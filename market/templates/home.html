@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Danish Stock Market</title>
+
+<style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #0f172a;
+        color: white;
+    }
+
+    nav {
+        background: #1e293b;
+        padding: 18px 30px;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    nav h1 {
+        margin: 0;
+        color: #38bdf8;
+    }
+
+    .nav-buttons {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .nav-buttons a,
+    .nav-buttons button {
+        display: inline-block;
+
+        padding: 10px 16px;
+
+        border-radius: 8px;
+
+        text-decoration: none;
+
+        border: none;
+
+        cursor: pointer;
+
+        font-weight: bold;
+    }
+
+    .login {
+        background: #2563eb;
+        color: white;
+    }
+
+    .logout {
+        background: #dc2626;
+        color: white;
+    }
+
+    .portfolio {
+        background: #7c3aed;
+        color: white;
+    }
+
+    .graph {
+        background: #0891b2;
+        color: white;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .welcome {
+        background: #1e293b;
+
+        padding: 25px;
+
+        border-radius: 15px;
+
+        margin-bottom: 25px;
+    }
+
+    .welcome h2 {
+        color: #38bdf8;
+    }
+
+    .live {
+        color: #22c55e;
+        font-weight: bold;
+    }
+
+    .stock {
+        background: #1e293b;
+
+        padding: 22px;
+
+        margin-bottom: 15px;
+
+        border-radius: 14px;
+    }
+
+    .stock h3 {
+        margin-top: 0;
+    }
+
+    .symbol {
+        color: #94a3b8;
+    }
+
+    .price {
+        font-size: 28px;
+
+        font-weight: bold;
+
+        margin: 12px 0;
+    }
+
+    .change {
+        font-weight: bold;
+    }
+
+    .buttons {
+        margin-top: 18px;
+    }
+
+    .buttons a {
+        display: inline-block;
+
+        padding: 10px 18px;
+
+        margin-right: 8px;
+
+        margin-bottom: 8px;
+
+        border-radius: 8px;
+
+        text-decoration: none;
+
+        font-weight: bold;
+    }
+
+    .buy {
+        background: #16a34a;
+        color: white;
+    }
+
+    .sell {
+        background: #dc2626;
+        color: white;
+    }
+
+    .graph {
+        background: #0891b2;
+        color: white;
+    }
+
+    .login-trade {
+        display: inline-block;
+
+        padding: 10px 18px;
+
+        border-radius: 8px;
+
+        background: #2563eb;
+
+        color: white;
+
+        text-decoration: none;
+
+        font-weight: bold;
+    }
+
+    .status {
+        font-size: 14px;
+
+        color: #94a3b8;
+
+        margin-top: 8px;
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+<nav>
+
+```
+<h1>📈 Danish Stock Market</h1>
+
+
+<div class="nav-buttons">
+
+    {% if user.is_authenticated %}
+
+        <span>
+            👤 {{ user.username }}
+        </span>
+
+        <a class="portfolio"
+           href="{% url 'portfolio' %}">
+            📊 Portfolio
+        </a>
+
+
+        <form method="post"
+              action="{% url 'logout' %}"
+              style="display:inline;">
+
+            {% csrf_token %}
+
+            <button class="logout" type="submit">
+                Logout
+            </button>
+
+        </form>
+
+
+    {% else %}
+
+        <a class="login"
+           href="{% url 'login' %}">
+            🔐 Login
+        </a>
+
+    {% endif %}
+
+</div>
+```
+
+</nav>
+
+<div class="container">
+
+```
+<div class="welcome">
+
+    {% if user.is_authenticated %}
+
+        <h2>
+            Welcome, {{ user.username }}! 👋
+        </h2>
+
+        <p>
+            You are logged in to your virtual stock market.
+        </p>
+
+    {% else %}
+
+        <h2>
+            My Stocks 📊
+        </h2>
+
+        <p>
+            Login to buy and sell your virtual stocks.
+        </p>
+
+    {% endif %}
+
+
+    <p class="live">
+        🟢 LIVE MARKET
+    </p>
+
+    <p class="status">
+        Prices automatically update every 2 seconds.
+    </p>
+
+</div>
+
+
+
+{% for stock in stocks %}
+
+
+    <div class="stock">
+
+
+        <h3>
+
+            {{ stock.name }}
+
+            <span class="symbol">
+                ({{ stock.symbol }})
+            </span>
+
+        </h3>
+
+
+        <div class="price">
+
+            ₹{{ stock.price }}
+
+        </div>
+
+
+        <p>
+
+            Change:
+
+            <span class="change">
+
+                {% if stock.change >= 0 %}
+
+                    📈 +₹{{ stock.change }}
+
+                {% else %}
+
+                    📉 ₹{{ stock.change }}
+
+                {% endif %}
+
+                ({{ stock.change_percent|floatformat:2 }}%)
+
+            </span>
+
+        </p>
+
+
+        {% if stock.description %}
+
+            <p>
+                {{ stock.description }}
+            </p>
+
+        {% endif %}
+
+
+
+        <div class="buttons">
+
+
+            {% if user.is_authenticated %}
+
+
+                <a class="buy"
+                   href="{% url 'buy_stock' stock.symbol %}">
+
+                    🟢 Buy
+
+                </a>
+
+
+                <a class="sell"
+                   href="{% url 'sell_stock' stock.symbol %}">
+
+                    🔴 Sell
+
+                </a>
+
+
+            {% else %}
+
+
+                <a class="login-trade"
+                   href="{% url 'login' %}?next={% url 'buy_stock' stock.symbol %}">
+
+                    🔐 Login to Trade
+
+                </a>
+
+
+            {% endif %}
+
+
+            <a class="graph"
+               href="{% url 'stock_chart' stock.symbol %}">
+
+                📈 View Graph
+
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+{% empty %}
+
+
+    <div class="welcome">
+
+        <h2>
+            No stocks yet 📭
+        </h2>
+
+        <p>
+            Add some stocks from Django Admin.
+        </p>
+
+    </div>
+
+
+{% endfor %}
+```
+
+</div>
+
+<script>
+
+    /*
+     * Refresh the market every 2 seconds.
+     *
+     * This gets the newest prices from Django.
+     */
+
+    setTimeout(function() {
+
+        location.reload();
+
+    }, 2000);
+
+</script>
+
+</body>
+</html>

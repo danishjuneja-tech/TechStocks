@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+
+```
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Portfolio</title>
+
+<style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #0f172a;
+        color: white;
+    }
+
+    nav {
+        background: #1e293b;
+        padding: 18px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    nav h1 {
+        margin: 0;
+        color: #38bdf8;
+    }
+
+    nav a {
+        color: white;
+        text-decoration: none;
+        background: #2563eb;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-weight: bold;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 35px auto;
+        padding: 20px;
+    }
+
+    .card {
+        background: #1e293b;
+        padding: 25px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+    }
+
+    h2 {
+        color: #38bdf8;
+    }
+
+    .wallet {
+        font-size: 32px;
+        font-weight: bold;
+        color: #22c55e;
+    }
+
+    .value {
+        font-size: 25px;
+        color: #facc15;
+        font-weight: bold;
+    }
+
+    .holding {
+        background: #334155;
+        padding: 18px;
+        border-radius: 12px;
+        margin-bottom: 12px;
+    }
+
+    .holding h3 {
+        margin-top: 0;
+    }
+
+    .symbol {
+        color: #94a3b8;
+    }
+
+    .transaction {
+        background: #334155;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+
+    .buy {
+        color: #22c55e;
+        font-weight: bold;
+    }
+
+    .sell {
+        color: #ef4444;
+        font-weight: bold;
+    }
+
+    .empty {
+        color: #94a3b8;
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+<nav>
+
+```
+<h1>📊 My Portfolio</h1>
+
+<a href="{% url 'market_home' %}">
+    ← Market
+</a>
+```
+
+</nav>
+
+<div class="container">
+
+```
+<div class="card">
+
+    <h2>👤 {{ user.username }}</h2>
+
+    <p>Wallet Balance</p>
+
+    <div class="wallet">
+        ₹{{ wallet.balance|floatformat:2 }}
+    </div>
+
+    <p>Total Current Stock Value</p>
+
+    <div class="value">
+        ₹{{ total_value|floatformat:2 }}
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <h2>📦 My Holdings</h2>
+
+    {% for holding in holdings %}
+
+        <div class="holding">
+
+            <h3>
+                {{ holding.stock.name }}
+                <span class="symbol">
+                    ({{ holding.stock.symbol }})
+                </span>
+            </h3>
+
+            <p>
+                Shares:
+                <strong>{{ holding.quantity }}</strong>
+            </p>
+
+            <p>
+                Average Buy Price:
+                ₹{{ holding.average_price|floatformat:2 }}
+            </p>
+
+            <p>
+                Current Price:
+                ₹{{ holding.stock.price|floatformat:2 }}
+            </p>
+
+            <p>
+                Current Value:
+                <strong>
+                    ₹{% widthratio holding.quantity 1 holding.stock.price %}
+                </strong>
+            </p>
+
+        </div>
+
+    {% empty %}
+
+        <p class="empty">
+            You don't own any stocks yet.
+        </p>
+
+    {% endfor %}
+
+</div>
+
+
+<div class="card">
+
+    <h2>🧾 My Transactions</h2>
+
+    {% for transaction in transactions %}
+
+        <div class="transaction">
+
+            {% if transaction.transaction_type == "BUY" %}
+
+                <span class="buy">
+                    🟢 BUY
+                </span>
+
+            {% else %}
+
+                <span class="sell">
+                    🔴 SELL
+                </span>
+
+            {% endif %}
+
+            <strong>
+                {{ transaction.stock.symbol }}
+            </strong>
+
+            <br>
+
+            {{ transaction.quantity }} shares
+            @ ₹{{ transaction.price|floatformat:2 }}
+
+            <br>
+
+            <small>
+                {{ transaction.created_at }}
+            </small>
+
+        </div>
+
+    {% empty %}
+
+        <p class="empty">
+            No transactions yet.
+        </p>
+
+    {% endfor %}
+
+</div>
+```
+
+</div>
+
+</body>
+</html>
