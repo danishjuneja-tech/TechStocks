@@ -1,20 +1,17 @@
+
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.contrib import messages
-from django.http import JsonResponse
 
-from .models import (
-    Stock,
-    Wallet,
-    Holding,
-    Transaction,
-    StockPriceHistory,
-)
+from .models import Stock, Wallet, Holding, Transaction
 
+
+# ==========================================
+# MARKET HOME
+# ==========================================
 
 def home(request):
-
     stocks = Stock.objects.all()
 
     return render(
@@ -25,6 +22,10 @@ def home(request):
         }
     )
 
+
+# ==========================================
+# BUY STOCK
+# ==========================================
 
 @login_required
 def buy_stock(request, symbol):
@@ -42,17 +43,12 @@ def buy_stock(request, symbol):
 
         try:
             quantity = int(
-                request.POST.get(
-                    "quantity",
-                    0
-                )
+                request.POST.get("quantity", 0)
             )
-
         except (TypeError, ValueError):
             quantity = 0
 
         if quantity <= 0:
-
             messages.error(
                 request,
                 "Invalid quantity."
@@ -69,7 +65,6 @@ def buy_stock(request, symbol):
         total = stock.price * quantity
 
         if wallet.balance < total:
-
             messages.error(
                 request,
                 "Not enough virtual money."
@@ -118,7 +113,6 @@ def buy_stock(request, symbol):
                 )
 
             holding.quantity += quantity
-
             holding.save()
 
             Transaction.objects.create(
@@ -143,6 +137,10 @@ def buy_stock(request, symbol):
     )
 
 
+# ==========================================
+# SELL STOCK
+# ==========================================
+
 @login_required
 def sell_stock(request, symbol):
 
@@ -164,12 +162,8 @@ def sell_stock(request, symbol):
 
         try:
             quantity = int(
-                request.POST.get(
-                    "quantity",
-                    0
-                )
+                request.POST.get("quantity", 0)
             )
-
         except (TypeError, ValueError):
             quantity = 0
 
@@ -214,7 +208,6 @@ def sell_stock(request, symbol):
             if holding.quantity == 0:
 
                 holding.delete()
-
                 holding = None
 
             else:
@@ -222,7 +215,6 @@ def sell_stock(request, symbol):
                 holding.save()
 
             wallet.balance += total
-
             wallet.save()
 
             Transaction.objects.create(
@@ -246,21 +238,11 @@ def sell_stock(request, symbol):
             "holding": holding
         }
     )
-    def stock_page(request, symbol):
 
-        stock = get_object_or_404(
-            Stock,
-            symbol=symbol
-        )
 
-        return render(
-            request,
-            "stock.html",
-            {
-                "symbol": stock.symbol
-            }
-        )
-
+# ==========================================
+# CUSTOMER PORTFOLIO
+# ==========================================
 
 @login_required
 def portfolio(request):
@@ -269,10 +251,14 @@ def portfolio(request):
         user=request.user
     )
 
+    # Only this customer's holdings
     holdings = Holding.objects.filter(
         user=request.user
-    ).select_related("stock")
+    ).select_related(
+        "stock"
+    )
 
+    # Only this customer's transactions
     transactions = Transaction.objects.filter(
         user=request.user
     ).select_related(
@@ -282,13 +268,33 @@ def portfolio(request):
     )
 
     total_value = 0
+    total_invested = 0
+    total_pnl = 0
 
     for holding in holdings:
 
-        total_value += (
+        current_value = (
             holding.quantity *
             holding.stock.price
         )
+
+        invested_value = (
+            holding.quantity *
+            holding.average_price
+        )
+
+        pnl = (
+            current_value -
+            invested_value
+        )
+
+        holding.current_value = current_value
+        holding.invested_value = invested_value
+        holding.pnl = pnl
+
+        total_value += current_value
+        total_invested += invested_value
+        total_pnl += pnl
 
     return render(
         request,
@@ -298,9 +304,15 @@ def portfolio(request):
             "holdings": holdings,
             "transactions": transactions,
             "total_value": total_value,
+            "total_invested": total_invested,
+            "total_pnl": total_pnl
         }
     )
 
+
+# ==========================================
+# STOCK GRAPH
+# ==========================================
 
 def stock_chart(request, symbol):
 
@@ -309,30 +321,11 @@ def stock_chart(request, symbol):
         symbol=symbol
     )
 
-    history = StockPriceHistory.objects.filter(
-        stock=stock
-    ).order_by(
-        "created_at"
-    )[:100]
+    return render(
+        request,
+        "stock_chart.html",
+        {
+            "stock": stock
+        }
+    )
 
-    data = []
-
-    for item in history:
-
-        data.append({
-            "time": item.created_at.strftime(
-                "%H:%M:%S"
-            ),
-            "price": float(
-                item.price
-            )
-        })
-
-    return JsonResponse({
-        "symbol": stock.symbol,
-        "name": stock.name,
-        "current_price": float(
-            stock.price
-        ),
-        "data": data
-    })

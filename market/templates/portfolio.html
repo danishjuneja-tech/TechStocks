@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 
 <html lang="en">
+
 <head>
 
 ```
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>My Portfolio</title>
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>My Portfolio - Danish Stock Market</title>
 
 <style>
 
@@ -25,6 +28,7 @@
     nav {
         background: #1e293b;
         padding: 18px 30px;
+
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -38,75 +42,250 @@
     nav a {
         color: white;
         text-decoration: none;
+
         background: #2563eb;
+
         padding: 10px 16px;
+
         border-radius: 8px;
+
         font-weight: bold;
     }
 
     .container {
         max-width: 1100px;
+
         margin: 35px auto;
+
         padding: 20px;
     }
 
-    .card {
+    .welcome {
         background: #1e293b;
+
         padding: 25px;
-        border-radius: 15px;
+
+        border-radius: 16px;
+
+        margin-bottom: 20px;
+    }
+
+    .welcome h2 {
+        color: #38bdf8;
+
+        margin-top: 0;
+    }
+
+    .summary {
+        display: grid;
+
+        grid-template-columns:
+            repeat(auto-fit, minmax(200px, 1fr));
+
+        gap: 15px;
+
         margin-bottom: 25px;
     }
 
-    h2 {
-        color: #38bdf8;
+    .summary-card {
+        background: #1e293b;
+
+        padding: 22px;
+
+        border-radius: 15px;
+    }
+
+    .summary-card h3 {
+        color: #94a3b8;
+
+        font-size: 15px;
+
+        margin-top: 0;
+    }
+
+    .summary-card .value {
+        font-size: 25px;
+
+        font-weight: bold;
     }
 
     .wallet {
-        font-size: 32px;
-        font-weight: bold;
+        color: #38bdf8;
+    }
+
+    .stock-value {
+        color: #facc15;
+    }
+
+    .invested {
+        color: #a78bfa;
+    }
+
+    .profit {
         color: #22c55e;
     }
 
-    .value {
-        font-size: 25px;
-        color: #facc15;
-        font-weight: bold;
+    .loss {
+        color: #ef4444;
+    }
+
+    .section {
+        background: #1e293b;
+
+        padding: 25px;
+
+        border-radius: 16px;
+
+        margin-bottom: 25px;
+    }
+
+    .section h2 {
+        margin-top: 0;
+
+        color: #38bdf8;
     }
 
     .holding {
-        background: #334155;
-        padding: 18px;
+        background: #0f172a;
+
+        padding: 20px;
+
         border-radius: 12px;
+
         margin-bottom: 12px;
     }
 
+    .holding:last-child {
+        margin-bottom: 0;
+    }
+
+    .holding-header {
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        flex-wrap: wrap;
+    }
+
     .holding h3 {
-        margin-top: 0;
+        margin: 0;
+
+        font-size: 20px;
     }
 
     .symbol {
         color: #94a3b8;
     }
 
+    .holding-info {
+        display: grid;
+
+        grid-template-columns:
+            repeat(auto-fit, minmax(150px, 1fr));
+
+        gap: 12px;
+
+        margin-top: 18px;
+    }
+
+    .info-box {
+        background: #1e293b;
+
+        padding: 12px;
+
+        border-radius: 8px;
+    }
+
+    .info-box small {
+        display: block;
+
+        color: #94a3b8;
+
+        margin-bottom: 5px;
+    }
+
     .transaction {
-        background: #334155;
-        padding: 15px;
+        background: #0f172a;
+
+        padding: 16px;
+
         border-radius: 10px;
+
         margin-bottom: 10px;
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        gap: 15px;
+
+        flex-wrap: wrap;
     }
 
     .buy {
         color: #22c55e;
+
         font-weight: bold;
     }
 
     .sell {
         color: #ef4444;
+
         font-weight: bold;
     }
 
-    .empty {
+    .date {
         color: #94a3b8;
+
+        font-size: 13px;
+    }
+
+    .empty {
+        text-align: center;
+
+        padding: 30px;
+
+        color: #94a3b8;
+    }
+
+    .back {
+        display: inline-block;
+
+        margin-top: 10px;
+
+        color: #38bdf8;
+
+        text-decoration: none;
+
+        font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+
+        nav {
+            padding: 15px;
+
+            flex-direction: column;
+
+            gap: 12px;
+        }
+
+        .container {
+            margin: 20px auto;
+
+            padding: 12px;
+        }
+
+        .transaction {
+            align-items: flex-start;
+
+            flex-direction: column;
+        }
+
     }
 
 </style>
@@ -119,10 +298,12 @@
 <nav>
 
 ```
-<h1>📊 My Portfolio</h1>
+<h1>
+    📈 Danish Stock Market
+</h1>
 
 <a href="{% url 'market_home' %}">
-    ← Market
+    🏠 Market
 </a>
 ```
 
@@ -131,121 +312,361 @@
 <div class="container">
 
 ```
-<div class="card">
+<!-- WELCOME -->
 
-    <h2>👤 {{ user.username }}</h2>
+<div class="welcome">
 
-    <p>Wallet Balance</p>
+    <h2>
+        👤 {{ user.username }}'s Portfolio
+    </h2>
 
-    <div class="wallet">
-        ₹{{ wallet.balance|floatformat:2 }}
-    </div>
-
-    <p>Total Current Stock Value</p>
-
-    <div class="value">
-        ₹{{ total_value|floatformat:2 }}
-    </div>
+    <p>
+        Here you can see your wallet, holdings,
+        investments, P&L and transactions.
+    </p>
 
 </div>
 
 
-<div class="card">
 
-    <h2>📦 My Holdings</h2>
+<!-- SUMMARY -->
+
+<div class="summary">
+
+
+    <div class="summary-card">
+
+        <h3>
+            💰 Wallet Balance
+        </h3>
+
+        <div class="value wallet">
+
+            ₹{{ wallet.balance|floatformat:2 }}
+
+        </div>
+
+    </div>
+
+
+
+    <div class="summary-card">
+
+        <h3>
+            📊 Stock Value
+        </h3>
+
+        <div class="value stock-value">
+
+            ₹{{ total_value|floatformat:2 }}
+
+        </div>
+
+    </div>
+
+
+
+    <div class="summary-card">
+
+        <h3>
+            💵 Total Invested
+        </h3>
+
+        <div class="value invested">
+
+            ₹{{ total_invested|floatformat:2 }}
+
+        </div>
+
+    </div>
+
+
+
+    <div class="summary-card">
+
+        <h3>
+            📈 Total P&L
+        </h3>
+
+
+        {% if total_pnl >= 0 %}
+
+            <div class="value profit">
+
+                +₹{{ total_pnl|floatformat:2 }}
+
+            </div>
+
+        {% else %}
+
+            <div class="value loss">
+
+                -₹{{ total_pnl|stringformat:"s"|slice:"1:" }}
+
+            </div>
+
+        {% endif %}
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- HOLDINGS -->
+
+<div class="section">
+
+    <h2>
+        📦 My Holdings
+    </h2>
+
 
     {% for holding in holdings %}
 
+
         <div class="holding">
 
-            <h3>
-                {{ holding.stock.name }}
-                <span class="symbol">
-                    ({{ holding.stock.symbol }})
-                </span>
-            </h3>
 
-            <p>
-                Shares:
-                <strong>{{ holding.quantity }}</strong>
-            </p>
+            <div class="holding-header">
 
-            <p>
-                Average Buy Price:
-                ₹{{ holding.average_price|floatformat:2 }}
-            </p>
+                <h3>
 
-            <p>
-                Current Price:
-                ₹{{ holding.stock.price|floatformat:2 }}
-            </p>
+                    {{ holding.stock.name }}
 
-            <p>
-                Current Value:
+                    <span class="symbol">
+                        ({{ holding.stock.symbol }})
+                    </span>
+
+                </h3>
+
+
                 <strong>
-                    ₹{% widthratio holding.quantity 1 holding.stock.price %}
+
+                    {{ holding.quantity }} shares
+
                 </strong>
-            </p>
+
+            </div>
+
+
+
+            <div class="holding-info">
+
+
+                <div class="info-box">
+
+                    <small>
+                        Average Buy Price
+                    </small>
+
+                    ₹{{ holding.average_price|floatformat:2 }}
+
+                </div>
+
+
+
+                <div class="info-box">
+
+                    <small>
+                        Current Price
+                    </small>
+
+                    ₹{{ holding.stock.price|floatformat:2 }}
+
+                </div>
+
+
+
+                <div class="info-box">
+
+                    <small>
+                        Invested
+                    </small>
+
+                    ₹{{ holding.invested_value|floatformat:2 }}
+
+                </div>
+
+
+
+                <div class="info-box">
+
+                    <small>
+                        Current Value
+                    </small>
+
+                    ₹{{ holding.current_value|floatformat:2 }}
+
+                </div>
+
+
+
+                <div class="info-box">
+
+                    <small>
+                        P&L
+                    </small>
+
+
+                    {% if holding.pnl >= 0 %}
+
+                        <span class="profit">
+
+                            📈 +₹{{ holding.pnl|floatformat:2 }}
+
+                        </span>
+
+                    {% else %}
+
+                        <span class="loss">
+
+                            📉 ₹{{ holding.pnl|floatformat:2 }}
+
+                        </span>
+
+                    {% endif %}
+
+
+                </div>
+
+
+            </div>
+
+
+            <br>
+
+
+            <a class="back"
+               href="{% url 'stock_chart' holding.stock.symbol %}">
+
+                📈 View Live Graph
+
+            </a>
+
 
         </div>
 
+
     {% empty %}
 
-        <p class="empty">
-            You don't own any stocks yet.
-        </p>
+
+        <div class="empty">
+
+            📭 You don't own any stocks yet.
+
+            <br><br>
+
+            <a class="back"
+               href="{% url 'market_home' %}">
+
+                Browse Stocks →
+
+            </a>
+
+        </div>
+
 
     {% endfor %}
+
 
 </div>
 
 
-<div class="card">
 
-    <h2>🧾 My Transactions</h2>
+<!-- TRANSACTIONS -->
+
+<div class="section">
+
+    <h2>
+        🧾 My Transactions
+    </h2>
+
 
     {% for transaction in transactions %}
 
+
         <div class="transaction">
 
-            {% if transaction.transaction_type == "BUY" %}
 
-                <span class="buy">
-                    🟢 BUY
-                </span>
+            <div>
 
-            {% else %}
+                {% if transaction.transaction_type == "BUY" %}
 
-                <span class="sell">
-                    🔴 SELL
-                </span>
+                    <div class="buy">
+                        🟢 BUY
+                    </div>
 
-            {% endif %}
+                {% else %}
 
-            <strong>
-                {{ transaction.stock.symbol }}
-            </strong>
+                    <div class="sell">
+                        🔴 SELL
+                    </div>
 
-            <br>
+                {% endif %}
 
-            {{ transaction.quantity }} shares
-            @ ₹{{ transaction.price|floatformat:2 }}
 
-            <br>
+                <strong>
 
-            <small>
-                {{ transaction.created_at }}
-            </small>
+                    {{ transaction.stock.name }}
+
+                    ({{ transaction.stock.symbol }})
+
+                </strong>
+
+            </div>
+
+
+
+            <div>
+
+                {{ transaction.quantity }} shares
+
+            </div>
+
+
+
+            <div>
+
+                ₹{{ transaction.price|floatformat:2 }}
+                / share
+
+            </div>
+
+
+
+            <div>
+
+                ₹{% widthratio transaction.price 1 transaction.quantity %}
+
+            </div>
+
+
+
+            <div class="date">
+
+                {{ transaction.created_at|date:"d M Y, h:i A" }}
+
+            </div>
+
 
         </div>
 
+
     {% empty %}
 
-        <p class="empty">
-            No transactions yet.
-        </p>
+
+        <div class="empty">
+
+            🧾 No transactions yet.
+
+        </div>
+
 
     {% endfor %}
+
 
 </div>
 ```
@@ -253,4 +674,5 @@
 </div>
 
 </body>
+
 </html>
