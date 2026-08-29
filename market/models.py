@@ -166,3 +166,18 @@ class Transaction(models.Model):
             f"{self.quantity} "
             f"{self.stock.symbol}"
         )
+
+
+# ==========================================
+# MARKET SETTINGS
+# ==========================================
+
+class MarketSettings(models.Model):
+
+    market_open = models.BooleanField(
+        default=True
+    )
+
+    def __str__(self):
+        return "Market Settings"
+

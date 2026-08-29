@@ -1,6 +1,19 @@
-from django.contrib import admin
-from .models import Stock, Holding, Wallet, Transaction
 
+from django.contrib import admin
+
+from .models import (
+    Stock,
+    StockPriceHistory,
+    Holding,
+    Wallet,
+    Transaction,
+    MarketSettings,
+)
+
+
+# ==========================================
+# STOCK
+# ==========================================
 
 @admin.register(Stock)
 class StockAdmin(admin.ModelAdmin):
@@ -24,6 +37,32 @@ class StockAdmin(admin.ModelAdmin):
     )
 
 
+# ==========================================
+# STOCK PRICE HISTORY
+# ==========================================
+
+@admin.register(StockPriceHistory)
+class StockPriceHistoryAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "stock",
+        "price",
+        "created_at",
+    )
+
+    list_filter = (
+        "stock",
+    )
+
+    readonly_fields = (
+        "created_at",
+    )
+
+
+# ==========================================
+# HOLDING
+# ==========================================
+
 @admin.register(Holding)
 class HoldingAdmin(admin.ModelAdmin):
 
@@ -34,6 +73,15 @@ class HoldingAdmin(admin.ModelAdmin):
         "average_price",
     )
 
+    search_fields = (
+        "user__username",
+        "stock__symbol",
+    )
+
+
+# ==========================================
+# WALLET
+# ==========================================
 
 @admin.register(Wallet)
 class WalletAdmin(admin.ModelAdmin):
@@ -43,6 +91,14 @@ class WalletAdmin(admin.ModelAdmin):
         "balance",
     )
 
+    search_fields = (
+        "user__username",
+    )
+
+
+# ==========================================
+# TRANSACTION
+# ==========================================
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
@@ -56,6 +112,29 @@ class TransactionAdmin(admin.ModelAdmin):
         "created_at",
     )
 
+    list_filter = (
+        "transaction_type",
+        "stock",
+    )
+
+    search_fields = (
+        "user__username",
+        "stock__symbol",
+    )
+
     readonly_fields = (
         "created_at",
     )
+
+
+# ==========================================
+# MARKET SETTINGS
+# ==========================================
+
+@admin.register(MarketSettings)
+class MarketSettingsAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "market_open",
+    )
+

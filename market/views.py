@@ -1,9 +1,11 @@
-
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
 from django.contrib import messages
 from django.http import JsonResponse
+from django.utils import timezone
 from decimal import Decimal
 import random
 
@@ -12,6 +14,7 @@ from .models import (
     Wallet,
     Holding,
     Transaction,
+    MarketSettings,
 )
 
 
@@ -33,6 +36,37 @@ def home(request):
 
 
 # ==========================================
+# SIGNUP
+# ==========================================
+
+def signup(request):
+
+    if request.method == "POST":
+
+        form = UserCreationForm(request.POST)
+
+        if form.is_valid():
+
+            user = form.save()
+
+            login(request, user)
+
+            return redirect("market_home")
+
+    else:
+
+        form = UserCreationForm()
+
+    return render(
+        request,
+        "signup.html",
+        {
+            "form": form
+        }
+    )
+
+
+# ==========================================
 # BUY STOCK
 # ==========================================
 
@@ -48,6 +82,27 @@ def buy_stock(request, symbol):
         user=request.user
     )
 
+    # ======================================
+    # MARKET OPEN / CLOSED
+    # ======================================
+
+    settings = MarketSettings.objects.first()
+
+    if settings and not settings.market_open:
+
+        messages.error(
+            request,
+            "🔴 Market is currently closed."
+        )
+
+        return render(
+            request,
+            "buy.html",
+            {
+                "stock": stock
+            }
+        )
+
     if request.method == "POST":
 
         try:
@@ -57,7 +112,9 @@ def buy_stock(request, symbol):
                     0
                 )
             )
+
         except (TypeError, ValueError):
+
             quantity = 0
 
         if quantity <= 0:
@@ -94,9 +151,11 @@ def buy_stock(request, symbol):
 
         with transaction.atomic():
 
+            # Remove money
             wallet.balance -= total
             wallet.save()
 
+            # Get/create holding
             holding, created = Holding.objects.get_or_create(
                 user=request.user,
                 stock=stock
@@ -104,10 +163,12 @@ def buy_stock(request, symbol):
 
             old_quantity = holding.quantity
 
+            # First purchase
             if old_quantity == 0:
 
                 holding.average_price = stock.price
 
+            # Additional purchase
             else:
 
                 old_value = (
@@ -127,8 +188,10 @@ def buy_stock(request, symbol):
                 )
 
             holding.quantity += quantity
+
             holding.save()
 
+            # Save transaction
             Transaction.objects.create(
                 user=request.user,
                 stock=stock,
@@ -172,6 +235,28 @@ def sell_stock(request, symbol):
         stock=stock
     ).first()
 
+    # ======================================
+    # MARKET OPEN / CLOSED
+    # ======================================
+
+    settings = MarketSettings.objects.first()
+
+    if settings and not settings.market_open:
+
+        messages.error(
+            request,
+            "🔴 Market is currently closed."
+        )
+
+        return render(
+            request,
+            "sell.html",
+            {
+                "stock": stock,
+                "holding": holding
+            }
+        )
+
     if request.method == "POST":
 
         try:
@@ -181,7 +266,9 @@ def sell_stock(request, symbol):
                     0
                 )
             )
+
         except (TypeError, ValueError):
+
             quantity = 0
 
         if quantity <= 0:
@@ -220,6 +307,7 @@ def sell_stock(request, symbol):
 
         with transaction.atomic():
 
+            # Remove shares
             holding.quantity -= quantity
 
             if holding.quantity == 0:
@@ -231,9 +319,12 @@ def sell_stock(request, symbol):
 
                 holding.save()
 
+            # Add money
             wallet.balance += total
+
             wallet.save()
 
+            # Save transaction
             Transaction.objects.create(
                 user=request.user,
                 stock=stock,
@@ -339,39 +430,51 @@ def stock_chart(request, symbol):
     # JSON API request
     if request.GET.get("api") == "1":
 
-        # Get price history if your project has it
         history = []
 
         try:
-            from .models import PriceHistory
 
-            prices = PriceHistory.objects.filter(
+            from .models import StockPriceHistory
+
+            prices = StockPriceHistory.objects.filter(
                 stock=stock
-            ).order_by("created_at")[:100]
+            ).order_by(
+                "created_at"
+            )[:100]
 
             for item in prices:
+
                 history.append({
-                    "time": item.created_at.strftime("%H:%M:%S"),
-                    "price": float(item.price),
+                    "time": item.created_at.strftime(
+                        "%H:%M:%S"
+                    ),
+                    "price": float(
+                        item.price
+                    ),
                 })
 
         except Exception:
-            # If PriceHistory model does not exist,
-            # use current price as the first point.
+
             history = []
 
-        # Always have at least the current price
+        # Always have at least current price
         if not history:
 
             history.append({
-                "time": timezone.localtime().strftime("%H:%M:%S"),
-                "price": float(stock.price),
+                "time": timezone.localtime().strftime(
+                    "%H:%M:%S"
+                ),
+                "price": float(
+                    stock.price
+                ),
             })
 
         return JsonResponse({
             "symbol": stock.symbol,
             "name": stock.name,
-            "current_price": float(stock.price),
+            "current_price": float(
+                stock.price
+            ),
             "data": history,
         })
 
@@ -399,19 +502,6 @@ def live_market(request):
 
 # ==========================================
 # STOCK PRICES API
-# ==========================================
-#
-# This is the important part.
-#
-# Every time the browser calls:
-#
-# /market/api/prices/
-#
-# prices change and JSON is returned.
-#
-# Your home.html should call this URL
-# every 2 seconds.
-#
 # ==========================================
 
 def stock_prices(request):
@@ -444,6 +534,7 @@ def stock_prices(request):
 
             # Never below ₹1
             if new_price < Decimal("1.00"):
+
                 new_price = Decimal("1.00")
 
             stock.previous_price = old_price
@@ -459,7 +550,7 @@ def stock_prices(request):
                 ]
             )
 
-    # Get fresh prices after updating
+    # Get fresh prices
     stocks = Stock.objects.all()
 
     data = []
@@ -469,9 +560,15 @@ def stock_prices(request):
         data.append({
             "symbol": stock.symbol,
             "name": stock.name,
-            "price": float(stock.price),
-            "previous_price": float(stock.previous_price),
-            "change": float(stock.change),
+            "price": float(
+                stock.price
+            ),
+            "previous_price": float(
+                stock.previous_price
+            ),
+            "change": float(
+                stock.change
+            ),
             "change_percent": float(
                 stock.change_percent
             ),
@@ -480,4 +577,3 @@ def stock_prices(request):
     return JsonResponse({
         "stocks": data
     })
-
