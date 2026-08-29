@@ -38,4 +38,10 @@ urlpatterns = [
         views.stock_prices,
         name="stock_prices"
     ),
+
+    path(
+        "api/live/",
+        views.live_market,
+        name="live_market"
+    ),
 ]
