@@ -1,8 +1,11 @@
+
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.contrib import messages
 from django.http import JsonResponse
+from decimal import Decimal
+import random
 
 from .models import (
     Stock,
@@ -54,9 +57,7 @@ def buy_stock(request, symbol):
                     0
                 )
             )
-
         except (TypeError, ValueError):
-
             quantity = 0
 
         if quantity <= 0:
@@ -93,11 +94,9 @@ def buy_stock(request, symbol):
 
         with transaction.atomic():
 
-            # Remove money
             wallet.balance -= total
             wallet.save()
 
-            # Get/create holding
             holding, created = Holding.objects.get_or_create(
                 user=request.user,
                 stock=stock
@@ -105,12 +104,10 @@ def buy_stock(request, symbol):
 
             old_quantity = holding.quantity
 
-            # First purchase
             if old_quantity == 0:
 
                 holding.average_price = stock.price
 
-            # Additional purchase
             else:
 
                 old_value = (
@@ -130,10 +127,8 @@ def buy_stock(request, symbol):
                 )
 
             holding.quantity += quantity
-
             holding.save()
 
-            # Save transaction
             Transaction.objects.create(
                 user=request.user,
                 stock=stock,
@@ -180,16 +175,13 @@ def sell_stock(request, symbol):
     if request.method == "POST":
 
         try:
-
             quantity = int(
                 request.POST.get(
                     "quantity",
                     0
                 )
             )
-
         except (TypeError, ValueError):
-
             quantity = 0
 
         if quantity <= 0:
@@ -228,7 +220,6 @@ def sell_stock(request, symbol):
 
         with transaction.atomic():
 
-            # Remove shares
             holding.quantity -= quantity
 
             if holding.quantity == 0:
@@ -240,12 +231,9 @@ def sell_stock(request, symbol):
 
                 holding.save()
 
-            # Add money
             wallet.balance += total
-
             wallet.save()
 
-            # Save transaction
             Transaction.objects.create(
                 user=request.user,
                 stock=stock,
@@ -294,9 +282,9 @@ def portfolio(request):
         "-created_at"
     )
 
-    total_value = 0
-    total_invested = 0
-    total_pnl = 0
+    total_value = Decimal("0")
+    total_invested = Decimal("0")
+    total_pnl = Decimal("0")
 
     for holding in holdings:
 
@@ -348,24 +336,61 @@ def stock_chart(request, symbol):
         symbol=symbol
     )
 
+    # JSON API request
+    if request.GET.get("api") == "1":
+
+        # Get price history if your project has it
+        history = []
+
+        try:
+            from .models import PriceHistory
+
+            prices = PriceHistory.objects.filter(
+                stock=stock
+            ).order_by("created_at")[:100]
+
+            for item in prices:
+                history.append({
+                    "time": item.created_at.strftime("%H:%M:%S"),
+                    "price": float(item.price),
+                })
+
+        except Exception:
+            # If PriceHistory model does not exist,
+            # use current price as the first point.
+            history = []
+
+        # Always have at least the current price
+        if not history:
+
+            history.append({
+                "time": timezone.localtime().strftime("%H:%M:%S"),
+                "price": float(stock.price),
+            })
+
+        return JsonResponse({
+            "symbol": stock.symbol,
+            "name": stock.name,
+            "current_price": float(stock.price),
+            "data": history,
+        })
+
+    # Normal HTML page
     return render(
         request,
-        "stock_chart.html",
+        "stock.html",
         {
-            "stock": stock
+            "symbol": stock.symbol,
+            "stock": stock,
         }
     )
 
 
 # ==========================================
-# START LIVE MARKET
+# LIVE MARKET
 # ==========================================
 
 def live_market(request):
-
-    from .scheduler import start
-
-    start()
 
     return JsonResponse({
         "status": "live"
@@ -375,9 +400,66 @@ def live_market(request):
 # ==========================================
 # STOCK PRICES API
 # ==========================================
+#
+# This is the important part.
+#
+# Every time the browser calls:
+#
+# /market/api/prices/
+#
+# prices change and JSON is returned.
+#
+# Your home.html should call this URL
+# every 2 seconds.
+#
+# ==========================================
 
 def stock_prices(request):
 
+    stocks = Stock.objects.all()
+
+    for stock in stocks:
+
+        # Only move stocks that have
+        # random movement enabled.
+        if stock.random_enabled:
+
+            old_price = stock.price
+
+            # Random movement:
+            # -2% to +2%
+            movement = Decimal(
+                str(
+                    random.uniform(
+                        -0.02,
+                        0.02
+                    )
+                )
+            )
+
+            new_price = old_price * (
+                Decimal("1.00") +
+                movement
+            )
+
+            # Never below ₹1
+            if new_price < Decimal("1.00"):
+                new_price = Decimal("1.00")
+
+            stock.previous_price = old_price
+
+            stock.price = new_price.quantize(
+                Decimal("0.01")
+            )
+
+            stock.save(
+                update_fields=[
+                    "price",
+                    "previous_price"
+                ]
+            )
+
+    # Get fresh prices after updating
     stocks = Stock.objects.all()
 
     data = []
@@ -387,15 +469,9 @@ def stock_prices(request):
         data.append({
             "symbol": stock.symbol,
             "name": stock.name,
-            "price": float(
-                stock.price
-            ),
-            "previous_price": float(
-                stock.previous_price
-            ),
-            "change": float(
-                stock.change
-            ),
+            "price": float(stock.price),
+            "previous_price": float(stock.previous_price),
+            "change": float(stock.change),
             "change_percent": float(
                 stock.change_percent
             ),
@@ -404,3 +480,4 @@ def stock_prices(request):
     return JsonResponse({
         "stocks": data
     })
+
