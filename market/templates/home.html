@@ -9,7 +9,6 @@
 <title>Danish Stock Market</title>
 
 <style>
-
     * {
         box-sizing: border-box;
     }
@@ -24,11 +23,9 @@
     nav {
         background: #1e293b;
         padding: 18px 30px;
-
         display: flex;
         justify-content: space-between;
         align-items: center;
-
         position: sticky;
         top: 0;
         z-index: 100;
@@ -48,17 +45,11 @@
     .nav-buttons a,
     .nav-buttons button {
         display: inline-block;
-
         padding: 10px 16px;
-
         border-radius: 8px;
-
         text-decoration: none;
-
         border: none;
-
         cursor: pointer;
-
         font-weight: bold;
     }
 
@@ -90,11 +81,8 @@
 
     .welcome {
         background: #1e293b;
-
         padding: 25px;
-
         border-radius: 15px;
-
         margin-bottom: 25px;
     }
 
@@ -109,11 +97,8 @@
 
     .stock {
         background: #1e293b;
-
         padding: 22px;
-
         margin-bottom: 15px;
-
         border-radius: 14px;
     }
 
@@ -127,9 +112,7 @@
 
     .price {
         font-size: 28px;
-
         font-weight: bold;
-
         margin: 12px 0;
     }
 
@@ -143,17 +126,11 @@
 
     .buttons a {
         display: inline-block;
-
         padding: 10px 18px;
-
         margin-right: 8px;
-
         margin-bottom: 8px;
-
         border-radius: 8px;
-
         text-decoration: none;
-
         font-weight: bold;
     }
 
@@ -167,35 +144,27 @@
         color: white;
     }
 
-    .graph {
-        background: #0891b2;
-        color: white;
-    }
-
     .login-trade {
         display: inline-block;
-
         padding: 10px 18px;
-
         border-radius: 8px;
-
         background: #2563eb;
-
         color: white;
-
         text-decoration: none;
-
         font-weight: bold;
     }
 
     .status {
         font-size: 14px;
-
         color: #94a3b8;
-
         margin-top: 8px;
     }
 
+    .updating {
+        color: #22c55e;
+        font-size: 13px;
+        font-weight: bold;
+    }
 </style>
 ```
 
@@ -207,7 +176,6 @@
 
 ```
 <h1>📈 Danish Stock Market</h1>
-
 
 <div class="nav-buttons">
 
@@ -222,7 +190,6 @@
             📊 Portfolio
         </a>
 
-
         <form method="post"
               action="{% url 'logout' %}"
               style="display:inline;">
@@ -234,7 +201,6 @@
             </button>
 
         </form>
-
 
     {% else %}
 
@@ -277,143 +243,130 @@
 
     {% endif %}
 
-
     <p class="live">
         🟢 LIVE MARKET
     </p>
 
     <p class="status">
-        Prices automatically update every 2 seconds.
+        Prices update automatically every 2 seconds.
     </p>
+
+    <span id="update-status" class="updating">
+        ● Connecting to market...
+    </span>
 
 </div>
 
 
+<div id="stock-list">
 
-{% for stock in stocks %}
+    {% for stock in stocks %}
 
+        <div class="stock"
+             data-symbol="{{ stock.symbol }}">
 
-    <div class="stock">
+            <h3>
 
+                {{ stock.name }}
 
-        <h3>
+                <span class="symbol">
+                    ({{ stock.symbol }})
+                </span>
 
-            {{ stock.name }}
-
-            <span class="symbol">
-                ({{ stock.symbol }})
-            </span>
-
-        </h3>
-
-
-        <div class="price">
-
-            ₹{{ stock.price }}
-
-        </div>
+            </h3>
 
 
-        <p>
+            <div class="price">
 
-            Change:
+                ₹<span class="stock-price">
+                    {{ stock.price }}
+                </span>
 
-            <span class="change">
+            </div>
 
-                {% if stock.change >= 0 %}
-
-                    📈 +₹{{ stock.change }}
-
-                {% else %}
-
-                    📉 ₹{{ stock.change }}
-
-                {% endif %}
-
-                ({{ stock.change_percent|floatformat:2 }}%)
-
-            </span>
-
-        </p>
-
-
-        {% if stock.description %}
 
             <p>
-                {{ stock.description }}
+
+                Change:
+
+                <span class="change stock-change">
+
+                    {% if stock.change >= 0 %}
+
+                        📈 +₹{{ stock.change }}
+
+                    {% else %}
+
+                        📉 ₹{{ stock.change }}
+
+                    {% endif %}
+
+                    ({{ stock.change_percent|floatformat:2 }}%)
+
+                </span>
+
             </p>
 
-        {% endif %}
 
+            {% if stock.description %}
 
-
-        <div class="buttons">
-
-
-            {% if user.is_authenticated %}
-
-
-                <a class="buy"
-                   href="{% url 'buy_stock' stock.symbol %}">
-
-                    🟢 Buy
-
-                </a>
-
-
-                <a class="sell"
-                   href="{% url 'sell_stock' stock.symbol %}">
-
-                    🔴 Sell
-
-                </a>
-
-
-            {% else %}
-
-
-                <a class="login-trade"
-                   href="{% url 'login' %}?next={% url 'buy_stock' stock.symbol %}">
-
-                    🔐 Login to Trade
-
-                </a>
-
+                <p>
+                    {{ stock.description }}
+                </p>
 
             {% endif %}
 
 
-            <a class="graph"
-               href="{% url 'stock_chart' stock.symbol %}">
+            <div class="buttons">
 
-                📈 View Graph
+                {% if user.is_authenticated %}
 
-            </a>
+                    <a class="buy"
+                       href="{% url 'buy_stock' stock.symbol %}">
+                        🟢 Buy
+                    </a>
 
+                    <a class="sell"
+                       href="{% url 'sell_stock' stock.symbol %}">
+                        🔴 Sell
+                    </a>
+
+                {% else %}
+
+                    <a class="login-trade"
+                       href="{% url 'login' %}?next={% url 'buy_stock' stock.symbol %}">
+                        🔐 Login to Trade
+                    </a>
+
+                {% endif %}
+
+
+                <a class="graph"
+                   href="{% url 'stock_chart' stock.symbol %}">
+                    📈 View Graph
+                </a>
+
+            </div>
 
         </div>
 
+    {% empty %}
 
-    </div>
+        <div class="welcome">
 
+            <h2>
+                No stocks yet 📭
+            </h2>
 
-{% empty %}
+            <p>
+                Add some stocks from Django Admin.
+            </p>
 
+        </div>
 
-    <div class="welcome">
+    {% endfor %}
 
-        <h2>
-            No stocks yet 📭
-        </h2>
-
-        <p>
-            Add some stocks from Django Admin.
-        </p>
-
-    </div>
-
-
-{% endfor %}
+</div>
 ```
 
 </div>
@@ -421,16 +374,101 @@
 <script>
 
     /*
-     * Refresh the market every 2 seconds.
-     *
-     * This gets the newest prices from Django.
+     * Update prices without refreshing the page.
      */
 
-    setTimeout(function() {
+    async function updateStocks() {
 
-        location.reload();
+        try {
 
-    }, 2000);
+            const response = await fetch(
+                "{% url 'market_home' %}?prices=1",
+                {
+                    cache: "no-store"
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Server error");
+            }
+
+            const data = await response.json();
+
+
+            data.stocks.forEach(function(stock) {
+
+                const card = document.querySelector(
+                    '[data-symbol="' + stock.symbol + '"]'
+                );
+
+                if (!card) {
+                    return;
+                }
+
+
+                const priceElement =
+                    card.querySelector(".stock-price");
+
+                const changeElement =
+                    card.querySelector(".stock-change");
+
+
+                priceElement.textContent =
+                    Number(stock.price).toFixed(2);
+
+
+                let arrow = "";
+
+                if (Number(stock.change) >= 0) {
+
+                    arrow = "📈 +₹";
+
+                } else {
+
+                    arrow = "📉 ₹";
+
+                }
+
+
+                changeElement.textContent =
+                    arrow +
+                    Number(stock.change).toFixed(2) +
+                    " (" +
+                    Number(stock.change_percent).toFixed(2) +
+                    "%)";
+
+            });
+
+
+            document.getElementById(
+                "update-status"
+            ).textContent = "● LIVE • Updated just now";
+
+        }
+
+        catch (error) {
+
+            document.getElementById(
+                "update-status"
+            ).textContent = "🔴 Market connection lost";
+
+        }
+
+    }
+
+
+    /*
+     * Check for new prices every 2 seconds.
+     *
+     * This only runs while somebody has this page open.
+     */
+
+    updateStocks();
+
+    setInterval(
+        updateStocks,
+        2000
+    );
 
 </script>
 

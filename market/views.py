@@ -3,6 +3,10 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.contrib import messages
+from decimal import Decimal
+import random
+from django.http import JsonResponse
+from django.core.cache import cache
 
 from .models import Stock, Wallet, Holding, Transaction
 
@@ -12,7 +16,28 @@ from .models import Stock, Wallet, Holding, Transaction
 # ==========================================
 
 def home(request):
+
+
     stocks = Stock.objects.all()
+
+    # AJAX price update
+    if request.GET.get("prices") == "1":
+
+        from django.http import JsonResponse
+
+        data = {
+            "stocks": [
+                {
+                    "symbol": stock.symbol,
+                    "price": float(stock.price),
+                    "change": float(stock.change),
+                    "change_percent": float(stock.change_percent),
+                }
+                for stock in stocks
+            ]
+        }
+
+        return JsonResponse(data)
 
     return render(
         request,
@@ -21,6 +46,8 @@ def home(request):
             "stocks": stocks
         }
     )
+
+
 
 
 # ==========================================
@@ -328,4 +355,62 @@ def stock_chart(request, symbol):
             "stock": stock
         }
     )
+def stock_prices(request):
 
+    # Only update the market once every 2 seconds
+    lock = cache.add(
+        "stock_market_update_lock",
+        True,
+        timeout=2
+    )
+
+    if lock:
+
+        stocks = Stock.objects.filter(
+            random_enabled=True
+        )
+
+        for stock in stocks:
+
+            old_price = stock.price
+
+            # Random movement between -5% and +5%
+            movement = Decimal(
+                str(random.uniform(-0.05, 0.05))
+            )
+
+            new_price = old_price * (
+                Decimal("1.00") + movement
+            )
+
+            # Never go below ₹1
+            if new_price < Decimal("1.00"):
+                new_price = Decimal("1.00")
+
+            stock.previous_price = old_price
+            stock.price = new_price.quantize(
+                Decimal("0.01")
+            )
+
+            stock.save()
+
+    # Always return current prices
+    stocks = Stock.objects.all()
+
+    data = []
+
+    for stock in stocks:
+
+        data.append({
+            "symbol": stock.symbol,
+            "price": str(stock.price),
+            "change": str(stock.change),
+            "change_percent": float(
+                stock.change_percent
+            ),
+        })
+
+    return JsonResponse(
+        data,
+        safe=False
+    )
