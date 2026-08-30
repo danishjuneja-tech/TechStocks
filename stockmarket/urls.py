@@ -6,13 +6,13 @@ from django.urls import path, include
 urlpatterns = [
 
     path(
-        "admin/",
-        admin.site.urls
+        "",
+        include("market.urls")
     ),
 
     path(
-        "market/",
-        include("market.urls")
+        "admin/",
+        admin.site.urls
     ),
 
     path(

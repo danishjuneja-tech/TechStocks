@@ -5,63 +5,90 @@ from . import views
 
 urlpatterns = [
 
-    # Home
+    # ==============================
+    # MARKET HOME
+    # ==============================
+
     path(
         "",
         views.home,
         name="market_home"
     ),
 
-    # Buy
+    # ==============================
+    # BUY
+    # ==============================
+
     path(
         "buy/<str:symbol>/",
         views.buy_stock,
         name="buy_stock"
     ),
 
-    # Immediate Sell
+    # ==============================
+    # IMMEDIATE SELL
+    # ==============================
+
     path(
         "sell/<str:symbol>/",
         views.sell_stock,
         name="sell_stock"
     ),
 
-    # Limit Sell
+    # ==============================
+    # LIMIT SELL
+    # ==============================
+
     path(
         "sell/<str:symbol>/limit/",
         views.limit_sell,
         name="limit_sell"
     ),
 
-    # Cancel Limit Order
+    # ==============================
+    # CANCEL LIMIT ORDER
+    # ==============================
+
     path(
         "limit-order/cancel/<int:order_id>/",
         views.cancel_limit_order,
         name="cancel_limit_order"
     ),
 
-    # Portfolio
+    # ==============================
+    # PORTFOLIO
+    # ==============================
+
     path(
         "portfolio/",
         views.portfolio,
         name="portfolio"
     ),
 
-    # Stock chart
+    # ==============================
+    # STOCK CHART
+    # ==============================
+
     path(
         "stock/<str:symbol>/",
         views.stock_chart,
         name="stock_chart"
     ),
 
-    # Live market
+    # ==============================
+    # LIVE MARKET
+    # ==============================
+
     path(
         "live/",
         views.live_market,
         name="live_market"
     ),
 
-    # Stock prices API
+    # ==============================
+    # STOCK PRICES API
+    # ==============================
+
     path(
         "prices/",
         views.stock_prices,

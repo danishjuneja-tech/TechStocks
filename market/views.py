@@ -829,8 +829,8 @@ def stock_prices(request):
             movement = Decimal(
                 str(
                     random.uniform(
-                        -0.02,
-                        0.02
+                        -0.20,
+                        0.20
                     )
                 )
             )
