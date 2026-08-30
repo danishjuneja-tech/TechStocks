@@ -1,19 +1,24 @@
-from django.shortcuts import render, get_object_or_404
+
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.db import transaction
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
+from django.db import transaction
 from django.http import JsonResponse
 from django.utils import timezone
+
 from decimal import Decimal
 import random
 
 from .models import (
     Stock,
+    StockPriceHistory,
     Wallet,
     Holding,
     Transaction,
-    MarketSettings,
     LimitOrder,
+    MarketSettings,
 )
 
 
@@ -102,9 +107,14 @@ def buy_stock(request, symbol):
             }
         )
 
+    # ======================================
+    # BUY
+    # ======================================
+
     if request.method == "POST":
 
         try:
+
             quantity = int(
                 request.POST.get(
                     "quantity",
@@ -112,9 +122,16 @@ def buy_stock(request, symbol):
                 )
             )
 
-        except (TypeError, ValueError):
+        except (
+            TypeError,
+            ValueError
+        ):
 
             quantity = 0
+
+        # ----------------------------------
+        # Validate quantity
+        # ----------------------------------
 
         if quantity <= 0:
 
@@ -123,15 +140,23 @@ def buy_stock(request, symbol):
                 "Invalid quantity."
             )
 
-            return render(
-                request,
-                "buy.html",
-                {
-                    "stock": stock
-                }
+            return redirect(
+                "buy_stock",
+                symbol=stock.symbol
             )
 
-        total = stock.price * quantity
+        # ----------------------------------
+        # Calculate total
+        # ----------------------------------
+
+        total = (
+            stock.price *
+            quantity
+        )
+
+        # ----------------------------------
+        # Check wallet
+        # ----------------------------------
 
         if wallet.balance < total:
 
@@ -140,21 +165,21 @@ def buy_stock(request, symbol):
                 "Not enough virtual money."
             )
 
-            return render(
-                request,
-                "buy.html",
-                {
-                    "stock": stock
-                }
+            return redirect(
+                "buy_stock",
+                symbol=stock.symbol
             )
+
+        # ==================================
+        # COMPLETE BUY
+        # ==================================
 
         with transaction.atomic():
 
-            # Remove money
             wallet.balance -= total
+
             wallet.save()
 
-            # Get/create holding
             holding, created = Holding.objects.get_or_create(
                 user=request.user,
                 stock=stock
@@ -162,12 +187,18 @@ def buy_stock(request, symbol):
 
             old_quantity = holding.quantity
 
+            # --------------------------------
             # First purchase
+            # --------------------------------
+
             if old_quantity == 0:
 
                 holding.average_price = stock.price
 
+            # --------------------------------
             # Additional purchase
+            # --------------------------------
+
             else:
 
                 old_value = (
@@ -181,16 +212,21 @@ def buy_stock(request, symbol):
                 )
 
                 holding.average_price = (
-                    old_value + new_value
+                    old_value +
+                    new_value
                 ) / (
-                    old_quantity + quantity
+                    old_quantity +
+                    quantity
                 )
 
             holding.quantity += quantity
 
             holding.save()
 
-            # Save transaction
+            # --------------------------------
+            # Transaction history
+            # --------------------------------
+
             Transaction.objects.create(
                 user=request.user,
                 stock=stock,
@@ -201,8 +237,18 @@ def buy_stock(request, symbol):
 
         messages.success(
             request,
-            f"Bought {quantity} shares of {stock.symbol}."
+            f"Bought {quantity} shares of "
+            f"{stock.symbol} at ₹{stock.price}."
         )
+
+        return redirect(
+            "buy_stock",
+            symbol=stock.symbol
+        )
+
+    # ======================================
+    # SHOW BUY PAGE
+    # ======================================
 
     return render(
         request,
@@ -214,7 +260,7 @@ def buy_stock(request, symbol):
 
 
 # ==========================================
-# SELL STOCK
+# MARKET SELL
 # ==========================================
 
 @login_required
@@ -256,9 +302,26 @@ def sell_stock(request, symbol):
             }
         )
 
+    # ======================================
+    # MARKET SELL
+    # ======================================
+
     if request.method == "POST":
 
+        sell_type = request.POST.get(
+            "sell_type",
+            "market"
+        )
+
+        if sell_type != "market":
+
+            return redirect(
+                "limit_sell",
+                symbol=stock.symbol
+            )
+
         try:
+
             quantity = int(
                 request.POST.get(
                     "quantity",
@@ -266,7 +329,10 @@ def sell_stock(request, symbol):
                 )
             )
 
-        except (TypeError, ValueError):
+        except (
+            TypeError,
+            ValueError
+        ):
 
             quantity = 0
 
@@ -277,65 +343,88 @@ def sell_stock(request, symbol):
                 "Invalid quantity."
             )
 
-            return render(
-                request,
-                "sell.html",
-                {
-                    "stock": stock,
-                    "holding": holding
-                }
+            return redirect(
+                "sell_stock",
+                symbol=stock.symbol
             )
 
-        if not holding or holding.quantity < quantity:
+        if not holding:
+
+            messages.error(
+                request,
+                "You don't own this stock."
+            )
+
+            return redirect(
+                "sell_stock",
+                symbol=stock.symbol
+            )
+
+        if holding.quantity < quantity:
 
             messages.error(
                 request,
                 "You don't own enough shares."
             )
 
-            return render(
-                request,
-                "sell.html",
-                {
-                    "stock": stock,
-                    "holding": holding
-                }
+            return redirect(
+                "sell_stock",
+                symbol=stock.symbol
             )
 
-        total = stock.price * quantity
+        # ----------------------------------
+        # Current market price
+        # ----------------------------------
+
+        sell_price = stock.price
+
+        total = (
+            sell_price *
+            quantity
+        )
+
+        # ==================================
+        # COMPLETE SELL
+        # ==================================
 
         with transaction.atomic():
 
-            # Remove shares
             holding.quantity -= quantity
 
             if holding.quantity == 0:
 
                 holding.delete()
-                holding = None
 
             else:
 
                 holding.save()
 
-            # Add money
             wallet.balance += total
 
             wallet.save()
 
-            # Save transaction
             Transaction.objects.create(
                 user=request.user,
                 stock=stock,
                 transaction_type=Transaction.SELL,
                 quantity=quantity,
-                price=stock.price
+                price=sell_price
             )
 
         messages.success(
             request,
-            f"Sold {quantity} shares of {stock.symbol}."
+            f"Sold {quantity} shares of "
+            f"{stock.symbol} at ₹{sell_price}."
         )
+
+        return redirect(
+            "sell_stock",
+            symbol=stock.symbol
+        )
+
+    # ======================================
+    # SELL PAGE
+    # ======================================
 
     return render(
         request,
@@ -348,7 +437,200 @@ def sell_stock(request, symbol):
 
 
 # ==========================================
-# CUSTOMER PORTFOLIO
+# LIMIT SELL
+# ==========================================
+
+@login_required
+def limit_sell(request, symbol):
+
+    stock = get_object_or_404(
+        Stock,
+        symbol=symbol
+    )
+
+    holding = Holding.objects.filter(
+        user=request.user,
+        stock=stock
+    ).first()
+
+    # ======================================
+    # MARKET OPEN / CLOSED
+    # ======================================
+
+    settings = MarketSettings.objects.first()
+
+    if settings and not settings.market_open:
+
+        messages.error(
+            request,
+            "🔴 Market is currently closed."
+        )
+
+        return render(
+            request,
+            "limit_sell.html",
+            {
+                "stock": stock,
+                "holding": holding
+            }
+        )
+
+    # ======================================
+    # CREATE LIMIT ORDER
+    # ======================================
+
+    if request.method == "POST":
+
+        try:
+
+            quantity = int(
+                request.POST.get(
+                    "quantity",
+                    0
+                )
+            )
+
+            limit_price = Decimal(
+                request.POST.get(
+                    "limit_price",
+                    "0"
+                )
+            )
+
+        except (
+            TypeError,
+            ValueError,
+            ArithmeticError
+        ):
+
+            messages.error(
+                request,
+                "Invalid quantity or limit price."
+            )
+
+            return redirect(
+                "limit_sell",
+                symbol=stock.symbol
+            )
+
+        # ----------------------------------
+        # Quantity
+        # ----------------------------------
+
+        if quantity <= 0:
+
+            messages.error(
+                request,
+                "Quantity must be greater than 0."
+            )
+
+            return redirect(
+                "limit_sell",
+                symbol=stock.symbol
+            )
+
+        # ----------------------------------
+        # Price
+        # ----------------------------------
+
+        if limit_price <= 0:
+
+            messages.error(
+                request,
+                "Limit price must be greater than ₹0."
+            )
+
+            return redirect(
+                "limit_sell",
+                symbol=stock.symbol
+            )
+
+        # ----------------------------------
+        # Holding
+        # ----------------------------------
+
+        if not holding:
+
+            messages.error(
+                request,
+                "You don't own this stock."
+            )
+
+            return redirect(
+                "limit_sell",
+                symbol=stock.symbol
+            )
+
+        if holding.quantity < quantity:
+
+            messages.error(
+                request,
+                "You don't own enough shares."
+            )
+
+            return redirect(
+                "limit_sell",
+                symbol=stock.symbol
+            )
+
+        # ----------------------------------
+        # Target must be above current
+        # ----------------------------------
+
+        if limit_price <= stock.price:
+
+            messages.error(
+                request,
+                f"Limit price must be ABOVE "
+                f"current price ₹{stock.price}."
+            )
+
+            return redirect(
+                "limit_sell",
+                symbol=stock.symbol
+            )
+
+        # ==================================
+        # CREATE ORDER
+        # ==================================
+
+        LimitOrder.objects.create(
+            user=request.user,
+            stock=stock,
+            order_type=LimitOrder.SELL,
+            quantity=quantity,
+            limit_price=limit_price,
+            executed=False
+        )
+
+        messages.success(
+            request,
+            f"🎯 Limit sell placed: "
+            f"{quantity} shares of "
+            f"{stock.symbol} at ₹{limit_price}."
+        )
+
+        return redirect(
+            "limit_sell",
+            symbol=stock.symbol
+        )
+
+    # ======================================
+    # LIMIT SELL PAGE
+    # ======================================
+
+    return render(
+        request,
+        "limit_sell.html",
+        {
+            "stock": stock,
+            "holding": holding
+        }
+    )
+
+
+# ==========================================
+# PORTFOLIO
 # ==========================================
 
 @login_required
@@ -372,8 +654,27 @@ def portfolio(request):
         "-created_at"
     )
 
+    # ======================================
+    # PENDING ORDERS
+    # ======================================
+
+    pending_orders = LimitOrder.objects.filter(
+        user=request.user,
+        executed=False
+    ).select_related(
+        "stock"
+    ).order_by(
+        "-created_at"
+    )
+
+    # ======================================
+    # CALCULATE PORTFOLIO
+    # ======================================
+
     total_value = Decimal("0")
+
     total_invested = Decimal("0")
+
     total_pnl = Decimal("0")
 
     for holding in holdings:
@@ -394,22 +695,37 @@ def portfolio(request):
         )
 
         holding.current_value = current_value
+
         holding.invested_value = invested_value
+
         holding.pnl = pnl
 
         total_value += current_value
+
         total_invested += invested_value
+
         total_pnl += pnl
+
+    # ======================================
+    # PORTFOLIO PAGE
+    # ======================================
 
     return render(
         request,
         "portfolio.html",
         {
             "wallet": wallet,
+
             "holdings": holdings,
+
             "transactions": transactions,
+
+            "pending_orders": pending_orders,
+
             "total_value": total_value,
+
             "total_invested": total_invested,
+
             "total_pnl": total_pnl
         }
     )
@@ -426,37 +742,31 @@ def stock_chart(request, symbol):
         symbol=symbol
     )
 
-    # JSON API request
+    # ======================================
+    # GRAPH API
+    # ======================================
+
     if request.GET.get("api") == "1":
 
         history = []
 
-        try:
+        prices = StockPriceHistory.objects.filter(
+            stock=stock
+        ).order_by(
+            "created_at"
+        )[:100]
 
-            from .models import StockPriceHistory
+        for item in prices:
 
-            prices = StockPriceHistory.objects.filter(
-                stock=stock
-            ).order_by(
-                "created_at"
-            )[:100]
+            history.append({
+                "time": item.created_at.strftime(
+                    "%H:%M:%S"
+                ),
+                "price": float(
+                    item.price
+                )
+            })
 
-            for item in prices:
-
-                history.append({
-                    "time": item.created_at.strftime(
-                        "%H:%M:%S"
-                    ),
-                    "price": float(
-                        item.price
-                    ),
-                })
-
-        except Exception:
-
-            history = []
-
-        # Always have at least current price
         if not history:
 
             history.append({
@@ -465,7 +775,7 @@ def stock_chart(request, symbol):
                 ),
                 "price": float(
                     stock.price
-                ),
+                )
             })
 
         return JsonResponse({
@@ -474,22 +784,21 @@ def stock_chart(request, symbol):
             "current_price": float(
                 stock.price
             ),
-            "data": history,
+            "data": history
         })
 
-    # Normal HTML page
     return render(
         request,
         "stock.html",
         {
             "symbol": stock.symbol,
-            "stock": stock,
+            "stock": stock
         }
     )
 
 
 # ==========================================
-# LIVE MARKET
+# LIVE MARKET STATUS
 # ==========================================
 
 def live_market(request):
@@ -507,6 +816,10 @@ def stock_prices(request):
 
     stocks = Stock.objects.all()
 
+    # ======================================
+    # UPDATE PRICES
+    # ======================================
+
     for stock in stocks:
 
         if stock.random_enabled:
@@ -522,12 +835,16 @@ def stock_prices(request):
                 )
             )
 
-            new_price = old_price * (
-                Decimal("1.00") +
-                movement
+            new_price = (
+                old_price *
+                (
+                    Decimal("1.00") +
+                    movement
+                )
             )
 
             if new_price < Decimal("1.00"):
+
                 new_price = Decimal("1.00")
 
             stock.previous_price = old_price
@@ -543,14 +860,18 @@ def stock_prices(request):
                 ]
             )
 
+            # ----------------------------------
+            # History
+            # ----------------------------------
+
             StockPriceHistory.objects.create(
                 stock=stock,
                 price=stock.price
             )
 
-    # ==========================================
-    # EXECUTE LIMIT SELL ORDERS
-    # ==========================================
+    # ======================================
+    # EXECUTE LIMIT ORDERS
+    # ======================================
 
     pending_orders = LimitOrder.objects.filter(
         executed=False,
@@ -564,57 +885,31 @@ def stock_prices(request):
 
         stock = order.stock
 
-        # SELL when market price reaches
-        # or goes above the limit price.
-        if stock.price >= order.limit_price:
+        # ----------------------------------
+        # Target not reached
+        # ----------------------------------
 
-            with transaction.atomic():
+        if stock.price < order.limit_price:
 
-                holding = Holding.objects.filter(
-                    user=order.user,
-                    stock=stock
-                ).first()
+            continue
 
-                if not holding:
-                    continue
+        with transaction.atomic():
 
-                if holding.quantity < order.quantity:
-                    continue
+            holding = Holding.objects.filter(
+                user=order.user,
+                stock=stock
+            ).first()
 
-                wallet, created = Wallet.objects.get_or_create(
-                    user=order.user
-                )
+            # ----------------------------------
+            # Holding missing
+            # ----------------------------------
 
-                sell_price = stock.price
-
-                total = (
-                    sell_price *
-                    order.quantity
-                )
-
-                holding.quantity -= order.quantity
-
-                if holding.quantity == 0:
-
-                    holding.delete()
-
-                else:
-
-                    holding.save()
-
-                wallet.balance += total
-                wallet.save()
-
-                Transaction.objects.create(
-                    user=order.user,
-                    stock=stock,
-                    transaction_type=Transaction.SELL,
-                    quantity=order.quantity,
-                    price=sell_price
-                )
+            if not holding:
 
                 order.executed = True
+
                 order.executed_at = timezone.now()
+
                 order.save(
                     update_fields=[
                         "executed",
@@ -622,9 +917,98 @@ def stock_prices(request):
                     ]
                 )
 
-    # ==========================================
-    # RETURN CURRENT PRICES
-    # ==========================================
+                continue
+
+            # ----------------------------------
+            # Not enough shares
+            # ----------------------------------
+
+            if holding.quantity < order.quantity:
+
+                order.executed = True
+
+                order.executed_at = timezone.now()
+
+                order.save(
+                    update_fields=[
+                        "executed",
+                        "executed_at"
+                    ]
+                )
+
+                continue
+
+            # ----------------------------------
+            # Wallet
+            # ----------------------------------
+
+            wallet, created = Wallet.objects.get_or_create(
+                user=order.user
+            )
+
+            # ----------------------------------
+            # Execute at current price
+            # ----------------------------------
+
+            sell_price = stock.price
+
+            total = (
+                sell_price *
+                order.quantity
+            )
+
+            # ----------------------------------
+            # Remove shares
+            # ----------------------------------
+
+            holding.quantity -= order.quantity
+
+            if holding.quantity == 0:
+
+                holding.delete()
+
+            else:
+
+                holding.save()
+
+            # ----------------------------------
+            # Add money
+            # ----------------------------------
+
+            wallet.balance += total
+
+            wallet.save()
+
+            # ----------------------------------
+            # Transaction
+            # ----------------------------------
+
+            Transaction.objects.create(
+                user=order.user,
+                stock=stock,
+                transaction_type=Transaction.SELL,
+                quantity=order.quantity,
+                price=sell_price
+            )
+
+            # ----------------------------------
+            # Complete order
+            # ----------------------------------
+
+            order.executed = True
+
+            order.executed_at = timezone.now()
+
+            order.save(
+                update_fields=[
+                    "executed",
+                    "executed_at"
+                ]
+            )
+
+    # ======================================
+    # RETURN LIVE PRICES
+    # ======================================
 
     stocks = Stock.objects.all()
 
@@ -635,7 +1019,9 @@ def stock_prices(request):
         data.append({
             "symbol": stock.symbol,
             "name": stock.name,
-            "price": float(stock.price),
+            "price": float(
+                stock.price
+            ),
             "previous_price": float(
                 stock.previous_price
             ),
@@ -644,125 +1030,43 @@ def stock_prices(request):
             ),
             "change_percent": float(
                 stock.change_percent
-            ),
+            )
         })
 
     return JsonResponse({
         "stocks": data
     })
+
+
+# ==========================================
+# CANCEL LIMIT ORDER
+# ==========================================
+
 @login_required
-def limit_sell(request, symbol):
+def cancel_limit_order(request, order_id):
 
-    stock = get_object_or_404(
-        Stock,
-        symbol=symbol
-    )
+    if request.method != "POST":
 
-    holding = Holding.objects.filter(
+        return redirect("portfolio")
+
+    order = get_object_or_404(
+        LimitOrder,
+        id=order_id,
         user=request.user,
-        stock=stock
-    ).first()
-
-    if request.method == "POST":
-
-        try:
-            quantity = int(
-                request.POST.get(
-                    "quantity",
-                    0
-                )
-            )
-
-            limit_price = Decimal(
-                request.POST.get(
-                    "limit_price",
-                    "0"
-                )
-            )
-
-        except (TypeError, ValueError, ArithmeticError):
-
-            messages.error(
-                request,
-                "Invalid quantity or price."
-            )
-
-            return render(
-                request,
-                "limit_sell.html",
-                {
-                    "stock": stock,
-                    "holding": holding,
-                }
-            )
-
-        if quantity <= 0:
-
-            messages.error(
-                request,
-                "Quantity must be greater than 0."
-            )
-
-            return render(
-                request,
-                "limit_sell.html",
-                {
-                    "stock": stock,
-                    "holding": holding,
-                }
-            )
-
-        if limit_price <= 0:
-
-            messages.error(
-                request,
-                "Limit price must be greater than ₹0."
-            )
-
-            return render(
-                request,
-                "limit_sell.html",
-                {
-                    "stock": stock,
-                    "holding": holding,
-                }
-            )
-
-        if not holding or holding.quantity < quantity:
-
-            messages.error(
-                request,
-                "You don't own enough shares."
-            )
-
-            return render(
-                request,
-                "limit_sell.html",
-                {
-                    "stock": stock,
-                    "holding": holding,
-                }
-            )
-
-        LimitOrder.objects.create(
-            user=request.user,
-            stock=stock,
-            order_type=LimitOrder.SELL,
-            quantity=quantity,
-            limit_price=limit_price
-        )
-
-        messages.success(
-            request,
-            f"Limit sell placed: {quantity} "
-            f"shares of {stock.symbol} at ₹{limit_price}."
-        )
-
-    return render(
-        request,
-        "limit_sell.html",
-        {
-            "stock": stock,
-            "holding": holding,
-        }
+        executed=False
     )
+
+    quantity = order.quantity
+
+    symbol = order.stock.symbol
+
+    order.delete()
+
+    messages.success(
+        request,
+        f"❌ Limit order cancelled for "
+        f"{quantity} shares of {symbol}."
+    )
+
+    return redirect("portfolio")
+

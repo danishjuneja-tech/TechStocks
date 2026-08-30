@@ -1,104 +1,761 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Buy {{ stock.symbol }}</title>
 
+
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #0f172a;
-            color: white;
+
+        * {
+            box-sizing: border-box;
         }
+
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at top right,
+                    #172554 0%,
+                    #0f172a 40%,
+                    #020617 100%
+                );
+
+            color: white;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            padding: 20px;
+
+        }
+
 
         .box {
+
+            width: 100%;
+
             max-width: 500px;
-            margin: 80px auto;
-            background: #1e293b;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(30, 41, 59, 0.98),
+                    rgba(15, 23, 42, 0.98)
+                );
+
             padding: 35px;
-            border-radius: 15px;
-            text-align: center;
+
+            border-radius: 20px;
+
+            border:
+                1px solid
+                rgba(148, 163, 184, 0.15);
+
+            box-shadow:
+                0 20px 55px
+                rgba(0, 0, 0, 0.35);
+
         }
+
 
         h1 {
+
+            text-align: center;
+
             color: #38bdf8;
+
+            margin-top: 0;
+
+            margin-bottom: 10px;
+
         }
+
+
+        h2 {
+
+            text-align: center;
+
+            margin-bottom: 5px;
+
+        }
+
+
+        .symbol {
+
+            text-align: center;
+
+            color: #94a3b8;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        /* ==========================
+           LIVE PRICE
+        ========================== */
+
+        .price-box {
+
+            background: #0f172a;
+
+            border-radius: 14px;
+
+            padding: 20px;
+
+            text-align: center;
+
+            margin-bottom: 25px;
+
+            border:
+                1px solid
+                rgba(56, 189, 248, 0.18);
+
+        }
+
+
+        .price-label {
+
+            color: #94a3b8;
+
+            font-size: 14px;
+
+            margin-bottom: 7px;
+
+        }
+
 
         .price {
-            font-size: 30px;
-            font-weight: bold;
-            margin: 25px;
+
+            font-size: 36px;
+
+            font-weight: 800;
+
+            color: #38bdf8;
+
+            transition:
+                color 0.2s ease;
+
         }
+
+
+        .live {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+            margin-top: 8px;
+
+            color: #22c55e;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+        }
+
+
+        .live-dot {
+
+            width: 8px;
+
+            height: 8px;
+
+            background: #22c55e;
+
+            border-radius: 50%;
+
+            animation:
+                pulse 1s infinite;
+
+        }
+
+
+        @keyframes pulse {
+
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+
+            100% {
+                opacity: 1;
+            }
+
+        }
+
+
+        /* ==========================
+           QUANTITY
+        ========================== */
+
+        label {
+
+            display: block;
+
+            color: #cbd5e1;
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+
+            text-align: left;
+
+        }
+
 
         input {
-            width: 90%;
+
+            width: 100%;
+
             padding: 14px;
-            margin: 15px 0;
+
+            margin-bottom: 15px;
+
             border-radius: 8px;
-            border: none;
+
+            border:
+                1px solid
+                #475569;
+
+            background: #1e293b;
+
+            color: white;
+
             font-size: 18px;
+
+            outline: none;
+
         }
+
+
+        input:focus {
+
+            border-color:
+                #38bdf8;
+
+            outline:
+                2px solid
+                rgba(56, 189, 248, 0.2);
+
+        }
+
+
+        /* ==========================
+           TOTAL
+        ========================== */
+
+        .total-box {
+
+            background: #172554;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            margin-bottom: 20px;
+
+            text-align: center;
+
+            color: #bfdbfe;
+
+        }
+
+
+        .total-box strong {
+
+            display: block;
+
+            color: #38bdf8;
+
+            font-size: 24px;
+
+            margin-top: 5px;
+
+        }
+
+
+        /* ==========================
+           BUY BUTTON
+        ========================== */
 
         button {
-            width: 95%;
-            padding: 14px;
+
+            width: 100%;
+
+            padding: 15px;
+
             background: #16a34a;
+
             color: white;
+
             border: none;
-            border-radius: 8px;
+
+            border-radius: 9px;
+
             font-size: 18px;
+
             font-weight: bold;
+
             cursor: pointer;
+
+            transition: 0.2s;
+
         }
 
-        .back {
-            display: block;
-            margin-top: 20px;
-            color: #38bdf8;
-            text-decoration: none;
+
+        button:hover {
+
+            background: #15803d;
+
+            transform:
+                translateY(-2px);
+
         }
+
+
+        /* ==========================
+           MESSAGES
+        ========================== */
+
+        .message {
+
+            background: #334155;
+
+            color: #e2e8f0;
+
+            padding: 12px;
+
+            border-radius: 8px;
+
+            margin-bottom: 18px;
+
+            text-align: center;
+
+        }
+
+
+        /* ==========================
+           BACK
+        ========================== */
+
+        .back {
+
+            display: block;
+
+            text-align: center;
+
+            margin-top: 22px;
+
+            color: #38bdf8;
+
+            text-decoration: none;
+
+        }
+
+
+        .back:hover {
+
+            text-decoration: underline;
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .box {
+
+                padding: 25px 20px;
+
+            }
+
+            .price {
+
+                font-size: 32px;
+
+            }
+
+        }
+
     </style>
+
 </head>
+
 
 <body>
 
+
 <div class="box">
 
-    <h1>Buy Stock</h1>
 
-    <h2>{{ stock.name }}</h2>
+    <h1>
+        📈 Buy Stock
+    </h1>
 
-    <p>{{ stock.symbol }}</p>
 
-    <div class="price">
-        ₹{{ stock.price }}
+    <h2>
+        {{ stock.name }}
+    </h2>
+
+
+    <div class="symbol">
+        {{ stock.symbol }}
     </div>
+
+
+    <!-- ==========================
+         LIVE PRICE
+    ========================== -->
+
+    <div class="price-box">
+
+        <div class="price-label">
+            Current Market Price
+        </div>
+
+
+        <div
+            class="price"
+            id="current-price"
+        >
+            ₹{{ stock.price }}
+        </div>
+
+
+        <div class="live">
+
+            <span class="live-dot"></span>
+
+            LIVE PRICE
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================
+         DJANGO MESSAGES
+    ========================== -->
+
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <div class="message">
+                {{ message }}
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+
+    <!-- ==========================
+         BUY FORM
+    ========================== -->
 
     <form method="post">
 
         {% csrf_token %}
 
+
+        <label for="quantity">
+            Number of Shares
+        </label>
+
+
         <input
             type="number"
+            id="quantity"
             name="quantity"
             min="1"
             placeholder="Enter quantity"
             required
         >
 
+
+        <!-- ==========================
+             TOTAL COST
+        ========================== -->
+
+        <div class="total-box">
+
+            Estimated Purchase Cost
+
+            <strong id="total">
+                ₹0.00
+            </strong>
+
+        </div>
+
+
         <button type="submit">
-            BUY SHARES
+
+            🟢 BUY SHARES
+
         </button>
+
 
     </form>
 
-    <a class="back" href="{% url 'market_home' %}">
+
+    <a
+        class="back"
+        href="{% url 'market_home' %}"
+    >
+
         ← Back to Market
+
     </a>
+
 
 </div>
 
+
+<script>
+
+    /*
+    ==========================================
+    LIVE STOCK PRICE
+    ==========================================
+    */
+
+
+    const stockSymbol =
+        "{{ stock.symbol }}";
+
+
+    const priceElement =
+        document.getElementById(
+            "current-price"
+        );
+
+
+    const quantityInput =
+        document.getElementById(
+            "quantity"
+        );
+
+
+    const totalElement =
+        document.getElementById(
+            "total"
+        );
+
+
+    /*
+    Store the latest price
+    */
+
+
+    let livePrice =
+        Number(
+            "{{ stock.price }}"
+        );
+
+
+    /*
+    ==========================================
+    UPDATE TOTAL
+    ==========================================
+    */
+
+
+    function updateTotal() {
+
+        if (
+            !quantityInput ||
+            !totalElement
+        ) {
+
+            return;
+
+        }
+
+
+        const quantity =
+            Number(
+                quantityInput.value
+            ) || 0;
+
+
+        const total =
+            quantity *
+            livePrice;
+
+
+        totalElement.textContent =
+            "₹" +
+            total.toFixed(2);
+
+    }
+
+
+    /*
+    ==========================================
+    GET LIVE PRICE
+    ==========================================
+    */
+
+
+    async function updateLivePrice() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "{% url 'stock_prices' %}",
+                    {
+                        cache: "no-store"
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Price request failed"
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            /*
+            Find this stock
+            */
+
+            const stock =
+                data.stocks.find(
+                    item =>
+                        item.symbol ===
+                        stockSymbol
+                );
+
+
+            if (!stock) {
+
+                return;
+
+            }
+
+
+            /*
+            Save new price
+            */
+
+            livePrice =
+                Number(
+                    stock.price
+                );
+
+
+            /*
+            Update price on screen
+            */
+
+            if (priceElement) {
+
+                priceElement.textContent =
+                    "₹" +
+                    livePrice.toFixed(2);
+
+            }
+
+
+            /*
+            Update total
+            */
+
+            updateTotal();
+
+        }
+
+        catch (error) {
+
+            console.log(
+                "Live price error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /*
+    ==========================================
+    QUANTITY CHANGE
+    ==========================================
+    */
+
+
+    if (quantityInput) {
+
+        quantityInput.addEventListener(
+            "input",
+            updateTotal
+        );
+
+    }
+
+
+    /*
+    ==========================================
+    FIRST UPDATE
+    ==========================================
+    */
+
+    updateLivePrice();
+
+
+    /*
+    ==========================================
+    UPDATE EVERY 1 SECOND
+    ==========================================
+    */
+
+    setInterval(
+        updateLivePrice,
+        1000
+    );
+
+</script>
+
+
 </body>
+
 </html>
+```

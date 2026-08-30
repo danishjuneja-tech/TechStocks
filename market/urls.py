@@ -1,34 +1,72 @@
+
 from django.urls import path
 from . import views
 
+
 urlpatterns = [
 
-    # Market home
-    path("", views.home, name="market_home"),
+    # Home
+    path(
+        "",
+        views.home,
+        name="market_home"
+    ),
 
-    # Signup
-    path("signup/", views.signup, name="signup"),
+    # Buy
+    path(
+        "buy/<str:symbol>/",
+        views.buy_stock,
+        name="buy_stock"
+    ),
 
-    # Buy stock
-    path("buy/<str:symbol>/", views.buy_stock, name="buy_stock"),
+    # Immediate Sell
+    path(
+        "sell/<str:symbol>/",
+        views.sell_stock,
+        name="sell_stock"
+    ),
 
-    # Sell stock
-    path("sell/<str:symbol>/", views.sell_stock, name="sell_stock"),
+    # Limit Sell
+    path(
+        "sell/<str:symbol>/limit/",
+        views.limit_sell,
+        name="limit_sell"
+    ),
+
+    # Cancel Limit Order
+    path(
+        "limit-order/cancel/<int:order_id>/",
+        views.cancel_limit_order,
+        name="cancel_limit_order"
+    ),
 
     # Portfolio
-    path("portfolio/", views.portfolio, name="portfolio"),
+    path(
+        "portfolio/",
+        views.portfolio,
+        name="portfolio"
+    ),
 
-    # Stock graph
-    path("stock/<str:symbol>/", views.stock_chart, name="stock_chart"),
+    # Stock chart
+    path(
+        "stock/<str:symbol>/",
+        views.stock_chart,
+        name="stock_chart"
+    ),
 
-    # Price API
-    path("api/prices/", views.stock_prices, name="stock_prices"),
+    # Live market
+    path(
+        "live/",
+        views.live_market,
+        name="live_market"
+    ),
 
-    # Live market API
-    path("api/live/", views.live_market, name="live_market"),
+    # Stock prices API
+    path(
+        "prices/",
+        views.stock_prices,
+        name="stock_prices"
+    ),
+
 ]
-path(
-    "limit-sell/<str:symbol>/",
-    views.limit_sell,
-    name="limit_sell"
-),
+

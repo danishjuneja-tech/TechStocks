@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,112 +13,344 @@
 
     <title>Limit Sell - {{ stock.symbol }}</title>
 
+
     <style>
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: Arial, sans-serif;
-            background: #0f172a;
-            color: white;
+        * {
+            box-sizing: border-box;
         }
+
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-family: Arial, sans-serif;
+
+            background: #0f172a;
+
+            color: white;
+
+            padding: 20px;
+
+        }
+
 
         .box {
-            width: 400px;
-            max-width: 90%;
+
+            width: 430px;
+
+            max-width: 95%;
+
             background: #1e293b;
-            padding: 30px;
+
+            padding: 32px;
+
             border-radius: 18px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+
+            box-shadow:
+                0 15px 40px
+                rgba(0,0,0,0.4);
+
         }
+
 
         h1 {
-            color: #38bdf8;
+
+            text-align: center;
+
+            color: #f59e0b;
+
             margin-top: 0;
+
         }
 
-        .info {
-            color: #cbd5e1;
-            line-height: 1.7;
+
+        .stock {
+
+            text-align: center;
+
+            font-size: 22px;
+
+            font-weight: bold;
+
         }
+
+
+        .symbol {
+
+            text-align: center;
+
+            color: #94a3b8;
+
+            margin-top: 5px;
+
+        }
+
+
+        .price-box {
+
+            text-align: center;
+
+            margin: 25px 0;
+
+            padding: 20px;
+
+            background: #0f172a;
+
+            border-radius: 12px;
+
+        }
+
+
+        .price-label {
+
+            color: #94a3b8;
+
+            font-size: 14px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .price {
+
+            font-size: 36px;
+
+            font-weight: bold;
+
+            color: #38bdf8;
+
+        }
+
+
+        .live {
+
+            margin-top: 7px;
+
+            font-size: 12px;
+
+            color: #22c55e;
+
+        }
+
+
+        .owned {
+
+            background: #334155;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            text-align: center;
+
+            margin-bottom: 22px;
+
+            color: #cbd5e1;
+
+        }
+
+
+        .owned strong {
+
+            color: white;
+
+            font-size: 20px;
+
+        }
+
 
         label {
+
             display: block;
-            margin-top: 18px;
+
+            margin-top: 16px;
+
             margin-bottom: 7px;
+
+            color: #cbd5e1;
+
+            font-weight: bold;
+
         }
+
 
         input {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            background: #334155;
-            color: white;
-            font-size: 16px;
-        }
 
-        button {
             width: 100%;
-            margin-top: 22px;
+
             padding: 13px;
-            border: none;
+
+            border: 1px solid #475569;
+
             border-radius: 8px;
-            background: #dc2626;
+
+            background: #334155;
+
             color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
+
+            font-size: 17px;
+
         }
 
-        button:hover {
-            background: #b91c1c;
+
+        input:focus {
+
+            outline: 2px solid #38bdf8;
+
         }
+
+
+        .limit-btn {
+
+            width: 100%;
+
+            padding: 14px;
+
+            margin-top: 22px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            background: #f59e0b;
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+        }
+
+
+        .limit-btn:hover {
+
+            background: #d97706;
+
+        }
+
 
         .back {
+
             display: block;
+
             text-align: center;
-            margin-top: 18px;
+
+            margin-top: 20px;
+
             color: #38bdf8;
+
             text-decoration: none;
+
         }
 
+
+        .info {
+
+            margin-top: 18px;
+
+            padding: 14px;
+
+            border-radius: 9px;
+
+            background: #0f172a;
+
+            color: #94a3b8;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+
+            text-align: center;
+
+        }
+
+
         .message {
+
             background: #334155;
+
             padding: 10px;
+
             border-radius: 8px;
+
             margin-bottom: 15px;
+
+            text-align: center;
+
+        }
+
+
+        .error {
+
+            color: #f87171;
+
         }
 
     </style>
 
 </head>
 
+
 <body>
+
 
 <div class="box">
 
-    <h1>🔴 Limit Sell</h1>
 
-    <div class="info">
+    <h1>
+        🎯 Limit Sell
+    </h1>
 
-        <strong>{{ stock.name }}</strong>
-        ({{ stock.symbol }})
 
-        <br>
+    <div class="stock">
+        {{ stock.name }}
+    </div>
 
-        Current Price:
-        ₹{{ stock.price }}
 
-        <br>
+    <div class="symbol">
+        {{ stock.symbol }}
+    </div>
 
-        Your Shares:
-        {{ holding.quantity|default:"0" }}
+
+    <!-- ================================
+         LIVE CURRENT PRICE
+    ================================= -->
+
+    <div class="price-box">
+
+        <div class="price-label">
+            Current Market Price
+        </div>
+
+
+        <div
+            class="price"
+            id="currentPrice"
+        >
+            ₹{{ stock.price }}
+        </div>
+
+
+        <div class="live">
+            ● LIVE PRICE
+        </div>
 
     </div>
+
 
     {% for message in messages %}
 
@@ -127,40 +360,115 @@
 
     {% endfor %}
 
-    <form method="post">
 
-        {% csrf_token %}
+    {% if holding %}
 
-        <label>
-            Quantity
-        </label>
 
-        <input
-            type="number"
-            name="quantity"
-            min="1"
-            max="{{ holding.quantity }}"
-            required
+        <div class="owned">
+
+            You own:
+
+            <strong>
+                {{ holding.quantity }}
+            </strong>
+
+            shares
+
+        </div>
+
+
+        <!-- =================================
+             LIMIT SELL FORM
+        ================================= -->
+
+        <form
+            method="POST"
+            action=""
         >
 
-        <label>
-            Sell when price reaches
-        </label>
+            {% csrf_token %}
 
-        <input
-            type="number"
-            name="limit_price"
-            min="0.01"
-            step="0.01"
-            placeholder="Example: 150.00"
-            required
-        >
 
-        <button type="submit">
-            🔴 Set Limit Sell
-        </button>
+            <label for="quantity">
+                Number of Shares
+            </label>
 
-    </form>
+
+            <input
+                type="number"
+                id="quantity"
+                name="quantity"
+                min="1"
+                max="{{ holding.quantity }}"
+                placeholder="Number of shares"
+                required
+            >
+
+
+            <label for="limit_price">
+                Sell when price reaches
+            </label>
+
+
+            <input
+                type="number"
+                id="limit_price"
+                name="limit_price"
+                min="{{ stock.price }}"
+                step="0.01"
+                placeholder="Example: 55.00"
+                required
+            >
+
+
+            <button
+                type="submit"
+                class="limit-btn"
+            >
+                🎯 PLACE LIMIT SELL
+            </button>
+
+        </form>
+
+
+        <div class="info">
+
+            This will <strong>NOT sell immediately.</strong>
+
+            <br><br>
+
+            Your shares will remain in your portfolio.
+
+            <br>
+
+            They will be sold automatically when
+            the market price reaches or goes above
+            your target price.
+
+            <br><br>
+
+            Current price:
+
+            <strong id="infoPrice">
+                ₹{{ stock.price }}
+            </strong>
+
+        </div>
+
+
+    {% else %}
+
+
+        <div class="owned">
+
+            You don't own any shares
+            of this stock.
+
+        </div>
+
+
+    {% endif %}
+
 
     <a
         class="back"
@@ -169,8 +477,169 @@
         ← Back to Sell
     </a>
 
+
 </div>
+
+
+<script>
+
+
+    // ==========================================
+    // STOCK SYMBOL
+    // ==========================================
+
+    const stockSymbol =
+        "{{ stock.symbol }}";
+
+
+    // ==========================================
+    // PRICE ELEMENTS
+    // ==========================================
+
+    const priceElement =
+        document.getElementById(
+            "currentPrice"
+        );
+
+
+    const infoPrice =
+        document.getElementById(
+            "infoPrice"
+        );
+
+
+    // ==========================================
+    // LIMIT PRICE INPUT
+    // ==========================================
+
+    const limitInput =
+        document.getElementById(
+            "limit_price"
+        );
+
+
+    // ==========================================
+    // UPDATE PRICE
+    // ==========================================
+
+    async function updateLivePrice() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "{% url 'stock_prices' %}",
+                    {
+                        cache: "no-store"
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Price API error"
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            const stock =
+                data.stocks.find(
+                    item =>
+                        item.symbol === stockSymbol
+                );
+
+
+            if (!stock) {
+
+                return;
+
+            }
+
+
+            // ==================================
+            // UPDATE MAIN PRICE
+            // ==================================
+
+            if (priceElement) {
+
+                priceElement.textContent =
+                    "₹" +
+                    Number(
+                        stock.price
+                    ).toFixed(2);
+
+            }
+
+
+            // ==================================
+            // UPDATE INFO PRICE
+            // ==================================
+
+            if (infoPrice) {
+
+                infoPrice.textContent =
+                    "₹" +
+                    Number(
+                        stock.price
+                    ).toFixed(2);
+
+            }
+
+
+            // ==================================
+            // UPDATE MINIMUM LIMIT PRICE
+            // ==================================
+
+            if (limitInput) {
+
+                limitInput.min =
+                    Number(
+                        stock.price
+                    ).toFixed(2);
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.log(
+                "Live price error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    // ==========================================
+    // GET PRICE IMMEDIATELY
+    // ==========================================
+
+    updateLivePrice();
+
+
+    // ==========================================
+    // UPDATE EVERY 2 SECONDS
+    // ==========================================
+
+    setInterval(
+        updateLivePrice,
+        2000
+    );
+
+
+</script>
+
 
 </body>
 
 </html>
+```

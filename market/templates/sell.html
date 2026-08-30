@@ -13,13 +13,11 @@
 
     <title>Sell {{ stock.symbol }}</title>
 
-
     <style>
 
         * {
             box-sizing: border-box;
         }
-
 
         body {
 
@@ -49,9 +47,7 @@
             align-items: center;
 
             padding: 20px;
-
         }
-
 
         .box {
 
@@ -77,9 +73,7 @@
             box-shadow:
                 0 20px 55px
                 rgba(0, 0, 0, 0.35);
-
         }
-
 
         h1 {
 
@@ -90,9 +84,7 @@
             margin-top: 0;
 
             margin-bottom: 8px;
-
         }
-
 
         .stock-name {
 
@@ -100,10 +92,10 @@
 
             font-size: 22px;
 
+            font-weight: bold;
+
             margin: 5px 0;
-
         }
-
 
         .symbol {
 
@@ -112,9 +104,7 @@
             color: #94a3b8;
 
             margin-bottom: 25px;
-
         }
-
 
         .price-box {
 
@@ -131,9 +121,7 @@
             border:
                 1px solid
                 rgba(56, 189, 248, 0.15);
-
         }
-
 
         .price-label {
 
@@ -142,9 +130,7 @@
             font-size: 14px;
 
             margin-bottom: 7px;
-
         }
-
 
         .price {
 
@@ -154,8 +140,65 @@
 
             color: #38bdf8;
 
+            transition:
+                color 0.25s,
+                transform 0.25s;
         }
 
+        .price.up {
+
+            color: #22c55e;
+
+            transform: scale(1.04);
+        }
+
+        .price.down {
+
+            color: #ef4444;
+
+            transform: scale(1.04);
+        }
+
+        .live {
+
+            margin-top: 8px;
+
+            font-size: 12px;
+
+            color: #22c55e;
+        }
+
+        .live-dot {
+
+            display: inline-block;
+
+            width: 8px;
+
+            height: 8px;
+
+            background: #22c55e;
+
+            border-radius: 50%;
+
+            margin-right: 5px;
+
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
 
         .owned {
 
@@ -170,127 +213,14 @@
             margin-bottom: 25px;
 
             color: #cbd5e1;
-
         }
-
 
         .owned strong {
 
             color: white;
 
             font-size: 20px;
-
         }
-
-
-        .section-title {
-
-            font-size: 16px;
-
-            font-weight: bold;
-
-            margin-bottom: 12px;
-
-            color: #e2e8f0;
-
-        }
-
-
-        .options {
-
-            display: grid;
-
-            grid-template-columns:
-                1fr 1fr;
-
-            gap: 10px;
-
-            margin-bottom: 20px;
-
-        }
-
-
-        .option {
-
-            background: #334155;
-
-            border: 2px solid transparent;
-
-            padding: 14px;
-
-            border-radius: 10px;
-
-            cursor: pointer;
-
-            text-align: center;
-
-            transition: 0.2s;
-
-        }
-
-
-        .option:hover {
-
-            border-color: #64748b;
-
-        }
-
-
-        .option.active {
-
-            border-color: #38bdf8;
-
-            background: #1e3a5f;
-
-        }
-
-
-        .option input {
-
-            display: none;
-
-        }
-
-
-        .option-title {
-
-            font-weight: bold;
-
-            margin-bottom: 5px;
-
-        }
-
-
-        .option-description {
-
-            font-size: 12px;
-
-            color: #94a3b8;
-
-        }
-
-
-        .limit-section {
-
-            display: none;
-
-            background: #0f172a;
-
-            padding: 18px;
-
-            border-radius: 12px;
-
-            margin-bottom: 20px;
-
-        }
-
-
-        .limit-section.show {
-
-            display: block;
-
-        }
-
 
         label {
 
@@ -301,59 +231,9 @@
             font-weight: bold;
 
             margin-bottom: 8px;
-
         }
 
-
-        input[type="number"] {
-
-            width: 100%;
-
-            padding: 14px;
-
-            margin-bottom: 10px;
-
-            border-radius: 8px;
-
-            border: 1px solid #475569;
-
-            background: #1e293b;
-
-            color: white;
-
-            font-size: 17px;
-
-        }
-
-
-        input[type="number"]:focus {
-
-            outline: none;
-
-            border-color: #38bdf8;
-
-        }
-
-
-        .limit-help {
-
-            color: #94a3b8;
-
-            font-size: 12px;
-
-            line-height: 1.5;
-
-        }
-
-
-        .quantity-section {
-
-            margin-top: 20px;
-
-        }
-
-
-        .quantity-input {
+        input {
 
             width: 100%;
 
@@ -361,7 +241,8 @@
 
             border-radius: 8px;
 
-            border: 1px solid #475569;
+            border:
+                1px solid #475569;
 
             background: #1e293b;
 
@@ -369,34 +250,15 @@
 
             font-size: 18px;
 
+            margin-bottom: 10px;
         }
 
+        input:focus {
 
-        .estimate {
+            outline: none;
 
-            background: #172554;
-
-            padding: 15px;
-
-            border-radius: 10px;
-
-            margin-top: 15px;
-
-            text-align: center;
-
-            color: #bfdbfe;
-
+            border-color: #38bdf8;
         }
-
-
-        .estimate strong {
-
-            color: #38bdf8;
-
-            font-size: 20px;
-
-        }
-
 
         .sell-button {
 
@@ -404,7 +266,7 @@
 
             padding: 15px;
 
-            margin-top: 22px;
+            margin-top: 15px;
 
             background: #dc2626;
 
@@ -421,24 +283,76 @@
             cursor: pointer;
 
             transition: 0.2s;
-
         }
-
 
         .sell-button:hover {
 
             background: #b91c1c;
 
             transform: translateY(-2px);
-
         }
 
+        .limit-button {
+
+            display: block;
+
+            width: 100%;
+
+            padding: 15px;
+
+            margin-top: 14px;
+
+            background: #f59e0b;
+
+            color: white;
+
+            border-radius: 9px;
+
+            text-align: center;
+
+            text-decoration: none;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            transition: 0.2s;
+        }
+
+        .limit-button:hover {
+
+            background: #d97706;
+
+            transform: translateY(-2px);
+        }
+
+        .estimate {
+
+            background: #172554;
+
+            padding: 14px;
+
+            border-radius: 9px;
+
+            margin-top: 10px;
+
+            text-align: center;
+
+            color: #bfdbfe;
+
+            font-size: 14px;
+        }
+
+        .estimate strong {
+
+            color: #38bdf8;
+
+            font-size: 19px;
+        }
 
         .message {
 
-            background: #7f1d1d;
-
-            color: #fecaca;
+            background: #334155;
 
             padding: 12px;
 
@@ -447,9 +361,26 @@
             margin-bottom: 20px;
 
             text-align: center;
-
         }
 
+        .info {
+
+            background: #0f172a;
+
+            padding: 14px;
+
+            border-radius: 9px;
+
+            margin-top: 18px;
+
+            color: #94a3b8;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+
+            text-align: center;
+        }
 
         .back {
 
@@ -462,37 +393,24 @@
             color: #38bdf8;
 
             text-decoration: none;
-
         }
-
 
         .back:hover {
 
             text-decoration: underline;
-
         }
-
 
         @media (max-width: 500px) {
 
             .box {
 
                 padding: 25px 20px;
-
-            }
-
-            .options {
-
-                grid-template-columns: 1fr;
-
             }
 
             .price {
 
                 font-size: 32px;
-
             }
-
         }
 
     </style>
@@ -521,7 +439,9 @@
     </div>
 
 
-    <!-- CURRENT PRICE -->
+    <!-- ==================================
+         LIVE CURRENT PRICE
+    ================================== -->
 
     <div class="price-box">
 
@@ -529,16 +449,43 @@
             Current Market Price
         </div>
 
-        <div class="price">
+        <div
+            class="price"
+            id="livePrice"
+        >
             ₹{{ stock.price }}
+        </div>
+
+        <div class="live">
+
+            <span class="live-dot"></span>
+
+            LIVE MARKET PRICE
+
         </div>
 
     </div>
 
 
-    <!-- OWNED SHARES -->
+    <!-- ==================================
+         MESSAGES
+    ================================== -->
+
+    {% for message in messages %}
+
+        <div class="message">
+            {{ message }}
+        </div>
+
+    {% endfor %}
+
 
     {% if holding %}
+
+
+        <!-- ==================================
+             SHARES OWNED
+        ================================== -->
 
         <div class="owned">
 
@@ -553,140 +500,43 @@
         </div>
 
 
-        {% if messages %}
+        <!-- ==================================
+             IMMEDIATE SELL
+        ================================== -->
 
-            {% for message in messages %}
-
-                <div class="message">
-                    {{ message }}
-                </div>
-
-            {% endfor %}
-
-        {% endif %}
-
-
-        <form method="post">
+        <form
+            method="POST"
+            action="{% url 'sell_stock' stock.symbol %}"
+        >
 
             {% csrf_token %}
 
-
-            <!-- SELL TYPE -->
-
-            <div class="section-title">
-                Choose selling method
-            </div>
-
-
-            <div class="options">
-
-
-                <label
-                    class="option active"
-                    id="marketOption"
-                >
-
-                    <input
-                        type="radio"
-                        name="sell_type"
-                        value="market"
-                        checked
-                    >
-
-                    <div class="option-title">
-                        🔴 Sell Now
-                    </div>
-
-                    <div class="option-description">
-                        Sell at current market price
-                    </div>
-
-                </label>
-
-
-                <label
-                    class="option"
-                    id="limitOption"
-                >
-
-                    <input
-                        type="radio"
-                        name="sell_type"
-                        value="limit"
-                    >
-
-                    <div class="option-title">
-                        🎯 Limit Sell
-                    </div>
-
-                    <div class="option-description">
-                        Sell when target price is reached
-                    </div>
-
-                </label>
-
-
-            </div>
-
-
-            <!-- LIMIT PRICE -->
-
-            <div
-                class="limit-section"
-                id="limitSection"
+            <input
+                type="hidden"
+                name="sell_type"
+                value="market"
             >
 
-                <label for="limit_price">
-                    Target Sell Price
-                </label>
+
+            <label for="quantity">
+
+                Number of Shares
+
+            </label>
 
 
-                <input
-                    type="number"
-                    id="limit_price"
-                    name="limit_price"
-                    min="0.01"
-                    step="0.01"
-                    placeholder="Example: 250.00"
-                >
+            <input
+                type="number"
+                id="quantity"
+                name="quantity"
+                min="1"
+                max="{{ holding.quantity }}"
+                placeholder="Enter quantity"
+                required
+            >
 
 
-                <div class="limit-help">
-
-                    🎯 Your shares will be sold when the
-                    market price reaches or goes above
-                    your target price.
-
-                </div>
-
-            </div>
-
-
-            <!-- QUANTITY -->
-
-            <div class="quantity-section">
-
-                <label for="quantity">
-                    Number of Shares
-                </label>
-
-
-                <input
-                    class="quantity-input"
-                    type="number"
-                    id="quantity"
-                    name="quantity"
-                    min="1"
-                    max="{{ holding.quantity }}"
-                    placeholder="Enter quantity"
-                    required
-                    oninput="updateEstimate()"
-                >
-
-            </div>
-
-
-            <!-- ESTIMATE -->
+            <!-- ESTIMATED SELL VALUE -->
 
             <div class="estimate">
 
@@ -700,16 +550,52 @@
 
 
             <button
-                class="sell-button"
                 type="submit"
+                class="sell-button"
             >
 
-                🔴 SELL SHARES
+                🔴 SELL SHARES NOW
 
             </button>
 
-
         </form>
+
+
+        <!-- ==================================
+             LIMIT SELL
+        ================================== -->
+
+        <a
+            class="limit-button"
+            href="{% url 'limit_sell' stock.symbol %}"
+        >
+
+            🎯 LIMIT SELL
+
+        </a>
+
+
+        <!-- ==================================
+             INFORMATION
+        ================================== -->
+
+        <div class="info">
+
+            🔴 <strong>Sell Now</strong>
+
+            sells your shares immediately
+            at the current market price.
+
+            <br><br>
+
+            🎯 <strong>Limit Sell</strong>
+
+            does NOT sell immediately.
+
+            It waits until your target price
+            is reached.
+
+        </div>
 
 
     {% else %}
@@ -717,7 +603,8 @@
 
         <div class="owned">
 
-            You don't own any shares of this stock.
+            You don't own any shares
+            of this stock.
 
         </div>
 
@@ -741,27 +628,13 @@
 <script>
 
 
-    const marketOption =
+    // ==========================================
+    // LIVE PRICE ELEMENTS
+    // ==========================================
+
+    const livePrice =
         document.getElementById(
-            "marketOption"
-        );
-
-
-    const limitOption =
-        document.getElementById(
-            "limitOption"
-        );
-
-
-    const limitSection =
-        document.getElementById(
-            "limitSection"
-        );
-
-
-    const limitPrice =
-        document.getElementById(
-            "limit_price"
+            "livePrice"
         );
 
 
@@ -777,65 +650,27 @@
         );
 
 
-    const currentPrice =
+    // ==========================================
+    // STOCK SYMBOL
+    // ==========================================
+
+    const stockSymbol =
+        "{{ stock.symbol|escapejs }}";
+
+
+    // ==========================================
+    // STARTING PRICE
+    // ==========================================
+
+    let currentPrice =
         Number(
             "{{ stock.price }}"
         );
 
 
-    function selectMarket() {
-
-        marketOption.classList.add(
-            "active"
-        );
-
-        limitOption.classList.remove(
-            "active"
-        );
-
-        limitSection.classList.remove(
-            "show"
-        );
-
-        limitPrice.required = false;
-
-        updateEstimate();
-
-    }
-
-
-    function selectLimit() {
-
-        limitOption.classList.add(
-            "active"
-        );
-
-        marketOption.classList.remove(
-            "active"
-        );
-
-        limitSection.classList.add(
-            "show"
-        );
-
-        limitPrice.required = true;
-
-        updateEstimate();
-
-    }
-
-
-    marketOption.addEventListener(
-        "click",
-        selectMarket
-    );
-
-
-    limitOption.addEventListener(
-        "click",
-        selectLimit
-    );
-
+    // ==========================================
+    // UPDATE ESTIMATE
+    // ==========================================
 
     function updateEstimate() {
 
@@ -848,31 +683,8 @@
             Number(quantity.value) || 0;
 
 
-        let price =
-            currentPrice;
-
-
-        const selected =
-            document.querySelector(
-                'input[name="sell_type"]:checked'
-            );
-
-
-        if (
-            selected &&
-            selected.value === "limit" &&
-            limitPrice &&
-            Number(limitPrice.value) > 0
-        ) {
-
-            price =
-                Number(limitPrice.value);
-
-        }
-
-
         const total =
-            qty * price;
+            qty * currentPrice;
 
 
         estimate.textContent =
@@ -880,6 +692,143 @@
 
     }
 
+
+    // ==========================================
+    // GET LIVE STOCK PRICES
+    // ==========================================
+
+    async function updateLivePrice() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "{% url 'stock_prices' %}",
+                    {
+                        method: "GET",
+
+                        cache: "no-store"
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Price request failed"
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            // Find this stock
+
+            const stock =
+                data.stocks.find(
+                    item =>
+                        item.symbol === stockSymbol
+                );
+
+
+            if (!stock) {
+
+                return;
+
+            }
+
+
+            const newPrice =
+                Number(
+                    stock.price
+                );
+
+
+            // ==================================
+            // PRICE MOVEMENT EFFECT
+            // ==================================
+
+            if (
+                newPrice >
+                currentPrice
+            ) {
+
+                livePrice.classList.remove(
+                    "down"
+                );
+
+                livePrice.classList.add(
+                    "up"
+                );
+
+            }
+
+            else if (
+                newPrice <
+                currentPrice
+            ) {
+
+                livePrice.classList.remove(
+                    "up"
+                );
+
+                livePrice.classList.add(
+                    "down"
+                );
+
+            }
+
+
+            // ==================================
+            // UPDATE PRICE
+            // ==================================
+
+            currentPrice =
+                newPrice;
+
+
+            livePrice.textContent =
+                "₹" +
+                currentPrice.toFixed(2);
+
+
+            updateEstimate();
+
+
+            // Remove animation class
+
+            setTimeout(
+                function() {
+
+                    livePrice.classList.remove(
+                        "up",
+                        "down"
+                    );
+
+                },
+                300
+            );
+
+        }
+
+        catch (error) {
+
+            console.log(
+                "Live price error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    // ==========================================
+    // QUANTITY LISTENER
+    // ==========================================
 
     if (quantity) {
 
@@ -891,14 +840,23 @@
     }
 
 
-    if (limitPrice) {
+    // ==========================================
+    // FIRST PRICE UPDATE
+    // ==========================================
 
-        limitPrice.addEventListener(
-            "input",
-            updateEstimate
-        );
+    updateLivePrice();
 
-    }
+
+    // ==========================================
+    // KEEP PRICE LIVE
+    //
+    // Every 2 seconds
+    // ==========================================
+
+    setInterval(
+        updateLivePrice,
+        2000
+    );
 
 
 </script>

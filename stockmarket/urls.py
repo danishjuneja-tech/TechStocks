@@ -1,9 +1,9 @@
+
 from django.contrib import admin
 from django.urls import path, include
 
-urlpatterns = [
 
-    path("", include("market.urls")),
+urlpatterns = [
 
     path(
         "admin/",
@@ -21,3 +21,4 @@ urlpatterns = [
     ),
 
 ]
+
