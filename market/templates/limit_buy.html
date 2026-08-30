@@ -11,7 +11,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Limit Buy - {{ stock.symbol }}</title>
+    <title>Limit Buy - Danish Stock Market</title>
 
     <style>
 
@@ -20,234 +20,153 @@
         }
 
         body {
-
             margin: 0;
-
             min-height: 100vh;
-
             display: flex;
-
             justify-content: center;
-
             align-items: center;
-
             font-family: Arial, sans-serif;
-
             background: #0f172a;
-
             color: white;
         }
 
         .box {
-
-            width: 430px;
-
+            width: 420px;
             max-width: 92%;
-
             background: #1e293b;
-
             padding: 30px;
-
             border-radius: 18px;
-
-            box-shadow:
-                0 15px 40px
-                rgba(0, 0, 0, 0.4);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
         }
 
         h1 {
-
             text-align: center;
-
-            color: #22c55e;
-
+            color: #38bdf8;
             margin-top: 0;
-
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .stock {
-
             text-align: center;
-
             font-size: 22px;
-
             font-weight: bold;
-
-            margin-bottom: 22px;
+            margin-bottom: 5px;
         }
 
         .symbol {
-
             color: #94a3b8;
+            font-size: 15px;
         }
 
-        .price-box {
-
-            background: #0f172a;
-
-            padding: 20px;
-
-            border-radius: 12px;
-
+        .price {
             text-align: center;
-
-            margin-bottom: 20px;
-        }
-
-        .price-box small {
-
-            display: block;
-
-            color: #94a3b8;
-
-            margin-bottom: 7px;
-        }
-
-        .current-price {
-
-            color: #38bdf8;
-
-            font-size: 30px;
-
+            color: #22c55e;
+            font-size: 25px;
             font-weight: bold;
+            margin-bottom: 25px;
         }
 
         .price-change {
-
-            margin-top: 7px;
-
+            text-align: center;
             font-size: 13px;
-
+            margin-top: -18px;
+            margin-bottom: 20px;
             color: #94a3b8;
         }
 
-        .wallet {
-
-            text-align: center;
-
-            color: #38bdf8;
-
-            margin-bottom: 20px;
-        }
-
-        label {
-
-            display: block;
-
-            margin-top: 15px;
-
-            margin-bottom: 7px;
-
-            color: #cbd5e1;
-
+        .live {
+            color: #22c55e;
             font-weight: bold;
         }
 
+        label {
+            display: block;
+            color: #cbd5e1;
+            margin-top: 15px;
+            margin-bottom: 7px;
+        }
+
         input {
-
             width: 100%;
-
             padding: 13px;
-
             border: none;
-
             border-radius: 8px;
-
             background: #334155;
-
             color: white;
-
             font-size: 16px;
         }
 
         input:focus {
-
-            outline: 2px solid #22c55e;
-        }
-
-        .help {
-
-            color: #94a3b8;
-
-            font-size: 12px;
-
-            line-height: 1.5;
-
-            margin-top: 6px;
+            outline: 2px solid #38bdf8;
         }
 
         button {
-
             width: 100%;
-
+            margin-top: 22px;
             padding: 14px;
-
-            margin-top: 25px;
-
             border: none;
-
             border-radius: 8px;
-
             background: #16a34a;
-
             color: white;
-
             font-size: 17px;
-
             font-weight: bold;
-
             cursor: pointer;
         }
 
         button:hover {
-
             background: #15803d;
         }
 
-        .back {
-
-            display: block;
-
-            text-align: center;
-
-            margin-top: 16px;
-
-            color: #38bdf8;
-
-            text-decoration: none;
-
-            font-weight: bold;
-        }
-
-        .note {
-
+        .info {
             background: #0f172a;
-
-            padding: 12px;
-
-            border-radius: 8px;
-
-            margin-top: 18px;
-
-            color: #94a3b8;
-
+            border: 1px solid #38bdf8;
+            padding: 14px;
+            border-radius: 10px;
+            margin-top: 20px;
+            color: #cbd5e1;
             font-size: 13px;
-
             line-height: 1.5;
-
-            text-align: center;
         }
 
-        .live {
+        .warning {
+            background: #451a03;
+            border: 1px solid #f59e0b;
+            color: #fbbf24;
+            padding: 12px;
+            border-radius: 9px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
 
-            color: #22c55e;
+        .error {
+            background: #7f1d1d;
+            color: #fecaca;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
 
-            font-size: 12px;
+        .success {
+            background: #14532d;
+            color: #bbf7d0;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
 
-            margin-top: 8px;
-
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 18px;
+            color: #38bdf8;
+            text-decoration: none;
             font-weight: bold;
+        }
+
+        .back:hover {
+            text-decoration: underline;
         }
 
     </style>
@@ -277,59 +196,46 @@
     </div>
 
 
-    <!-- ======================================
-         LIVE PRICE
-    ======================================= -->
+    <!-- LIVE PRICE -->
 
-    <div class="price-box">
+    <div class="price">
 
-        <small>
-            Current Market Price
-        </small>
-
-        <div
-            class="current-price"
-            id="current-price"
-        >
-
-            ₹{{ stock.price|floatformat:2 }}
-
-        </div>
-
-        <div
-            class="price-change"
-            id="price-change"
-        >
-
-            Waiting for live update...
-
-        </div>
-
-        <div class="live">
-
-            🟢 LIVE MARKET
-
-        </div>
+        ₹<span id="live-price">
+            {{ stock.price|floatformat:2 }}
+        </span>
 
     </div>
 
 
-    <!-- ======================================
-         WALLET
-    ======================================= -->
+    <div class="price-change">
 
-    <div class="wallet">
-
-        💰 Wallet:
-
-        ₹{{ wallet.balance|floatformat:2 }}
+        🟢 <span class="live">LIVE PRICE</span>
 
     </div>
 
 
-    <!-- ======================================
-         FORM
-    ======================================= -->
+    {% if messages %}
+
+        {% for message in messages %}
+
+            {% if 'success' in message.tags %}
+
+                <div class="success">
+                    {{ message }}
+                </div>
+
+            {% else %}
+
+                <div class="error">
+                    {{ message }}
+                </div>
+
+            {% endif %}
+
+        {% endfor %}
+
+    {% endif %}
+
 
     <form method="POST">
 
@@ -337,9 +243,7 @@
 
 
         <label for="quantity">
-
             Number of Shares
-
         </label>
 
         <input
@@ -354,9 +258,7 @@
 
 
         <label for="limit_price">
-
-            Maximum Buy Price
-
+            Limit Buy Price
         </label>
 
         <input
@@ -365,57 +267,71 @@
             name="limit_price"
             min="0.01"
             step="0.01"
-            placeholder="Enter your target price"
+            placeholder="Example: {{ stock.price }}"
             required
         >
 
 
-        <div class="help">
-
-            Your order will execute automatically
-            when the live market price falls to
-            or below your limit price.
-
-        </div>
-
-
         <button type="submit">
 
-            🎯 PLACE LIMIT BUY
+            🟢 PLACE LIMIT BUY
 
         </button>
 
     </form>
 
 
-    <div class="note">
+    <div class="info">
 
-        ⏳ Your money stays in the wallet until
-        the order executes.
+        💡 <strong>How Limit Buy Works</strong>
+
+        <br><br>
+
+        Set a price <strong>below the current price</strong>.
+
+        <br><br>
+
+        Example:
 
         <br>
 
-        📉 Market price changes automatically.
+        Current price = ₹100
+
+        <br>
+
+        Limit buy = ₹90
+
+        <br><br>
+
+        Your order stays <strong>pending</strong> until the
+        stock reaches ₹90 or lower.
+
+        <br><br>
+
+        Then the system automatically buys the shares
+        at the current market price.
+
+    </div>
+
+
+    <div class="warning">
+
+        ⚠️ Do not place the same limit buy repeatedly.
+
+        <br>
+
+        Once placed, check your Portfolio for the
+        pending order and cancel it there if needed.
 
     </div>
 
 
     <a
         class="back"
-        href="{% url 'buy_stock' stock.symbol %}"
+        href="{% url 'market_home' %}"
     >
 
-        ← Back to Buy
-
-    </a>
-
-
-    <a
-        class="back"
-        href="{% url 'portfolio' %}"
-    >
-
-        📊 View Portfolio
+        ← Back to Market
 
     </a>
 
@@ -423,125 +339,72 @@
 </div>
 
 
-
-<!-- ==========================================
-     LIVE PRICE JAVASCRIPT
-=========================================== -->
-
 <script>
 
-const symbol = "{{ stock.symbol }}";
+    // ==========================================
+    // LIVE STOCK PRICE
+    // ==========================================
 
-const priceElement =
-    document.getElementById("current-price");
+    const symbol = "{{ stock.symbol }}";
 
-const changeElement =
-    document.getElementById("price-change");
-
-
-let oldPrice = parseFloat(
-    "{{ stock.price }}"
-);
+    const priceElement =
+        document.getElementById("live-price");
 
 
-function updatePrice() {
+    async function updateLivePrice() {
 
-    fetch(
-        "{% url 'stock_prices' %}"
-    )
+        try {
 
-    .then(response => response.json())
+            const response =
+                await fetch(
+                    "{% url 'stock_prices' %}",
+                    {
+                        cache: "no-store"
+                    }
+                );
 
-    .then(data => {
-
-        const stock = data.stocks.find(
-            item => item.symbol === symbol
-        );
-
-
-        if (!stock) {
-
-            return;
-
-        }
+            const data =
+                await response.json();
 
 
-        const newPrice =
-            parseFloat(stock.price);
+            const stock =
+                data.stocks.find(
+                    item => item.symbol === symbol
+                );
 
 
-        priceElement.textContent =
-            "₹" + newPrice.toFixed(2);
+            if (stock) {
 
+                priceElement.textContent =
+                    Number(stock.price).toFixed(2);
 
-        const difference =
-            newPrice - oldPrice;
-
-
-        if (difference > 0) {
-
-            changeElement.textContent =
-                "📈 +" +
-                difference.toFixed(2);
-
-            changeElement.style.color =
-                "#22c55e";
+            }
 
         }
 
-        else if (difference < 0) {
+        catch (error) {
 
-            changeElement.textContent =
-                "📉 " +
-                difference.toFixed(2);
-
-            changeElement.style.color =
-                "#ef4444";
+            console.log(
+                "Live price update failed:",
+                error
+            );
 
         }
 
-        else {
-
-            changeElement.textContent =
-                "No change";
-
-            changeElement.style.color =
-                "#94a3b8";
-
-        }
+    }
 
 
-        oldPrice = newPrice;
+    // Update immediately
 
-    })
-
-    .catch(error => {
-
-        console.log(
-            "Price update error:",
-            error
-        );
-
-    });
-
-}
+    updateLivePrice();
 
 
-/*
-    Update every 2 seconds
-*/
+    // Update every 3 seconds
 
-setInterval(
-    updatePrice,
-    2000
-);
-
-
-/*
-    First update
-*/
-
-updatePrice();
+    setInterval(
+        updateLivePrice,
+        3000
+    );
 
 </script>
 
