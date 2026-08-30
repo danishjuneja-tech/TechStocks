@@ -103,4 +103,9 @@ urlpatterns = [
         views.stock_prices,
         name="stock_prices"
     ),
+    path(
+    "signup/",
+    views.signup,
+    name="signup"
+),
 ]
