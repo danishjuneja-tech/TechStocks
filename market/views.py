@@ -812,12 +812,17 @@ def live_market(request):
 # STOCK PRICES API
 # ==========================================
 
+
+# ==========================================
+# STOCK PRICES API
+# ==========================================
+
 def stock_prices(request):
 
     stocks = Stock.objects.all()
 
     # ======================================
-    # UPDATE PRICES
+    # UPDATE STOCK PRICES
     # ======================================
 
     for stock in stocks:
@@ -829,8 +834,8 @@ def stock_prices(request):
             movement = Decimal(
                 str(
                     random.uniform(
-                        -0.20,
-                        0.20
+                        -0.10,
+                        0.10
                     )
                 )
             )
@@ -842,6 +847,10 @@ def stock_prices(request):
                     movement
                 )
             )
+
+            # --------------------------------
+            # Minimum price
+            # --------------------------------
 
             if new_price < Decimal("1.00"):
 
@@ -860,22 +869,21 @@ def stock_prices(request):
                 ]
             )
 
-            # ----------------------------------
-            # History
-            # ----------------------------------
+            # --------------------------------
+            # Save graph history
+            # --------------------------------
 
             StockPriceHistory.objects.create(
                 stock=stock,
                 price=stock.price
             )
 
-    # ======================================
-    # EXECUTE LIMIT ORDERS
-    # ======================================
+    # ==========================================
+    # EXECUTE PENDING LIMIT ORDERS
+    # ==========================================
 
     pending_orders = LimitOrder.objects.filter(
-        executed=False,
-        order_type=LimitOrder.SELL
+        executed=False
     ).select_related(
         "user",
         "stock"
@@ -885,130 +893,270 @@ def stock_prices(request):
 
         stock = order.stock
 
-        # ----------------------------------
-        # Target not reached
-        # ----------------------------------
+        # ======================================
+        # LIMIT BUY
+        #
+        # Executes when:
+        #
+        # current price <= target price
+        # ======================================
 
-        if stock.price < order.limit_price:
+        if order.order_type == LimitOrder.BUY:
 
-            continue
-
-        with transaction.atomic():
-
-            holding = Holding.objects.filter(
-                user=order.user,
-                stock=stock
-            ).first()
-
-            # ----------------------------------
-            # Holding missing
-            # ----------------------------------
-
-            if not holding:
-
-                order.executed = True
-
-                order.executed_at = timezone.now()
-
-                order.save(
-                    update_fields=[
-                        "executed",
-                        "executed_at"
-                    ]
-                )
+            if stock.price > order.limit_price:
 
                 continue
 
-            # ----------------------------------
-            # Not enough shares
-            # ----------------------------------
+            with transaction.atomic():
 
-            if holding.quantity < order.quantity:
+                # ----------------------------------
+                # Wallet
+                # ----------------------------------
 
-                order.executed = True
-
-                order.executed_at = timezone.now()
-
-                order.save(
-                    update_fields=[
-                        "executed",
-                        "executed_at"
-                    ]
+                wallet, created = Wallet.objects.get_or_create(
+                    user=order.user
                 )
 
-                continue
+                # ----------------------------------
+                # Calculate cost
+                # ----------------------------------
 
-            # ----------------------------------
-            # Wallet
-            # ----------------------------------
+                buy_price = order.limit_price
 
-            wallet, created = Wallet.objects.get_or_create(
-                user=order.user
-            )
+                total = (
+                    buy_price *
+                    order.quantity
+                )
 
-            # ----------------------------------
-            # Execute at current price
-            # ----------------------------------
+                # ----------------------------------
+                # Check wallet
+                # ----------------------------------
 
-            sell_price = stock.price
+                if wallet.balance < total:
 
-            total = (
-                sell_price *
-                order.quantity
-            )
+                    # Keep order pending.
+                    #
+                    # User can add virtual money
+                    # and it will execute later.
 
-            # ----------------------------------
-            # Remove shares
-            # ----------------------------------
+                    continue
 
-            holding.quantity -= order.quantity
+                # ----------------------------------
+                # Deduct money
+                # ----------------------------------
 
-            if holding.quantity == 0:
+                wallet.balance -= total
 
-                holding.delete()
+                wallet.save()
 
-            else:
+                # ----------------------------------
+                # Holding
+                # ----------------------------------
+
+                holding, created = Holding.objects.get_or_create(
+                    user=order.user,
+                    stock=stock
+                )
+
+                old_quantity = holding.quantity
+
+                # ----------------------------------
+                # First purchase
+                # ----------------------------------
+
+                if old_quantity == 0:
+
+                    holding.average_price = buy_price
+
+                # ----------------------------------
+                # Additional purchase
+                # ----------------------------------
+
+                else:
+
+                    old_value = (
+                        holding.average_price *
+                        old_quantity
+                    )
+
+                    new_value = (
+                        buy_price *
+                        order.quantity
+                    )
+
+                    holding.average_price = (
+                        old_value +
+                        new_value
+                    ) / (
+                        old_quantity +
+                        order.quantity
+                    )
+
+                # ----------------------------------
+                # Add shares
+                # ----------------------------------
+
+                holding.quantity += order.quantity
 
                 holding.save()
 
-            # ----------------------------------
-            # Add money
-            # ----------------------------------
+                # ----------------------------------
+                # Transaction history
+                # ----------------------------------
 
-            wallet.balance += total
+                Transaction.objects.create(
+                    user=order.user,
+                    stock=stock,
+                    transaction_type=Transaction.BUY,
+                    quantity=order.quantity,
+                    price=buy_price
+                )
 
-            wallet.save()
+                # ----------------------------------
+                # Mark executed
+                # ----------------------------------
 
-            # ----------------------------------
-            # Transaction
-            # ----------------------------------
+                order.executed = True
 
-            Transaction.objects.create(
-                user=order.user,
-                stock=stock,
-                transaction_type=Transaction.SELL,
-                quantity=order.quantity,
-                price=sell_price
-            )
+                order.executed_at = timezone.now()
 
-            # ----------------------------------
-            # Complete order
-            # ----------------------------------
+                order.save(
+                    update_fields=[
+                        "executed",
+                        "executed_at"
+                    ]
+                )
 
-            order.executed = True
+        # ======================================
+        # LIMIT SELL
+        #
+        # Executes when:
+        #
+        # current price >= target price
+        # ======================================
 
-            order.executed_at = timezone.now()
+        elif order.order_type == LimitOrder.SELL:
 
-            order.save(
-                update_fields=[
-                    "executed",
-                    "executed_at"
-                ]
-            )
+            if stock.price < order.limit_price:
 
-    # ======================================
-    # RETURN LIVE PRICES
-    # ======================================
+                continue
+
+            with transaction.atomic():
+
+                holding = Holding.objects.filter(
+                    user=order.user,
+                    stock=stock
+                ).first()
+
+                # ----------------------------------
+                # Holding no longer exists
+                # ----------------------------------
+
+                if not holding:
+
+                    order.executed = True
+
+                    order.executed_at = timezone.now()
+
+                    order.save(
+                        update_fields=[
+                            "executed",
+                            "executed_at"
+                        ]
+                    )
+
+                    continue
+
+                # ----------------------------------
+                # Not enough shares
+                # ----------------------------------
+
+                if holding.quantity < order.quantity:
+
+                    order.executed = True
+
+                    order.executed_at = timezone.now()
+
+                    order.save(
+                        update_fields=[
+                            "executed",
+                            "executed_at"
+                        ]
+                    )
+
+                    continue
+
+                # ----------------------------------
+                # Wallet
+                # ----------------------------------
+
+                wallet, created = Wallet.objects.get_or_create(
+                    user=order.user
+                )
+
+                # ----------------------------------
+                # Execute at current market price
+                # ----------------------------------
+
+                sell_price = stock.price
+
+                total = (
+                    sell_price *
+                    order.quantity
+                )
+
+                # ----------------------------------
+                # Remove shares
+                # ----------------------------------
+
+                holding.quantity -= order.quantity
+
+                if holding.quantity == 0:
+
+                    holding.delete()
+
+                else:
+
+                    holding.save()
+
+                # ----------------------------------
+                # Add money
+                # ----------------------------------
+
+                wallet.balance += total
+
+                wallet.save()
+
+                # ----------------------------------
+                # Transaction history
+                # ----------------------------------
+
+                Transaction.objects.create(
+                    user=order.user,
+                    stock=stock,
+                    transaction_type=Transaction.SELL,
+                    quantity=order.quantity,
+                    price=sell_price
+                )
+
+                # ----------------------------------
+                # Mark executed
+                # ----------------------------------
+
+                order.executed = True
+
+                order.executed_at = timezone.now()
+
+                order.save(
+                    update_fields=[
+                        "executed",
+                        "executed_at"
+                    ]
+                )
+
+    # ==========================================
+    # RETURN CURRENT PRICES
+    # ==========================================
 
     stocks = Stock.objects.all()
 
@@ -1036,6 +1184,8 @@ def stock_prices(request):
     return JsonResponse({
         "stocks": data
     })
+
+
 
 
 # ==========================================
@@ -1069,4 +1219,173 @@ def cancel_limit_order(request, order_id):
     )
 
     return redirect("portfolio")
+
+# ==========================================
+# LIMIT BUY
+# ==========================================
+
+@login_required
+def limit_buy(request, symbol):
+
+    stock = get_object_or_404(
+        Stock,
+        symbol=symbol
+    )
+
+    wallet, created = Wallet.objects.get_or_create(
+        user=request.user
+    )
+
+    settings = MarketSettings.objects.first()
+
+    # ======================================
+    # MARKET OPEN / CLOSED
+    # ======================================
+
+    if settings and not settings.market_open:
+
+        messages.error(
+            request,
+            "🔴 Market is currently closed."
+        )
+
+        return render(
+            request,
+            "limit_buy.html",
+            {
+                "stock": stock,
+                "wallet": wallet
+            }
+        )
+
+    # ======================================
+    # LIMIT BUY POST
+    # ======================================
+
+    if request.method == "POST":
+
+        try:
+
+            quantity = int(
+                request.POST.get(
+                    "quantity",
+                    0
+                )
+            )
+
+            limit_price = Decimal(
+                request.POST.get(
+                    "limit_price",
+                    "0"
+                )
+            )
+
+        except (
+            TypeError,
+            ValueError,
+            ArithmeticError
+        ):
+
+            messages.error(
+                request,
+                "Invalid quantity or limit price."
+            )
+
+            return redirect(
+                "limit_buy",
+                symbol=stock.symbol
+            )
+
+        # ==================================
+        # VALIDATE QUANTITY
+        # ==================================
+
+        if quantity <= 0:
+
+            messages.error(
+                request,
+                "Quantity must be greater than 0."
+            )
+
+            return redirect(
+                "limit_buy",
+                symbol=stock.symbol
+            )
+
+        # ==================================
+        # VALIDATE PRICE
+        # ==================================
+
+        if limit_price <= 0:
+
+            messages.error(
+                request,
+                "Limit price must be greater than ₹0."
+            )
+
+            return redirect(
+                "limit_buy",
+                symbol=stock.symbol
+            )
+
+        # ==================================
+        # LIMIT BUY MUST BE BELOW CURRENT
+        # PRICE
+        # ==================================
+
+        if limit_price >= stock.price:
+
+            messages.error(
+                request,
+                f"Limit buy price must be BELOW "
+                f"the current price of ₹{stock.price}."
+            )
+
+            return redirect(
+                "limit_buy",
+                symbol=stock.symbol
+            )
+
+        # ==================================
+        # CREATE LIMIT BUY
+        #
+        # Money is NOT deducted here.
+        # Shares are NOT added here.
+        # ==================================
+
+        LimitOrder.objects.create(
+            user=request.user,
+            stock=stock,
+            order_type=LimitOrder.BUY,
+            quantity=quantity,
+            limit_price=limit_price,
+            executed=False
+        )
+
+        messages.success(
+            request,
+            f"🎯 Limit buy placed: "
+            f"{quantity} shares of "
+            f"{stock.symbol} at ₹{limit_price}."
+        )
+
+        return redirect(
+            "limit_buy",
+            symbol=stock.symbol
+        )
+
+    # ======================================
+    # SHOW LIMIT BUY PAGE
+    # ======================================
+
+    return render(
+        request,
+        "limit_buy.html",
+        {
+            "stock": stock,
+            "wallet": wallet
+        }
+    )
+
+
 

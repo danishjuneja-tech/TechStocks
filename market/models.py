@@ -1,10 +1,15 @@
+
 from django.db import models
 from django.contrib.auth.models import User
 
 
 class Stock(models.Model):
     name = models.CharField(max_length=100)
-    symbol = models.CharField(max_length=20, unique=True)
+
+    symbol = models.CharField(
+        max_length=20,
+        unique=True
+    )
 
     price = models.DecimalField(
         max_digits=12,
@@ -43,6 +48,7 @@ class Stock(models.Model):
 
     @property
     def change_percent(self):
+
         if self.previous_price == 0:
             return 0
 
@@ -52,7 +58,12 @@ class Stock(models.Model):
         ) * 100
 
 
+# ==========================================
+# STOCK PRICE HISTORY
+# ==========================================
+
 class StockPriceHistory(models.Model):
+
     stock = models.ForeignKey(
         Stock,
         on_delete=models.CASCADE,
@@ -72,6 +83,7 @@ class StockPriceHistory(models.Model):
         ordering = ["created_at"]
 
     def __str__(self):
+
         return (
             f"{self.stock.symbol} "
             f"₹{self.price} "
@@ -79,7 +91,12 @@ class StockPriceHistory(models.Model):
         )
 
 
+# ==========================================
+# HOLDING
+# ==========================================
+
 class Holding(models.Model):
+
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE
@@ -101,13 +118,19 @@ class Holding(models.Model):
     )
 
     def __str__(self):
+
         return (
             f"{self.user.username} - "
             f"{self.stock.symbol}"
         )
 
 
+# ==========================================
+# WALLET
+# ==========================================
+
 class Wallet(models.Model):
+
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE
@@ -120,8 +143,13 @@ class Wallet(models.Model):
     )
 
     def __str__(self):
+
         return f"{self.user.username} Wallet"
 
+
+# ==========================================
+# TRANSACTION
+# ==========================================
 
 class Transaction(models.Model):
 
@@ -160,6 +188,7 @@ class Transaction(models.Model):
     )
 
     def __str__(self):
+
         return (
             f"{self.user.username} "
             f"{self.transaction_type} "
@@ -168,6 +197,10 @@ class Transaction(models.Model):
         )
 
 
+# ==========================================
+# MARKET SETTINGS
+# ==========================================
+
 class MarketSettings(models.Model):
 
     market_open = models.BooleanField(
@@ -175,14 +208,21 @@ class MarketSettings(models.Model):
     )
 
     def __str__(self):
+
         return "Market Settings"
 
 
+# ==========================================
+# LIMIT ORDER
+# ==========================================
+
 class LimitOrder(models.Model):
 
+    BUY = "BUY"
     SELL = "SELL"
 
     TYPES = [
+        (BUY, "Buy"),
         (SELL, "Sell"),
     ]
 
@@ -223,8 +263,11 @@ class LimitOrder(models.Model):
     )
 
     def __str__(self):
+
         return (
             f"{self.user.username} - "
             f"{self.stock.symbol} - "
-            f"SELL @ ₹{self.limit_price}"
+            f"{self.order_type} "
+            f"@ ₹{self.limit_price}"
         )
+

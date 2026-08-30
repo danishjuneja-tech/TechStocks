@@ -527,7 +527,13 @@
                         href="{% url 'buy_stock' stock.symbol %}"
                     >
                         🟢 Buy
+                        <a href="{% url 'limit_buy' stock.symbol %}">
+                            🎯 Limit Buy
+                        </a>            
                     </a>
+
+
+
 
                     <a
                         class="sell"
