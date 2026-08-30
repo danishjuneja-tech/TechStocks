@@ -27,3 +27,8 @@ urlpatterns = [
     # Live market API
     path("api/live/", views.live_market, name="live_market"),
 ]
+path(
+    "limit-sell/<str:symbol>/",
+    views.limit_sell,
+    name="limit_sell"
+),

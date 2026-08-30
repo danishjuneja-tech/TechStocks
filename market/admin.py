@@ -8,6 +8,7 @@ from .models import (
     Wallet,
     Transaction,
     MarketSettings,
+    LimitOrder,
 )
 
 
@@ -136,5 +137,34 @@ class MarketSettingsAdmin(admin.ModelAdmin):
 
     list_display = (
         "market_open",
+    )
+@admin.register(LimitOrder)
+class LimitOrderAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "user",
+        "stock",
+        "order_type",
+        "quantity",
+        "limit_price",
+        "executed",
+        "created_at",
+        "executed_at",
+    )
+
+    list_filter = (
+        "executed",
+        "stock",
+        "order_type",
+    )
+
+    search_fields = (
+        "user__username",
+        "stock__symbol",
+    )
+
+    readonly_fields = (
+        "created_at",
+        "executed_at",
     )
 
