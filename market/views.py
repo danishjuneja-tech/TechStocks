@@ -1412,6 +1412,11 @@ def cancel_limit_order(request, order_id):
 # ==========================================
 
 @login_required
+# ==========================================
+# LIMIT BUY
+# ==========================================
+
+@login_required
 def limit_buy(request, symbol):
 
     stock = get_object_or_404(
@@ -1446,7 +1451,7 @@ def limit_buy(request, symbol):
         )
 
     # ======================================
-    # LIMIT BUY POST
+    # LIMIT BUY
     # ======================================
 
     if request.method == "POST":
@@ -1516,16 +1521,23 @@ def limit_buy(request, symbol):
             )
 
         # ==================================
-        # LIMIT BUY MUST BE BELOW CURRENT
-        # PRICE
+        # CALCULATE ORDER VALUE
         # ==================================
 
-        if limit_price >= stock.price:
+        total = (
+            limit_price *
+            quantity
+        )
+
+        # ==================================
+        # CHECK WALLET
+        # ==================================
+
+        if wallet.balance < total:
 
             messages.error(
                 request,
-                f"Limit buy price must be BELOW "
-                f"the current price of ₹{stock.price}."
+                "Not enough virtual money for this order."
             )
 
             return redirect(
@@ -1534,10 +1546,130 @@ def limit_buy(request, symbol):
             )
 
         # ==================================
-        # CREATE LIMIT BUY
+        # IMMEDIATE EXECUTION
         #
-        # Money is NOT deducted here.
-        # Shares are NOT added here.
+        # BUY executes when:
+        #
+        # current price <= limit price
+        # ==================================
+
+        if stock.price <= limit_price:
+
+            buy_price = stock.price
+
+            total = (
+                buy_price *
+                quantity
+            )
+
+            # ----------------------------------
+            # Final wallet check
+            # ----------------------------------
+
+            if wallet.balance < total:
+
+                messages.error(
+                    request,
+                    "Not enough virtual money."
+                )
+
+                return redirect(
+                    "limit_buy",
+                    symbol=stock.symbol
+                )
+
+            # ==================================
+            # COMPLETE BUY
+            # ==================================
+
+            with transaction.atomic():
+
+                # ----------------------------------
+                # Deduct money
+                # ----------------------------------
+
+                wallet.balance -= total
+
+                wallet.save()
+
+                # ----------------------------------
+                # Holding
+                # ----------------------------------
+
+                holding, created = Holding.objects.get_or_create(
+                    user=request.user,
+                    stock=stock
+                )
+
+                old_quantity = holding.quantity
+
+                # ----------------------------------
+                # First purchase
+                # ----------------------------------
+
+                if old_quantity == 0:
+
+                    holding.average_price = buy_price
+
+                # ----------------------------------
+                # Additional purchase
+                # ----------------------------------
+
+                else:
+
+                    old_value = (
+                        holding.average_price *
+                        old_quantity
+                    )
+
+                    new_value = (
+                        buy_price *
+                        quantity
+                    )
+
+                    holding.average_price = (
+                        old_value +
+                        new_value
+                    ) / (
+                        old_quantity +
+                        quantity
+                    )
+
+                # ----------------------------------
+                # Add shares
+                # ----------------------------------
+
+                holding.quantity += quantity
+
+                holding.save()
+
+                # ----------------------------------
+                # Transaction history
+                # ----------------------------------
+
+                Transaction.objects.create(
+                    user=request.user,
+                    stock=stock,
+                    transaction_type=Transaction.BUY,
+                    quantity=quantity,
+                    price=buy_price
+                )
+
+            messages.success(
+                request,
+                f"✅ Bought {quantity} shares of "
+                f"{stock.symbol} at ₹{buy_price}."
+            )
+
+            return redirect(
+                "limit_buy",
+                symbol=stock.symbol
+            )
+
+        # ==================================
+        # CREATE PENDING LIMIT ORDER
+        #
+        # Current price is ABOVE limit.
         # ==================================
 
         LimitOrder.objects.create(
