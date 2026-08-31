@@ -1,10 +1,16 @@
-
 from django.db import models
 from django.contrib.auth.models import User
 
 
+# ==========================================
+# STOCK
+# ==========================================
+
 class Stock(models.Model):
-    name = models.CharField(max_length=100)
+
+    name = models.CharField(
+        max_length=100
+    )
 
     symbol = models.CharField(
         max_length=20,
@@ -40,16 +46,22 @@ class Stock(models.Model):
     )
 
     def __str__(self):
+
         return f"{self.name} ({self.symbol})"
 
     @property
     def change(self):
-        return self.price - self.previous_price
+
+        return (
+            self.price -
+            self.previous_price
+        )
 
     @property
     def change_percent(self):
 
         if self.previous_price == 0:
+
             return 0
 
         return (
@@ -80,7 +92,10 @@ class StockPriceHistory(models.Model):
     )
 
     class Meta:
-        ordering = ["created_at"]
+
+        ordering = [
+            "created_at"
+        ]
 
     def __str__(self):
 
@@ -144,7 +159,9 @@ class Wallet(models.Model):
 
     def __str__(self):
 
-        return f"{self.user.username} Wallet"
+        return (
+            f"{self.user.username} Wallet"
+        )
 
 
 # ==========================================
@@ -270,4 +287,3 @@ class LimitOrder(models.Model):
             f"{self.order_type} "
             f"@ ₹{self.limit_price}"
         )
-

@@ -631,6 +631,158 @@ def limit_sell(request, symbol):
 
 
 # ==========================================
+# REALIZED P&L CALCULATOR
+# ==========================================
+
+def calculate_realized_pnl(user):
+
+    transactions = Transaction.objects.filter(
+        user=user
+    ).select_related(
+        "stock"
+    ).order_by(
+        "created_at",
+        "id"
+    )
+
+    # --------------------------------------
+    # Store current cost basis for each stock
+    # --------------------------------------
+
+    positions = {}
+
+    realized_pnl = Decimal("0")
+
+    total_sell_value = Decimal("0")
+
+    total_buy_value = Decimal("0")
+
+    for txn in transactions:
+
+        symbol = txn.stock.symbol
+
+        # ----------------------------------
+        # Create position if necessary
+        # ----------------------------------
+
+        if symbol not in positions:
+
+            positions[symbol] = {
+                "quantity": 0,
+                "average_price": Decimal("0")
+            }
+
+        position = positions[symbol]
+
+        # ==================================
+        # BUY TRANSACTION
+        # ==================================
+
+        if txn.transaction_type == Transaction.BUY:
+
+            old_quantity = position["quantity"]
+
+            old_average = position["average_price"]
+
+            buy_quantity = txn.quantity
+
+            buy_price = txn.price
+
+            old_value = (
+                Decimal(old_quantity) *
+                old_average
+            )
+
+            new_value = (
+                Decimal(buy_quantity) *
+                buy_price
+            )
+
+            new_quantity = (
+                old_quantity +
+                buy_quantity
+            )
+
+            if new_quantity > 0:
+
+                position["average_price"] = (
+                    old_value +
+                    new_value
+                ) / Decimal(new_quantity)
+
+            position["quantity"] = new_quantity
+
+            total_buy_value += new_value
+
+        # ==================================
+        # SELL TRANSACTION
+        # ==================================
+
+        elif txn.transaction_type == Transaction.SELL:
+
+            sell_quantity = txn.quantity
+
+            sell_price = txn.price
+
+            # ----------------------------------
+            # Average purchase price BEFORE SELL
+            # ----------------------------------
+
+            average_buy_price = position[
+                "average_price"
+            ]
+
+            # ----------------------------------
+            # Cost of shares being sold
+            # ----------------------------------
+
+            cost_of_sold_shares = (
+                Decimal(sell_quantity) *
+                average_buy_price
+            )
+
+            # ----------------------------------
+            # Actual money received from sale
+            # ----------------------------------
+
+            sale_value = (
+                Decimal(sell_quantity) *
+                sell_price
+            )
+
+            # ----------------------------------
+            # REALIZED PROFIT / LOSS
+            # ----------------------------------
+
+            sale_pnl = (
+                sale_value -
+                cost_of_sold_shares
+            )
+
+            realized_pnl += sale_pnl
+
+            total_sell_value += sale_value
+
+            # ----------------------------------
+            # Remove sold shares from position
+            # ----------------------------------
+
+            position["quantity"] -= sell_quantity
+
+            if position["quantity"] <= 0:
+
+                position["quantity"] = 0
+
+                position["average_price"] = Decimal("0")
+
+    return {
+        "realized_pnl": realized_pnl,
+        "total_sell_value": total_sell_value,
+        "total_buy_value": total_buy_value,
+    }
+
+
+# ==========================================
 # PORTFOLIO
 # ==========================================
 
@@ -669,14 +821,14 @@ def portfolio(request):
     )
 
     # ======================================
-    # CALCULATE PORTFOLIO
+    # CURRENT / UNREALIZED P&L
     # ======================================
 
     total_value = Decimal("0")
 
     total_invested = Decimal("0")
 
-    total_pnl = Decimal("0")
+    unrealized_pnl = Decimal("0")
 
     for holding in holdings:
 
@@ -705,7 +857,32 @@ def portfolio(request):
 
         total_invested += invested_value
 
-        total_pnl += pnl
+        unrealized_pnl += pnl
+
+    # ======================================
+    # REALIZED P&L
+    # ======================================
+
+    realized_data = calculate_realized_pnl(
+        request.user
+    )
+
+    realized_pnl = realized_data[
+        "realized_pnl"
+    ]
+
+    total_sell_value = realized_data[
+        "total_sell_value"
+    ]
+
+    # ======================================
+    # TOTAL P&L
+    # ======================================
+
+    total_pnl = (
+        unrealized_pnl +
+        realized_pnl
+    )
 
     # ======================================
     # PORTFOLIO PAGE
@@ -727,7 +904,13 @@ def portfolio(request):
 
             "total_invested": total_invested,
 
-            "total_pnl": total_pnl
+            "total_pnl": total_pnl,
+
+            "realized_pnl": realized_pnl,
+
+            "unrealized_pnl": unrealized_pnl,
+
+            "total_sell_value": total_sell_value,
         }
     )
 
@@ -829,7 +1012,6 @@ def stock_prices(request):
 
             # ==================================
             # NATURAL RANDOM MOVEMENT
-            # SOMETIMES UP, SOMETIMES DOWN
             # ==================================
 
             movement = Decimal(
@@ -903,7 +1085,7 @@ def stock_prices(request):
         #
         # Executes when:
         #
-        # current price <= target price
+        # current price <= limit price
         # ======================================
 
         if order.order_type == LimitOrder.BUY:
@@ -923,7 +1105,7 @@ def stock_prices(request):
                 )
 
                 # ----------------------------------
-                # Calculate cost
+                # Buy at limit price
                 # ----------------------------------
 
                 buy_price = order.limit_price
@@ -1032,7 +1214,7 @@ def stock_prices(request):
         #
         # Executes when:
         #
-        # current price >= target price
+        # current price >= limit price
         # ======================================
 
         elif order.order_type == LimitOrder.SELL:
@@ -1095,7 +1277,8 @@ def stock_prices(request):
                 )
 
                 # ----------------------------------
-                # Execute at current market price
+                # IMPORTANT:
+                # Execute at CURRENT market price
                 # ----------------------------------
 
                 sell_price = stock.price
@@ -1166,16 +1349,21 @@ def stock_prices(request):
 
         data.append({
             "symbol": stock.symbol,
+
             "name": stock.name,
+
             "price": float(
                 stock.price
             ),
+
             "previous_price": float(
                 stock.previous_price
             ),
+
             "change": float(
                 stock.change
             ),
+
             "change_percent": float(
                 stock.change_percent
             )
@@ -1385,8 +1573,6 @@ def limit_buy(request, symbol):
             "wallet": wallet
         }
     )
-
-
 # ==========================================
 # LIVE PORTFOLIO P&L API
 # ==========================================
@@ -1401,7 +1587,6 @@ def portfolio_prices(request):
     )
 
     total_value = Decimal("0")
-
     total_invested = Decimal("0")
 
     data = []
@@ -1424,7 +1609,6 @@ def portfolio_prices(request):
         )
 
         total_value += current_value
-
         total_invested += invested_value
 
         data.append({
@@ -1444,20 +1628,65 @@ def portfolio_prices(request):
             ),
         })
 
-    total_pnl = (
+    # ======================================
+    # REALIZED P&L
+    # ======================================
+
+    realized_data = calculate_realized_pnl(
+        request.user
+    )
+
+    realized_pnl = realized_data[
+        "realized_pnl"
+    ]
+
+    total_sell_value = realized_data[
+        "total_sell_value"
+    ]
+
+    # ======================================
+    # UNREALIZED P&L
+    # ======================================
+
+    unrealized_pnl = (
         total_value -
         total_invested
     )
 
+    # ======================================
+    # TOTAL P&L
+    # ======================================
+
+    total_pnl = (
+        unrealized_pnl +
+        realized_pnl
+    )
+
     return JsonResponse({
+
         "holdings": data,
+
         "total_value": float(
             total_value
         ),
+
         "total_invested": float(
             total_invested
         ),
+
+        "unrealized_pnl": float(
+            unrealized_pnl
+        ),
+
+        "realized_pnl": float(
+            realized_pnl
+        ),
+
         "total_pnl": float(
             total_pnl
+        ),
+
+        "total_sell_value": float(
+            total_sell_value
         ),
     })
