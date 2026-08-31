@@ -14,6 +14,8 @@ urlpatterns = [
         name="market_home"
     ),
 
+
+
     # ==========================================
     # BUY
     # ==========================================
@@ -107,5 +109,10 @@ urlpatterns = [
     "signup/",
     views.signup,
     name="signup"
+),
+path(
+    "portfolio/prices/",
+    views.portfolio_prices,
+    name="portfolio_prices"
 ),
 ]

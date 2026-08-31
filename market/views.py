@@ -1,4 +1,3 @@
-
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
@@ -103,7 +102,8 @@ def buy_stock(request, symbol):
             request,
             "buy.html",
             {
-                "stock": stock
+                "stock": stock,
+                "wallet": wallet
             }
         )
 
@@ -254,7 +254,8 @@ def buy_stock(request, symbol):
         request,
         "buy.html",
         {
-            "stock": stock
+            "stock": stock,
+            "wallet": wallet
         }
     )
 
@@ -812,11 +813,6 @@ def live_market(request):
 # STOCK PRICES API
 # ==========================================
 
-
-# ==========================================
-# STOCK PRICES API
-# ==========================================
-
 def stock_prices(request):
 
     stocks = Stock.objects.all()
@@ -831,11 +827,16 @@ def stock_prices(request):
 
             old_price = stock.price
 
+            # ==================================
+            # NATURAL RANDOM MOVEMENT
+            # SOMETIMES UP, SOMETIMES DOWN
+            # ==================================
+
             movement = Decimal(
                 str(
                     random.uniform(
-                        -0.10,
-                        0.10
+                        -0.015,
+                        0.015
                     )
                 )
             )
@@ -848,13 +849,17 @@ def stock_prices(request):
                 )
             )
 
-            # --------------------------------
-            # Minimum price
-            # --------------------------------
+            # ==================================
+            # MINIMUM PRICE
+            # ==================================
 
             if new_price < Decimal("1.00"):
 
                 new_price = Decimal("1.00")
+
+            # ==================================
+            # SAVE PRICE
+            # ==================================
 
             stock.previous_price = old_price
 
@@ -869,9 +874,9 @@ def stock_prices(request):
                 ]
             )
 
-            # --------------------------------
-            # Save graph history
-            # --------------------------------
+            # ==================================
+            # SAVE GRAPH HISTORY
+            # ==================================
 
             StockPriceHistory.objects.create(
                 stock=stock,
@@ -933,11 +938,6 @@ def stock_prices(request):
                 # ----------------------------------
 
                 if wallet.balance < total:
-
-                    # Keep order pending.
-                    #
-                    # User can add virtual money
-                    # and it will execute later.
 
                     continue
 
@@ -1186,8 +1186,6 @@ def stock_prices(request):
     })
 
 
-
-
 # ==========================================
 # CANCEL LIMIT ORDER
 # ==========================================
@@ -1219,6 +1217,7 @@ def cancel_limit_order(request, order_id):
     )
 
     return redirect("portfolio")
+
 
 # ==========================================
 # LIMIT BUY
@@ -1388,4 +1387,77 @@ def limit_buy(request, symbol):
     )
 
 
+# ==========================================
+# LIVE PORTFOLIO P&L API
+# ==========================================
 
+@login_required
+def portfolio_prices(request):
+
+    holdings = Holding.objects.filter(
+        user=request.user
+    ).select_related(
+        "stock"
+    )
+
+    total_value = Decimal("0")
+
+    total_invested = Decimal("0")
+
+    data = []
+
+    for holding in holdings:
+
+        current_value = (
+            holding.quantity *
+            holding.stock.price
+        )
+
+        invested_value = (
+            holding.quantity *
+            holding.average_price
+        )
+
+        pnl = (
+            current_value -
+            invested_value
+        )
+
+        total_value += current_value
+
+        total_invested += invested_value
+
+        data.append({
+            "symbol": holding.stock.symbol,
+            "quantity": holding.quantity,
+            "price": float(
+                holding.stock.price
+            ),
+            "current_value": float(
+                current_value
+            ),
+            "invested_value": float(
+                invested_value
+            ),
+            "pnl": float(
+                pnl
+            ),
+        })
+
+    total_pnl = (
+        total_value -
+        total_invested
+    )
+
+    return JsonResponse({
+        "holdings": data,
+        "total_value": float(
+            total_value
+        ),
+        "total_invested": float(
+            total_invested
+        ),
+        "total_pnl": float(
+            total_pnl
+        ),
+    })

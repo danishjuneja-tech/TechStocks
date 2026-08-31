@@ -53,11 +53,15 @@
         }
 
 
+        /* ==========================================
+           MAIN BUY BOX
+        ========================================== */
+
         .box {
 
             width: 100%;
 
-            max-width: 500px;
+            max-width: 520px;
 
             background:
                 linear-gradient(
@@ -78,6 +82,10 @@
                 0 20px 55px
                 rgba(0, 0, 0, 0.35);
 
+            position: relative;
+
+            z-index: 2;
+
         }
 
 
@@ -85,20 +93,24 @@
 
             text-align: center;
 
-            color: #38bdf8;
+            color: #4ade80;
 
             margin-top: 0;
 
-            margin-bottom: 10px;
+            margin-bottom: 8px;
 
         }
 
 
-        h2 {
+        .stock-name {
 
             text-align: center;
 
-            margin-bottom: 5px;
+            font-size: 22px;
+
+            font-weight: bold;
+
+            margin: 5px 0;
 
         }
 
@@ -114,9 +126,9 @@
         }
 
 
-        /* ==========================
-           LIVE PRICE
-        ========================== */
+        /* ==========================================
+           PRICE
+        ========================================== */
 
         .price-box {
 
@@ -128,11 +140,11 @@
 
             text-align: center;
 
-            margin-bottom: 25px;
+            margin-bottom: 20px;
 
             border:
                 1px solid
-                rgba(56, 189, 248, 0.18);
+                rgba(56, 189, 248, 0.15);
 
         }
 
@@ -150,38 +162,51 @@
 
         .price {
 
-            font-size: 36px;
+            font-size: 38px;
 
             font-weight: 800;
 
             color: #38bdf8;
 
             transition:
-                color 0.2s ease;
+                color 0.25s,
+                transform 0.25s;
+
+        }
+
+
+        .price.up {
+
+            color: #22c55e;
+
+            transform: scale(1.04);
+
+        }
+
+
+        .price.down {
+
+            color: #ef4444;
+
+            transform: scale(1.04);
 
         }
 
 
         .live {
 
-            display: inline-flex;
-
-            align-items: center;
-
-            gap: 6px;
-
             margin-top: 8px;
 
+            font-size: 12px;
+
             color: #22c55e;
-
-            font-size: 13px;
-
-            font-weight: bold;
 
         }
 
 
         .live-dot {
+
+            display: inline-block;
 
             width: 8px;
 
@@ -191,8 +216,9 @@
 
             border-radius: 50%;
 
-            animation:
-                pulse 1s infinite;
+            margin-right: 5px;
+
+            animation: pulse 1.5s infinite;
 
         }
 
@@ -214,9 +240,263 @@
         }
 
 
-        /* ==========================
-           QUANTITY
-        ========================== */
+        /* ==========================================
+           FLOATING P&L PANEL
+        ========================================== */
+
+        .floating-pnl {
+
+            position: fixed;
+
+            right: 25px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            width: 235px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(30, 41, 59, 0.97),
+                    rgba(15, 23, 42, 0.97)
+                );
+
+            border:
+                1px solid
+                rgba(56, 189, 248, 0.25);
+
+            border-radius: 18px;
+
+            padding: 20px;
+
+            box-shadow:
+                0 15px 45px
+                rgba(0, 0, 0, 0.45);
+
+            backdrop-filter: blur(12px);
+
+            z-index: 100;
+
+            transition:
+                transform 0.25s,
+                box-shadow 0.25s;
+
+        }
+
+
+        .floating-pnl:hover {
+
+            transform:
+                translateY(-50%)
+                translateX(-4px);
+
+            box-shadow:
+                0 18px 55px
+                rgba(0, 0, 0, 0.6);
+
+        }
+
+
+        .pnl-title {
+
+            text-align: center;
+
+            color: #cbd5e1;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .pnl-stock {
+
+            text-align: center;
+
+            color: #94a3b8;
+
+            font-size: 13px;
+
+            margin-bottom: 12px;
+
+        }
+
+
+        .pnl-value {
+
+            text-align: center;
+
+            font-size: 29px;
+
+            font-weight: 900;
+
+            margin-bottom: 16px;
+
+            transition:
+                color 0.3s,
+                transform 0.3s;
+
+        }
+
+
+        .pnl-value.profit {
+
+            color: #22c55e;
+
+        }
+
+
+        .pnl-value.loss {
+
+            color: #ef4444;
+
+        }
+
+
+        .pnl-value.neutral {
+
+            color: #facc15;
+
+        }
+
+
+        .pnl-value.flash {
+
+            transform: scale(1.08);
+
+        }
+
+
+        .pnl-divider {
+
+            height: 1px;
+
+            background:
+                rgba(148, 163, 184, 0.15);
+
+            margin: 12px 0;
+
+        }
+
+
+        .pnl-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin: 11px 0;
+
+            font-size: 13px;
+
+        }
+
+
+        .pnl-row span:first-child {
+
+            color: #94a3b8;
+
+        }
+
+
+        .pnl-row span:last-child {
+
+            color: white;
+
+            font-weight: bold;
+
+            text-align: right;
+
+        }
+
+
+        .pnl-live {
+
+            text-align: center;
+
+            margin-top: 13px;
+
+            padding: 7px;
+
+            border-radius: 8px;
+
+            background:
+                rgba(34, 197, 94, 0.08);
+
+            color: #22c55e;
+
+            font-size: 11px;
+
+            font-weight: bold;
+
+        }
+
+
+        .pnl-live-dot {
+
+            display: inline-block;
+
+            width: 6px;
+
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: #22c55e;
+
+            margin-right: 4px;
+
+            animation: pulse 1.3s infinite;
+
+        }
+
+
+        /* ==========================================
+           WALLET
+        ========================================== */
+
+        .wallet {
+
+            background: #334155;
+
+            padding: 17px;
+
+            border-radius: 10px;
+
+            text-align: center;
+
+            margin-bottom: 25px;
+
+            color: #cbd5e1;
+
+        }
+
+
+        .wallet strong {
+
+            color: #38bdf8;
+
+            font-size: 20px;
+
+        }
+
+
+        /* ==========================================
+           FORM
+        ========================================== */
 
         label {
 
@@ -228,8 +508,6 @@
 
             margin-bottom: 8px;
 
-            text-align: left;
-
         }
 
 
@@ -239,13 +517,10 @@
 
             padding: 14px;
 
-            margin-bottom: 15px;
-
             border-radius: 8px;
 
             border:
-                1px solid
-                #475569;
+                1px solid #475569;
 
             background: #1e293b;
 
@@ -253,66 +528,31 @@
 
             font-size: 18px;
 
-            outline: none;
+            margin-bottom: 10px;
 
         }
 
 
         input:focus {
 
-            border-color:
-                #38bdf8;
+            outline: none;
 
-            outline:
-                2px solid
-                rgba(56, 189, 248, 0.2);
+            border-color: #38bdf8;
 
         }
 
 
-        /* ==========================
-           TOTAL
-        ========================== */
-
-        .total-box {
-
-            background: #172554;
-
-            padding: 15px;
-
-            border-radius: 10px;
-
-            margin-bottom: 20px;
-
-            text-align: center;
-
-            color: #bfdbfe;
-
-        }
-
-
-        .total-box strong {
-
-            display: block;
-
-            color: #38bdf8;
-
-            font-size: 24px;
-
-            margin-top: 5px;
-
-        }
-
-
-        /* ==========================
+        /* ==========================================
            BUY BUTTON
-        ========================== */
+        ========================================== */
 
-        button {
+        .buy-button {
 
             width: 100%;
 
             padding: 15px;
+
+            margin-top: 15px;
 
             background: #16a34a;
 
@@ -333,40 +573,136 @@
         }
 
 
-        button:hover {
+        .buy-button:hover {
 
             background: #15803d;
 
-            transform:
-                translateY(-2px);
+            transform: translateY(-2px);
 
         }
 
 
-        /* ==========================
-           MESSAGES
-        ========================== */
+        /* ==========================================
+           LIMIT BUY BUTTON
+        ========================================== */
+
+        .limit-button {
+
+            display: block;
+
+            width: 100%;
+
+            padding: 15px;
+
+            margin-top: 14px;
+
+            background: #f59e0b;
+
+            color: white;
+
+            border-radius: 9px;
+
+            text-align: center;
+
+            text-decoration: none;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            transition: 0.2s;
+
+        }
+
+
+        .limit-button:hover {
+
+            background: #d97706;
+
+            transform: translateY(-2px);
+
+        }
+
+
+        /* ==========================================
+           ESTIMATE
+        ========================================== */
+
+        .estimate {
+
+            background: #172554;
+
+            padding: 14px;
+
+            border-radius: 9px;
+
+            margin-top: 10px;
+
+            text-align: center;
+
+            color: #bfdbfe;
+
+            font-size: 14px;
+
+        }
+
+
+        .estimate strong {
+
+            color: #38bdf8;
+
+            font-size: 19px;
+
+        }
+
+
+        /* ==========================================
+           MESSAGE
+        ========================================== */
 
         .message {
 
             background: #334155;
 
-            color: #e2e8f0;
-
             padding: 12px;
 
             border-radius: 8px;
 
-            margin-bottom: 18px;
+            margin-bottom: 20px;
 
             text-align: center;
 
         }
 
 
-        /* ==========================
+        /* ==========================================
+           INFO
+        ========================================== */
+
+        .info {
+
+            background: #0f172a;
+
+            padding: 14px;
+
+            border-radius: 9px;
+
+            margin-top: 18px;
+
+            color: #94a3b8;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+
+            text-align: center;
+
+        }
+
+
+        /* ==========================================
            BACK
-        ========================== */
+        ========================================== */
 
         .back {
 
@@ -390,6 +726,58 @@
         }
 
 
+        /* ==========================================
+           MOBILE
+        ========================================== */
+
+        @media (max-width: 900px) {
+
+            body {
+
+                align-items: flex-start;
+
+                flex-direction: column;
+
+            }
+
+
+            .floating-pnl {
+
+                position: relative;
+
+                right: auto;
+
+                top: auto;
+
+                transform: none;
+
+                width: 100%;
+
+                max-width: 520px;
+
+                margin: 0 auto 20px auto;
+
+                order: -1;
+
+            }
+
+
+            .floating-pnl:hover {
+
+                transform: none;
+
+            }
+
+
+            .box {
+
+                margin: 20px auto;
+
+            }
+
+        }
+
+
         @media (max-width: 500px) {
 
             .box {
@@ -398,9 +786,26 @@
 
             }
 
+
             .price {
 
                 font-size: 32px;
+
+            }
+
+
+            .floating-pnl {
+
+                padding: 16px;
+
+                border-radius: 15px;
+
+            }
+
+
+            .pnl-value {
+
+                font-size: 25px;
 
             }
 
@@ -414,40 +819,174 @@
 <body>
 
 
+<!-- ==========================================
+     FLOATING P&L
+========================================== -->
+
+{% if holding %}
+
+<div class="floating-pnl">
+
+    <div class="pnl-title">
+        📊 Your Position
+    </div>
+
+
+    <div class="pnl-stock">
+
+        {{ stock.symbol }}
+        •
+        {{ holding.quantity }}
+        shares
+
+    </div>
+
+
+    <div
+        id="floatingPnl"
+        class="pnl-value
+        {% if holding.pnl >= 0 %}
+            profit
+        {% else %}
+            loss
+        {% endif %}"
+    >
+
+        {% if holding.pnl >= 0 %}
+
+            📈 +₹{{ holding.pnl|floatformat:2 }}
+
+        {% else %}
+
+            📉 ₹{{ holding.pnl|floatformat:2 }}
+
+        {% endif %}
+
+    </div>
+
+
+    <div class="pnl-divider"></div>
+
+
+    <div class="pnl-row">
+
+        <span>
+            Avg. Buy
+        </span>
+
+        <span id="floatingAvg">
+
+            ₹{{ holding.average_price|floatformat:2 }}
+
+        </span>
+
+    </div>
+
+
+    <div class="pnl-row">
+
+        <span>
+            Current
+        </span>
+
+        <span id="floatingCurrent">
+
+            ₹{{ stock.price|floatformat:2 }}
+
+        </span>
+
+    </div>
+
+
+    <div class="pnl-row">
+
+        <span>
+            Invested
+        </span>
+
+        <span id="floatingInvested">
+
+            ₹{{ holding.invested_value|floatformat:2 }}
+
+        </span>
+
+    </div>
+
+
+    <div class="pnl-row">
+
+        <span>
+            Current Value
+        </span>
+
+        <span id="floatingValue">
+
+            ₹{{ holding.current_value|floatformat:2 }}
+
+        </span>
+
+    </div>
+
+
+    <div class="pnl-live">
+
+        <span class="pnl-live-dot"></span>
+
+        LIVE P&amp;L
+
+    </div>
+
+</div>
+
+{% endif %}
+
+
+<!-- ==========================================
+     BUY BOX
+========================================== -->
+
 <div class="box">
 
 
     <h1>
-        📈 Buy Stock
+        🟢 Buy Stock
     </h1>
 
 
-    <h2>
+    <div class="stock-name">
+
         {{ stock.name }}
-    </h2>
 
-
-    <div class="symbol">
-        {{ stock.symbol }}
     </div>
 
 
-    <!-- ==========================
+    <div class="symbol">
+
+        {{ stock.symbol }}
+
+    </div>
+
+
+    <!-- ==========================================
          LIVE PRICE
-    ========================== -->
+    ========================================== -->
 
     <div class="price-box">
 
         <div class="price-label">
+
             Current Market Price
+
         </div>
 
 
         <div
             class="price"
-            id="current-price"
+            id="livePrice"
         >
+
             ₹{{ stock.price }}
+
         </div>
 
 
@@ -455,41 +994,68 @@
 
             <span class="live-dot"></span>
 
-            LIVE PRICE
+            LIVE MARKET PRICE
 
         </div>
 
     </div>
 
 
-    <!-- ==========================
-         DJANGO MESSAGES
-    ========================== -->
+    <!-- ==========================================
+         MESSAGES
+    ========================================== -->
 
-    {% if messages %}
+    {% for message in messages %}
 
-        {% for message in messages %}
+        <div class="message">
 
-            <div class="message">
-                {{ message }}
-            </div>
+            {{ message }}
 
-        {% endfor %}
+        </div>
 
-    {% endif %}
+    {% endfor %}
 
 
-    <!-- ==========================
-         BUY FORM
-    ========================== -->
+    <!-- ==========================================
+         WALLET
+    ========================================== -->
 
-    <form method="post">
+    <div class="wallet">
+
+        Available Wallet Balance:
+
+        <strong>
+
+            ₹{{ wallet.balance|floatformat:2 }}
+
+        </strong>
+
+    </div>
+
+
+    <!-- ==========================================
+         MARKET BUY
+    ========================================== -->
+
+    <form
+        method="POST"
+        action="{% url 'buy_stock' stock.symbol %}"
+    >
 
         {% csrf_token %}
 
 
+        <input
+            type="hidden"
+            name="buy_type"
+            value="market"
+        >
+
+
         <label for="quantity">
+
             Number of Shares
+
         </label>
 
 
@@ -503,29 +1069,68 @@
         >
 
 
-        <!-- ==========================
-             TOTAL COST
-        ========================== -->
+        <!-- ESTIMATED VALUE -->
 
-        <div class="total-box">
+        <div class="estimate">
 
-            Estimated Purchase Cost
+            Estimated cost:
 
-            <strong id="total">
+            <strong id="estimate">
+
                 ₹0.00
+
             </strong>
 
         </div>
 
 
-        <button type="submit">
+        <button
+            type="submit"
+            class="buy-button"
+        >
 
-            🟢 BUY SHARES
+            🟢 BUY SHARES NOW
 
         </button>
 
-
     </form>
+
+
+    <!-- ==========================================
+         LIMIT BUY
+    ========================================== -->
+
+    <a
+        class="limit-button"
+        href="{% url 'limit_buy' stock.symbol %}"
+    >
+
+        🎯 LIMIT BUY
+
+    </a>
+
+
+    <!-- ==========================================
+         INFORMATION
+    ========================================== -->
+
+    <div class="info">
+
+        🟢 <strong>Buy Now</strong>
+
+        purchases the shares immediately
+        at the current market price.
+
+        <br><br>
+
+        🎯 <strong>Limit Buy</strong>
+
+        does NOT buy immediately.
+
+        It waits until the stock reaches
+        your target price.
+
+    </div>
 
 
     <a
@@ -543,89 +1148,230 @@
 
 <script>
 
-    /*
-    ==========================================
-    LIVE STOCK PRICE
-    ==========================================
-    */
 
+    /* ==========================================
+       ELEMENTS
+    ========================================== */
 
-    const stockSymbol =
-        "{{ stock.symbol }}";
-
-
-    const priceElement =
+    const livePrice =
         document.getElementById(
-            "current-price"
+            "livePrice"
         );
 
 
-    const quantityInput =
+    const quantity =
         document.getElementById(
             "quantity"
         );
 
 
-    const totalElement =
+    const estimate =
         document.getElementById(
-            "total"
+            "estimate"
         );
 
 
-    /*
-    Store the latest price
-    */
+    const floatingPnl =
+        document.getElementById(
+            "floatingPnl"
+        );
 
 
-    let livePrice =
+    const floatingCurrent =
+        document.getElementById(
+            "floatingCurrent"
+        );
+
+
+    const floatingValue =
+        document.getElementById(
+            "floatingValue"
+        );
+
+
+    const floatingInvested =
+        document.getElementById(
+            "floatingInvested"
+        );
+
+
+    /* ==========================================
+       STOCK SYMBOL
+    ========================================== */
+
+    const stockSymbol =
+        "{{ stock.symbol|escapejs }}";
+
+
+    /* ==========================================
+       STARTING PRICE
+    ========================================== */
+
+    let currentPrice =
         Number(
             "{{ stock.price }}"
         );
 
 
-    /*
-    ==========================================
-    UPDATE TOTAL
-    ==========================================
-    */
+    /* ==========================================
+       HOLDING DATA
+    ========================================== */
+
+    const holdingQuantity =
+        Number(
+            "{{ holding.quantity|default:'0' }}"
+        );
 
 
-    function updateTotal() {
+    const investedValue =
+        Number(
+            "{{ holding.invested_value|default:'0' }}"
+        );
 
-        if (
-            !quantityInput ||
-            !totalElement
-        ) {
+
+    /* ==========================================
+       UPDATE ESTIMATE
+    ========================================== */
+
+    function updateEstimate() {
+
+        if (!quantity || !estimate) {
 
             return;
 
         }
 
 
-        const quantity =
+        const qty =
             Number(
-                quantityInput.value
+                quantity.value
             ) || 0;
 
 
         const total =
-            quantity *
-            livePrice;
+            qty *
+            currentPrice;
 
 
-        totalElement.textContent =
+        estimate.textContent =
             "₹" +
             total.toFixed(2);
 
     }
 
 
-    /*
-    ==========================================
-    GET LIVE PRICE
-    ==========================================
-    */
+    /* ==========================================
+       UPDATE FLOATING P&L
+    ========================================== */
 
+    function updateFloatingPnl() {
+
+        if (!floatingPnl) {
+
+            return;
+
+        }
+
+
+        const currentValue =
+            currentPrice *
+            holdingQuantity;
+
+
+        const pnl =
+            currentValue -
+            investedValue;
+
+
+        /* CURRENT PRICE */
+
+        if (floatingCurrent) {
+
+            floatingCurrent.textContent =
+                "₹" +
+                currentPrice.toFixed(2);
+
+        }
+
+
+        /* CURRENT VALUE */
+
+        if (floatingValue) {
+
+            floatingValue.textContent =
+                "₹" +
+                currentValue.toFixed(2);
+
+        }
+
+
+        /* INVESTED VALUE */
+
+        if (floatingInvested) {
+
+            floatingInvested.textContent =
+                "₹" +
+                investedValue.toFixed(2);
+
+        }
+
+
+        /* P&L */
+
+        if (pnl > 0) {
+
+            floatingPnl.className =
+                "pnl-value profit flash";
+
+            floatingPnl.textContent =
+                "📈 +₹" +
+                pnl.toFixed(2);
+
+        }
+
+        else if (pnl < 0) {
+
+            floatingPnl.className =
+                "pnl-value loss flash";
+
+            floatingPnl.textContent =
+                "📉 ₹" +
+                pnl.toFixed(2);
+
+        }
+
+        else {
+
+            floatingPnl.className =
+                "pnl-value neutral flash";
+
+            floatingPnl.textContent =
+                "➖ ₹0.00";
+
+        }
+
+
+        setTimeout(
+            function() {
+
+                if (floatingPnl) {
+
+                    floatingPnl.classList.remove(
+                        "flash"
+                    );
+
+                }
+
+            },
+            300
+        );
+
+    }
+
+
+    /* ==========================================
+       LIVE STOCK PRICE
+    ========================================== */
 
     async function updateLivePrice() {
 
@@ -635,6 +1381,7 @@
                 await fetch(
                     "{% url 'stock_prices' %}",
                     {
+                        method: "GET",
                         cache: "no-store"
                     }
                 );
@@ -653,10 +1400,6 @@
                 await response.json();
 
 
-            /*
-            Find this stock
-            */
-
             const stock =
                 data.stocks.find(
                     item =>
@@ -672,34 +1415,85 @@
             }
 
 
-            /*
-            Save new price
-            */
-
-            livePrice =
+            const newPrice =
                 Number(
                     stock.price
                 );
 
 
-            /*
-            Update price on screen
-            */
+            /* ==================================
+               PRICE MOVEMENT
+            ================================== */
 
-            if (priceElement) {
+            if (
+                newPrice >
+                currentPrice
+            ) {
 
-                priceElement.textContent =
-                    "₹" +
-                    livePrice.toFixed(2);
+                livePrice.classList.remove(
+                    "down"
+                );
+
+                livePrice.classList.add(
+                    "up"
+                );
+
+            }
+
+            else if (
+                newPrice <
+                currentPrice
+            ) {
+
+                livePrice.classList.remove(
+                    "up"
+                );
+
+                livePrice.classList.add(
+                    "down"
+                );
 
             }
 
 
-            /*
-            Update total
-            */
+            /* UPDATE PRICE */
 
-            updateTotal();
+            currentPrice =
+                newPrice;
+
+
+            livePrice.textContent =
+                "₹" +
+                currentPrice.toFixed(2);
+
+
+            /* UPDATE ESTIMATE */
+
+            updateEstimate();
+
+
+            /* UPDATE P&L */
+
+            updateFloatingPnl();
+
+
+            /* REMOVE ANIMATION */
+
+            setTimeout(
+                function() {
+
+                    if (livePrice) {
+
+                        livePrice.classList.remove(
+                            "up",
+                            "down"
+                        );
+
+                    }
+
+                },
+                300
+            );
 
         }
 
@@ -715,42 +1509,40 @@
     }
 
 
-    /*
-    ==========================================
-    QUANTITY CHANGE
-    ==========================================
-    */
+    /* ==========================================
+       QUANTITY LISTENER
+    ========================================== */
 
+    if (quantity) {
 
-    if (quantityInput) {
-
-        quantityInput.addEventListener(
+        quantity.addEventListener(
             "input",
-            updateTotal
+            updateEstimate
         );
 
     }
 
 
-    /*
-    ==========================================
-    FIRST UPDATE
-    ==========================================
-    */
+    /* ==========================================
+       FIRST UPDATE
+    ========================================== */
+
+    updateEstimate();
+
+    updateFloatingPnl();
 
     updateLivePrice();
 
 
-    /*
-    ==========================================
-    UPDATE EVERY 1 SECOND
-    ==========================================
-    */
+    /* ==========================================
+       UPDATE EVERY 2 SECONDS
+    ========================================== */
 
     setInterval(
         updateLivePrice,
-        1000
+        2000
     );
+
 
 </script>
 

@@ -47,7 +47,13 @@
             align-items: center;
 
             padding: 20px;
+
         }
+
+
+        /* ==========================================
+           MAIN SELL BOX
+        ========================================== */
 
         .box {
 
@@ -73,7 +79,13 @@
             box-shadow:
                 0 20px 55px
                 rgba(0, 0, 0, 0.35);
+
+            position: relative;
+
+            z-index: 2;
+
         }
+
 
         h1 {
 
@@ -84,7 +96,9 @@
             margin-top: 0;
 
             margin-bottom: 8px;
+
         }
+
 
         .stock-name {
 
@@ -95,7 +109,9 @@
             font-weight: bold;
 
             margin: 5px 0;
+
         }
+
 
         .symbol {
 
@@ -104,7 +120,13 @@
             color: #94a3b8;
 
             margin-bottom: 25px;
+
         }
+
+
+        /* ==========================================
+           PRICE
+        ========================================== */
 
         .price-box {
 
@@ -121,7 +143,9 @@
             border:
                 1px solid
                 rgba(56, 189, 248, 0.15);
+
         }
+
 
         .price-label {
 
@@ -130,7 +154,9 @@
             font-size: 14px;
 
             margin-bottom: 7px;
+
         }
+
 
         .price {
 
@@ -143,21 +169,27 @@
             transition:
                 color 0.25s,
                 transform 0.25s;
+
         }
+
 
         .price.up {
 
             color: #22c55e;
 
             transform: scale(1.04);
+
         }
+
 
         .price.down {
 
             color: #ef4444;
 
             transform: scale(1.04);
+
         }
+
 
         .live {
 
@@ -166,7 +198,9 @@
             font-size: 12px;
 
             color: #22c55e;
+
         }
+
 
         .live-dot {
 
@@ -183,7 +217,9 @@
             margin-right: 5px;
 
             animation: pulse 1.5s infinite;
+
         }
+
 
         @keyframes pulse {
 
@@ -198,7 +234,237 @@
             100% {
                 opacity: 1;
             }
+
         }
+
+
+        /* ==========================================
+           FLOATING P&L PANEL
+        ========================================== */
+
+        .floating-pnl {
+
+            position: fixed;
+
+            right: 25px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            width: 235px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(30, 41, 59, 0.97),
+                    rgba(15, 23, 42, 0.97)
+                );
+
+            border:
+                1px solid
+                rgba(56, 189, 248, 0.25);
+
+            border-radius: 18px;
+
+            padding: 20px;
+
+            box-shadow:
+                0 15px 45px
+                rgba(0, 0, 0, 0.45);
+
+            backdrop-filter: blur(12px);
+
+            z-index: 100;
+
+            transition:
+                transform 0.25s,
+                box-shadow 0.25s;
+
+        }
+
+
+        .floating-pnl:hover {
+
+            transform:
+                translateY(-50%)
+                translateX(-4px);
+
+            box-shadow:
+                0 18px 55px
+                rgba(0, 0, 0, 0.6);
+
+        }
+
+
+        .pnl-title {
+
+            text-align: center;
+
+            color: #cbd5e1;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .pnl-stock {
+
+            text-align: center;
+
+            color: #94a3b8;
+
+            font-size: 13px;
+
+            margin-bottom: 12px;
+
+        }
+
+
+        .pnl-value {
+
+            text-align: center;
+
+            font-size: 29px;
+
+            font-weight: 900;
+
+            margin-bottom: 16px;
+
+            transition:
+                color 0.3s,
+                transform 0.3s;
+
+        }
+
+
+        .pnl-value.profit {
+
+            color: #22c55e;
+
+        }
+
+
+        .pnl-value.loss {
+
+            color: #ef4444;
+
+        }
+
+
+        .pnl-value.neutral {
+
+            color: #facc15;
+
+        }
+
+
+        .pnl-value.flash {
+
+            transform: scale(1.08);
+
+        }
+
+
+        .pnl-divider {
+
+            height: 1px;
+
+            background:
+                rgba(148, 163, 184, 0.15);
+
+            margin: 12px 0;
+
+        }
+
+
+        .pnl-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin: 11px 0;
+
+            font-size: 13px;
+
+        }
+
+
+        .pnl-row span:first-child {
+
+            color: #94a3b8;
+
+        }
+
+
+        .pnl-row span:last-child {
+
+            color: white;
+
+            font-weight: bold;
+
+            text-align: right;
+
+        }
+
+
+        .pnl-live {
+
+            text-align: center;
+
+            margin-top: 13px;
+
+            padding: 7px;
+
+            border-radius: 8px;
+
+            background:
+                rgba(34, 197, 94, 0.08);
+
+            color: #22c55e;
+
+            font-size: 11px;
+
+            font-weight: bold;
+
+        }
+
+
+        .pnl-live-dot {
+
+            display: inline-block;
+
+            width: 6px;
+
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: #22c55e;
+
+            margin-right: 4px;
+
+            animation: pulse 1.3s infinite;
+
+        }
+
+
+        /* ==========================================
+           OWNED
+        ========================================== */
 
         .owned {
 
@@ -213,14 +479,22 @@
             margin-bottom: 25px;
 
             color: #cbd5e1;
+
         }
+
 
         .owned strong {
 
             color: white;
 
             font-size: 20px;
+
         }
+
+
+        /* ==========================================
+           FORM
+        ========================================== */
 
         label {
 
@@ -231,7 +505,9 @@
             font-weight: bold;
 
             margin-bottom: 8px;
+
         }
+
 
         input {
 
@@ -251,14 +527,22 @@
             font-size: 18px;
 
             margin-bottom: 10px;
+
         }
+
 
         input:focus {
 
             outline: none;
 
             border-color: #38bdf8;
+
         }
+
+
+        /* ==========================================
+           SELL BUTTON
+        ========================================== */
 
         .sell-button {
 
@@ -283,14 +567,22 @@
             cursor: pointer;
 
             transition: 0.2s;
+
         }
+
 
         .sell-button:hover {
 
             background: #b91c1c;
 
             transform: translateY(-2px);
+
         }
+
+
+        /* ==========================================
+           LIMIT BUTTON
+        ========================================== */
 
         .limit-button {
 
@@ -317,14 +609,22 @@
             font-weight: bold;
 
             transition: 0.2s;
+
         }
+
 
         .limit-button:hover {
 
             background: #d97706;
 
             transform: translateY(-2px);
+
         }
+
+
+        /* ==========================================
+           ESTIMATE
+        ========================================== */
 
         .estimate {
 
@@ -341,14 +641,22 @@
             color: #bfdbfe;
 
             font-size: 14px;
+
         }
+
 
         .estimate strong {
 
             color: #38bdf8;
 
             font-size: 19px;
+
         }
+
+
+        /* ==========================================
+           MESSAGE
+        ========================================== */
 
         .message {
 
@@ -361,7 +669,13 @@
             margin-bottom: 20px;
 
             text-align: center;
+
         }
+
+
+        /* ==========================================
+           INFO
+        ========================================== */
 
         .info {
 
@@ -380,7 +694,13 @@
             line-height: 1.6;
 
             text-align: center;
+
         }
+
+
+        /* ==========================================
+           BACK
+        ========================================== */
 
         .back {
 
@@ -393,24 +713,107 @@
             color: #38bdf8;
 
             text-decoration: none;
+
         }
+
 
         .back:hover {
 
             text-decoration: underline;
+
         }
+
+
+        /* ==========================================
+           MOBILE
+        ========================================== */
+
+        @media (max-width: 900px) {
+
+            body {
+
+                align-items: flex-start;
+
+            }
+
+
+            .floating-pnl {
+
+                position: relative;
+
+                right: auto;
+
+                top: auto;
+
+                transform: none;
+
+                width: 100%;
+
+                max-width: 520px;
+
+                margin: 0 auto 20px auto;
+
+                order: -1;
+
+            }
+
+
+            .floating-pnl:hover {
+
+                transform: none;
+
+            }
+
+
+            body {
+
+                display: flex;
+
+                flex-direction: column;
+
+            }
+
+
+            .box {
+
+                margin: 20px auto;
+
+            }
+
+        }
+
 
         @media (max-width: 500px) {
 
             .box {
 
                 padding: 25px 20px;
+
             }
+
 
             .price {
 
                 font-size: 32px;
+
             }
+
+
+            .floating-pnl {
+
+                padding: 16px;
+
+                border-radius: 15px;
+
+            }
+
+
+            .pnl-value {
+
+                font-size: 25px;
+
+            }
+
         }
 
     </style>
@@ -420,6 +823,122 @@
 
 <body>
 
+
+<!-- ==========================================
+     FLOATING P&L
+========================================== -->
+
+{% if holding %}
+
+<div class="floating-pnl">
+
+    <div class="pnl-title">
+        📊 Your Position
+    </div>
+
+
+    <div class="pnl-stock">
+        {{ stock.symbol }} • {{ holding.quantity }} shares
+    </div>
+
+
+    <div
+        id="floatingPnl"
+        class="pnl-value
+        {% if holding.pnl >= 0 %}
+            profit
+        {% else %}
+            loss
+        {% endif %}"
+    >
+
+        {% if holding.pnl >= 0 %}
+
+            📈 +₹{{ holding.pnl|floatformat:2 }}
+
+        {% else %}
+
+            📉 ₹{{ holding.pnl|floatformat:2 }}
+
+        {% endif %}
+
+    </div>
+
+
+    <div class="pnl-divider"></div>
+
+
+    <div class="pnl-row">
+
+        <span>
+            Avg. Buy
+        </span>
+
+        <span id="floatingAvg">
+            ₹{{ holding.average_price|floatformat:2 }}
+        </span>
+
+    </div>
+
+
+    <div class="pnl-row">
+
+        <span>
+            Current
+        </span>
+
+        <span
+            id="floatingCurrent"
+            class="current-floating"
+        >
+            ₹{{ stock.price|floatformat:2 }}
+        </span>
+
+    </div>
+
+
+    <div class="pnl-row">
+
+        <span>
+            Invested
+        </span>
+
+        <span id="floatingInvested">
+            ₹{{ holding.invested_value|floatformat:2 }}
+        </span>
+
+    </div>
+
+
+    <div class="pnl-row">
+
+        <span>
+            Current Value
+        </span>
+
+        <span id="floatingValue">
+            ₹{{ holding.current_value|floatformat:2 }}
+        </span>
+
+    </div>
+
+
+    <div class="pnl-live">
+
+        <span class="pnl-live-dot"></span>
+
+        LIVE P&amp;L
+
+    </div>
+
+</div>
+
+{% endif %}
+
+
+<!-- ==========================================
+     SELL BOX
+========================================== -->
 
 <div class="box">
 
@@ -439,9 +958,7 @@
     </div>
 
 
-    <!-- ==================================
-         LIVE CURRENT PRICE
-    ================================== -->
+    <!-- LIVE PRICE -->
 
     <div class="price-box">
 
@@ -449,12 +966,16 @@
             Current Market Price
         </div>
 
+
         <div
             class="price"
             id="livePrice"
         >
+
             ₹{{ stock.price }}
+
         </div>
+
 
         <div class="live">
 
@@ -467,9 +988,7 @@
     </div>
 
 
-    <!-- ==================================
-         MESSAGES
-    ================================== -->
+    <!-- MESSAGES -->
 
     {% for message in messages %}
 
@@ -483,9 +1002,7 @@
     {% if holding %}
 
 
-        <!-- ==================================
-             SHARES OWNED
-        ================================== -->
+        <!-- SHARES OWNED -->
 
         <div class="owned">
 
@@ -500,9 +1017,7 @@
         </div>
 
 
-        <!-- ==================================
-             IMMEDIATE SELL
-        ================================== -->
+        <!-- MARKET SELL -->
 
         <form
             method="POST"
@@ -510,6 +1025,7 @@
         >
 
             {% csrf_token %}
+
 
             <input
                 type="hidden"
@@ -536,7 +1052,7 @@
             >
 
 
-            <!-- ESTIMATED SELL VALUE -->
+            <!-- ESTIMATE -->
 
             <div class="estimate">
 
@@ -561,9 +1077,7 @@
         </form>
 
 
-        <!-- ==================================
-             LIMIT SELL
-        ================================== -->
+        <!-- LIMIT SELL -->
 
         <a
             class="limit-button"
@@ -575,9 +1089,7 @@
         </a>
 
 
-        <!-- ==================================
-             INFORMATION
-        ================================== -->
+        <!-- INFORMATION -->
 
         <div class="info">
 
@@ -628,9 +1140,9 @@
 <script>
 
 
-    // ==========================================
-    // LIVE PRICE ELEMENTS
-    // ==========================================
+    /* ==========================================
+       ELEMENTS
+    ========================================== */
 
     const livePrice =
         document.getElementById(
@@ -650,17 +1162,41 @@
         );
 
 
-    // ==========================================
-    // STOCK SYMBOL
-    // ==========================================
+    const floatingPnl =
+        document.getElementById(
+            "floatingPnl"
+        );
+
+
+    const floatingCurrent =
+        document.getElementById(
+            "floatingCurrent"
+        );
+
+
+    const floatingValue =
+        document.getElementById(
+            "floatingValue"
+        );
+
+
+    const floatingInvested =
+        document.getElementById(
+            "floatingInvested"
+        );
+
+
+    /* ==========================================
+       STOCK SYMBOL
+    ========================================== */
 
     const stockSymbol =
         "{{ stock.symbol|escapejs }}";
 
 
-    // ==========================================
-    // STARTING PRICE
-    // ==========================================
+    /* ==========================================
+       STARTING PRICE
+    ========================================== */
 
     let currentPrice =
         Number(
@@ -668,14 +1204,38 @@
         );
 
 
-    // ==========================================
-    // UPDATE ESTIMATE
-    // ==========================================
+    /* ==========================================
+       HOLDING DATA
+    ========================================== */
+
+    const averagePrice =
+        Number(
+            "{{ holding.average_price|default:'0' }}"
+        );
+
+
+    const holdingQuantity =
+        Number(
+            "{{ holding.quantity|default:'0' }}"
+        );
+
+
+    const investedValue =
+        Number(
+            "{{ holding.invested_value|default:'0' }}"
+        );
+
+
+    /* ==========================================
+       UPDATE ESTIMATE
+    ========================================== */
 
     function updateEstimate() {
 
         if (!quantity || !estimate) {
+
             return;
+
         }
 
 
@@ -688,14 +1248,114 @@
 
 
         estimate.textContent =
-            "₹" + total.toFixed(2);
+            "₹" +
+            total.toFixed(2);
 
     }
 
 
-    // ==========================================
-    // GET LIVE STOCK PRICES
-    // ==========================================
+    /* ==========================================
+       UPDATE FLOATING P&L
+    ========================================== */
+
+    function updateFloatingPnl() {
+
+        if (!floatingPnl) {
+
+            return;
+
+        }
+
+
+        const currentValue =
+            currentPrice *
+            holdingQuantity;
+
+
+        const pnl =
+            currentValue -
+            investedValue;
+
+
+        /* CURRENT PRICE */
+
+        if (floatingCurrent) {
+
+            floatingCurrent.textContent =
+                "₹" +
+                currentPrice.toFixed(2);
+
+        }
+
+
+        /* CURRENT VALUE */
+
+        if (floatingValue) {
+
+            floatingValue.textContent =
+                "₹" +
+                currentValue.toFixed(2);
+
+        }
+
+
+        /* INVESTED */
+
+        if (floatingInvested) {
+
+            floatingInvested.textContent =
+                "₹" +
+                investedValue.toFixed(2);
+
+        }
+
+
+        /* P&L */
+
+        if (pnl >= 0) {
+
+            floatingPnl.className =
+                "pnl-value profit flash";
+
+            floatingPnl.textContent =
+                "📈 +₹" +
+                pnl.toFixed(2);
+
+        }
+
+        else {
+
+            floatingPnl.className =
+                "pnl-value loss flash";
+
+            floatingPnl.textContent =
+                "📉 ₹" +
+                pnl.toFixed(2);
+
+        }
+
+
+        setTimeout(
+            function() {
+
+                if (floatingPnl) {
+
+                    floatingPnl.classList.remove(
+                        "flash"
+                    );
+
+                }
+
+            },
+            300
+        );
+
+    }
+
+
+    /* ==========================================
+       LIVE STOCK PRICE
+    ========================================== */
 
     async function updateLivePrice() {
 
@@ -725,8 +1385,6 @@
                 await response.json();
 
 
-            // Find this stock
-
             const stock =
                 data.stocks.find(
                     item =>
@@ -747,9 +1405,7 @@
                 );
 
 
-            // ==================================
-            // PRICE MOVEMENT EFFECT
-            // ==================================
+            /* PRICE MOVEMENT */
 
             if (
                 newPrice >
@@ -782,9 +1438,7 @@
             }
 
 
-            // ==================================
-            // UPDATE PRICE
-            // ==================================
+            /* UPDATE PRICE */
 
             currentPrice =
                 newPrice;
@@ -795,18 +1449,29 @@
                 currentPrice.toFixed(2);
 
 
+            /* UPDATE ESTIMATE */
+
             updateEstimate();
 
 
-            // Remove animation class
+            /* UPDATE P&L */
+
+            updateFloatingPnl();
+
+
+            /* REMOVE PRICE ANIMATION */
 
             setTimeout(
                 function() {
 
-                    livePrice.classList.remove(
-                        "up",
-                        "down"
-                    );
+                    if (livePrice) {
+
+                        livePrice.classList.remove(
+                            "up",
+                            "down"
+                        );
+
+                    }
 
                 },
                 300
@@ -826,9 +1491,9 @@
     }
 
 
-    // ==========================================
-    // QUANTITY LISTENER
-    // ==========================================
+    /* ==========================================
+       QUANTITY LISTENER
+    ========================================== */
 
     if (quantity) {
 
@@ -840,18 +1505,20 @@
     }
 
 
-    // ==========================================
-    // FIRST PRICE UPDATE
-    // ==========================================
+    /* ==========================================
+       FIRST UPDATE
+    ========================================== */
+
+    updateEstimate();
+
+    updateFloatingPnl();
 
     updateLivePrice();
 
 
-    // ==========================================
-    // KEEP PRICE LIVE
-    //
-    // Every 2 seconds
-    // ==========================================
+    /* ==========================================
+       UPDATE EVERY 2 SECONDS
+    ========================================== */
 
     setInterval(
         updateLivePrice,
