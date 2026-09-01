@@ -22,136 +22,441 @@
         box-sizing: border-box;
     }
 
-    body {
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        background:
-            radial-gradient(
-                circle at top right,
-                #172554 0%,
-                #0f172a 40%,
-                #020617 100%
-            );
-        color: white;
-        min-height: 100vh;
+    :root {
+        --bg: #070a12;
+        --surface: #0d111c;
+        --surface-2: #121827;
+        --surface-3: #171e2d;
+
+        --border: rgba(255, 255, 255, 0.08);
+        --border-light: rgba(255, 255, 255, 0.13);
+
+        --text: #f8fafc;
+        --muted: #8b95a7;
+        --muted-light: #b5bdca;
+
+        --primary: #6d7cff;
+        --primary-light: #8b96ff;
+        --primary-dark: #5362e8;
+
+        --success: #21c47b;
+        --danger: #ff5c6c;
     }
 
-    nav {
-        background: rgba(15, 23, 42, 0.96);
-        border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+    /* ==========================================
+       BODY
+    ========================================== */
 
-        padding: 18px 30px;
+    body {
+        margin: 0;
+
+        min-height: 100vh;
+
+        font-family:
+            Inter,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            Arial,
+            sans-serif;
+
+        background:
+            radial-gradient(
+                circle at 8% 0%,
+                rgba(109, 124, 255, 0.12),
+                transparent 28%
+            ),
+            radial-gradient(
+                circle at 95% 80%,
+                rgba(124, 58, 237, 0.08),
+                transparent 30%
+            ),
+            linear-gradient(
+                145deg,
+                #090c14,
+                #06080f
+            );
+
+        color: var(--text);
+    }
+
+    /* ==========================================
+       NAVIGATION
+    ========================================== */
+
+    nav {
+        position: sticky;
+
+        top: 0;
+
+        z-index: 1000;
 
         display: flex;
+
         justify-content: space-between;
+
         align-items: center;
 
         gap: 20px;
+
+        padding: 17px 32px;
+
+        background:
+            rgba(8, 11, 18, 0.86);
+
+        border-bottom:
+            1px solid var(--border);
+
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+
+        box-shadow:
+            0 8px 35px rgba(0, 0, 0, 0.28);
     }
 
     nav h1 {
         margin: 0;
-        color: #38bdf8;
-        font-size: 24px;
+
+        font-size: 23px;
+
+        font-weight: 800;
+
+        letter-spacing: -0.5px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #ffffff,
+                #aeb7ff
+            );
+
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
     }
 
+    /* ==========================================
+       BACK BUTTON
+    ========================================== */
+
     .back {
-        color: white;
+        display: inline-flex;
+
+        align-items: center;
+        justify-content: center;
+
+        padding: 10px 17px;
+
+        border:
+            1px solid rgba(139, 150, 255, 0.22);
+
+        border-radius: 10px;
+
+        color: #dce0ff;
+
         text-decoration: none;
 
-        background: #2563eb;
+        font-size: 13px;
 
-        padding: 10px 16px;
+        font-weight: 650;
 
-        border-radius: 8px;
+        background:
+            rgba(109, 124, 255, 0.08);
 
-        font-weight: bold;
-
-        transition: 0.2s;
+        transition:
+            transform 0.2s ease,
+            background 0.2s ease,
+            border-color 0.2s ease,
+            box-shadow 0.2s ease;
     }
 
     .back:hover {
         transform: translateY(-2px);
-        opacity: 0.9;
+
+        background:
+            rgba(109, 124, 255, 0.15);
+
+        border-color:
+            rgba(139, 150, 255, 0.45);
+
+        box-shadow:
+            0 8px 22px rgba(83, 98, 232, 0.15);
     }
+
+    /* ==========================================
+       MAIN CONTAINER
+    ========================================== */
 
     .container {
-        max-width: 1100px;
+        width: min(1120px, calc(100% - 40px));
 
-        margin: 40px auto;
-
-        padding: 20px;
+        margin: 42px auto 70px;
     }
 
+    /* ==========================================
+       PREMIUM CARDS
+    ========================================== */
+
     .card {
+        position: relative;
+
         background:
             linear-gradient(
                 145deg,
-                rgba(30, 41, 59, 0.98),
-                rgba(15, 23, 42, 0.98)
+                rgba(18, 24, 39, 0.96),
+                rgba(10, 14, 23, 0.98)
             );
 
-        border: 1px solid rgba(148, 163, 184, 0.13);
+        border:
+            1px solid var(--border);
 
-        border-radius: 18px;
+        border-radius: 22px;
 
-        padding: 25px;
+        padding: 28px;
 
         margin-bottom: 20px;
 
         box-shadow:
-            0 15px 45px rgba(0, 0, 0, 0.25);
+            0 20px 60px rgba(0, 0, 0, 0.38),
+            inset 0 1px 0 rgba(255, 255, 255, 0.025);
+
+        overflow: hidden;
     }
 
+    .card::before {
+        content: "";
+
+        position: absolute;
+
+        top: 0;
+        left: 8%;
+        right: 8%;
+
+        height: 1px;
+
+        background:
+            linear-gradient(
+                90deg,
+                transparent,
+                rgba(109, 124, 255, 0.5),
+                transparent
+            );
+
+        pointer-events: none;
+    }
+
+    /* ==========================================
+       STOCK HEADER
+    ========================================== */
+
     .stock-title {
+        margin: 0 0 7px;
+
         font-size: 30px;
-        margin: 0 0 8px;
+
+        font-weight: 800;
+
+        letter-spacing: -0.8px;
+
+        color: #f8fafc;
     }
 
     .symbol {
-        color: #94a3b8;
-        font-size: 16px;
+        color: var(--muted);
+
+        font-size: 13px;
+
+        font-weight: 600;
+
+        letter-spacing: 0.5px;
+
+        text-transform: uppercase;
     }
+
+    /* ==========================================
+       PRICE
+    ========================================== */
 
     .price {
-        font-size: 42px;
-        font-weight: bold;
+        margin-top: 17px;
 
-        margin-top: 15px;
+        font-size: 43px;
 
-        color: #38bdf8;
+        font-weight: 850;
+
+        letter-spacing: -1.2px;
+
+        color: #ffffff;
+
+        background:
+            linear-gradient(
+                135deg,
+                #ffffff,
+                #aeb7ff
+            );
+
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+
+        transition:
+            transform 0.25s ease,
+            opacity 0.25s ease;
     }
 
+    .price:hover {
+        transform: translateY(-1px);
+    }
+
+    /* ==========================================
+       STATUS
+    ========================================== */
+
     .status {
-        color: #94a3b8;
+        color: var(--muted);
+
         margin-top: 10px;
+
+        font-size: 13px;
     }
 
     .live-status {
-        color: #22c55e;
-        font-weight: bold;
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 7px;
+
+        color: var(--success);
+
+        font-size: 12px;
+
+        font-weight: 700;
     }
+
+    .live-status::before {
+        content: "";
+
+        width: 7px;
+        height: 7px;
+
+        border-radius: 50%;
+
+        background: var(--success);
+
+        box-shadow:
+            0 0 10px rgba(33, 196, 123, 0.65);
+
+        animation:
+            livePulse 1.5s infinite;
+    }
+
+    @keyframes livePulse {
+
+        0% {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        50% {
+            opacity: 0.45;
+            transform: scale(0.72);
+        }
+
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+    }
+
+    /* ==========================================
+       CHART CONTAINER
+    ========================================== */
 
     .chart-box {
         position: relative;
+
         height: 500px;
+
+        margin-top: 5px;
+
+        padding: 8px;
+
+        border-radius: 16px;
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(8, 11, 18, 0.75),
+                rgba(13, 17, 28, 0.9)
+            );
+
+        border:
+            1px solid rgba(255, 255, 255, 0.055);
+
+        overflow: hidden;
+    }
+
+    .chart-box::after {
+        content: "";
+
+        position: absolute;
+
+        inset: 0;
+
+        pointer-events: none;
+
+        background:
+            radial-gradient(
+                circle at 50% 100%,
+                rgba(109, 124, 255, 0.07),
+                transparent 45%
+            );
     }
 
     canvas {
         width: 100% !important;
+
         height: 100% !important;
+
+        position: relative;
+
+        z-index: 1;
     }
+
+    /* ==========================================
+       ERROR
+    ========================================== */
 
     .error {
-        color: #ef4444;
-        font-weight: bold;
-        margin-top: 10px;
+        margin-top: 12px;
+
+        padding: 11px 14px;
+
+        border-radius: 10px;
+
+        background:
+            rgba(255, 92, 108, 0.07);
+
+        border:
+            1px solid rgba(255, 92, 108, 0.18);
+
+        color: #ff8d99;
+
+        font-size: 13px;
+
+        font-weight: 600;
     }
 
-    @media (max-width: 650px) {
+    /* ==========================================
+       MOBILE
+    ========================================== */
+
+    @media (max-width: 700px) {
 
         nav {
-            padding: 15px;
+            padding: 15px 18px;
         }
 
         nav h1 {
@@ -159,21 +464,86 @@
         }
 
         .container {
-            margin: 20px auto;
-            padding: 12px;
+            width: calc(100% - 24px);
+
+            margin: 25px auto 50px;
         }
 
         .card {
-            padding: 20px;
+            padding: 21px;
+
+            border-radius: 18px;
+        }
+
+        .stock-title {
+            font-size: 25px;
         }
 
         .price {
-            font-size: 34px;
+            font-size: 35px;
         }
 
         .chart-box {
-            height: 350px;
+            height: 360px;
+
+            padding: 5px;
         }
+
+        .back {
+            padding: 9px 13px;
+
+            font-size: 12px;
+        }
+    }
+
+    /* ==========================================
+       SMALL PHONES
+    ========================================== */
+
+    @media (max-width: 430px) {
+
+        nav {
+            gap: 10px;
+        }
+
+        nav h1 {
+            font-size: 17px;
+        }
+
+        .container {
+            width: calc(100% - 18px);
+        }
+
+        .card {
+            padding: 18px;
+        }
+
+        .stock-title {
+            font-size: 23px;
+        }
+
+        .price {
+            font-size: 31px;
+        }
+
+        .chart-box {
+            height: 310px;
+        }
+    }
+
+    /* ==========================================
+       REDUCED MOTION
+    ========================================== */
+
+    @media (prefers-reduced-motion: reduce) {
+
+        *,
+        *::before,
+        *::after {
+            animation: none !important;
+            transition: none !important;
+        }
+
     }
 
 </style>

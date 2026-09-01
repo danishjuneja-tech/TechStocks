@@ -7,96 +7,482 @@
 
     <title>Login - Danish Stock Market</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+    ```html
+<style>
+/* =========================================================
+   PREMIUM FINTECH LOGIN
+   Matches the main market UI
+========================================================= */
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: Arial, sans-serif;
-            background: #0f172a;
-            color: white;
-        }
+:root {
+    --bg: #080a0d;
+    --surface: #11151a;
+    --surface-2: #151a20;
 
-        .login-box {
-            width: 380px;
-            background: #1e293b;
-            padding: 35px;
-            border-radius: 18px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-        }
+    --border: rgba(255,255,255,0.08);
+    --border-strong: rgba(255,255,255,0.13);
 
-        h1 {
-            text-align: center;
-            color: #38bdf8;
-            margin-bottom: 8px;
-        }
+    --text: #f4f5f6;
+    --text-soft: #a7adb5;
+    --text-muted: #6f7781;
 
-        .subtitle {
-            text-align: center;
-            color: #94a3b8;
-            margin-bottom: 30px;
-        }
+    --green: #25d17f;
+    --red: #ff5c6c;
 
-        label {
-            display: block;
-            margin-top: 15px;
-            margin-bottom: 7px;
-            color: #cbd5e1;
-        }
+    --gold: #d6b56a;
+    --gold-soft: rgba(214,181,106,0.11);
+}
 
-        input {
-            width: 100%;
-            padding: 13px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            background: #334155;
-            color: white;
-        }
 
-        input:focus {
-            outline: 2px solid #38bdf8;
-        }
+/* =========================================================
+   RESET
+========================================================= */
 
-        button {
-            width: 100%;
-            margin-top: 25px;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            background: #2563eb;
-            color: white;
-            font-size: 17px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+* {
+    box-sizing: border-box;
+}
 
-        button:hover {
-            background: #1d4ed8;
-        }
 
-        .back {
-            display: block;
-            text-align: center;
-            margin-top: 22px;
-            color: #38bdf8;
-            text-decoration: none;
-        }
+/* =========================================================
+   PAGE
+========================================================= */
 
-        .error {
-            background: #7f1d1d;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-    </style>
+body {
+    margin: 0;
+
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 25px;
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    color: var(--text);
+
+    background:
+        radial-gradient(
+            circle at 50% -15%,
+            rgba(214,181,106,0.10),
+            transparent 38%
+        ),
+        radial-gradient(
+            circle at 0% 100%,
+            rgba(37,209,127,0.045),
+            transparent 35%
+        ),
+        linear-gradient(
+            180deg,
+            #080a0d 0%,
+            #090b0e 100%
+        );
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   LOGIN CARD
+========================================================= */
+
+.login-box {
+    position: relative;
+
+    width: min(410px, 100%);
+
+    padding: 38px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #12161b,
+            #0e1115
+        );
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,0.45),
+        0 5px 20px rgba(0,0,0,0.2);
+
+    overflow: hidden;
+}
+
+
+/* Premium top line */
+
+.login-box::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold),
+            transparent
+        );
+
+    opacity: 0.85;
+}
+
+
+/* Background glow */
+
+.login-box::after {
+    content: "";
+
+    position: absolute;
+
+    width: 230px;
+    height: 230px;
+
+    top: -150px;
+    right: -100px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(214,181,106,0.10),
+            transparent 70%
+        );
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   HEADING
+========================================================= */
+
+h1 {
+    position: relative;
+    z-index: 1;
+
+    margin:
+        0 0 8px;
+
+    text-align: center;
+
+    font-size: 29px;
+
+    font-weight: 850;
+
+    letter-spacing: -1px;
+
+    color: var(--text);
+}
+
+
+/* Gold accent */
+
+h1::after {
+    content: ".";
+
+    color: var(--gold);
+}
+
+
+/* =========================================================
+   SUBTITLE
+========================================================= */
+
+.subtitle {
+    position: relative;
+    z-index: 1;
+
+    margin:
+        0 0 30px;
+
+    text-align: center;
+
+    color: var(--text-muted);
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   LABELS
+========================================================= */
+
+label {
+    display: block;
+
+    margin-top: 17px;
+    margin-bottom: 8px;
+
+    color: var(--text-soft);
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.35px;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+input {
+    width: 100%;
+
+    padding: 13px 14px;
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    border-radius: 9px;
+
+    outline: none;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    color: var(--text);
+
+    background:
+        #0b0e12;
+
+    box-shadow:
+        inset 0 1px 2px rgba(0,0,0,0.25);
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+
+input::placeholder {
+    color:
+        #555d67;
+}
+
+
+input:hover {
+    border-color:
+        rgba(255,255,255,0.13);
+}
+
+
+input:focus {
+    background:
+        #0d1115;
+
+    border-color:
+        rgba(214,181,106,0.55);
+
+    box-shadow:
+        0 0 0 3px rgba(214,181,106,0.08),
+        0 5px 20px rgba(0,0,0,0.15);
+}
+
+
+/* =========================================================
+   LOGIN BUTTON
+========================================================= */
+
+button {
+    position: relative;
+
+    width: 100%;
+
+    margin-top: 27px;
+
+    padding: 14px 16px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #e3c47d,
+            #cda85b
+        );
+
+    color:
+        #15120b;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    font-weight: 850;
+
+    letter-spacing: 0.15px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 25px rgba(214,181,106,0.15);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        filter 0.2s ease;
+}
+
+
+button:hover {
+    transform:
+        translateY(-2px);
+
+    filter:
+        brightness(1.08);
+
+    box-shadow:
+        0 12px 32px rgba(214,181,106,0.23);
+}
+
+
+button:active {
+    transform:
+        translateY(0);
+}
+
+
+/* =========================================================
+   BACK LINK
+========================================================= */
+
+.back {
+    display: block;
+
+    margin-top: 22px;
+
+    text-align: center;
+
+    color:
+        var(--text-muted);
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition:
+        color 0.2s ease;
+}
+
+
+.back:hover {
+    color:
+        var(--gold);
+}
+
+
+/* =========================================================
+   ERROR MESSAGE
+========================================================= */
+
+.error {
+    padding: 11px 13px;
+
+    margin-bottom: 17px;
+
+    border-radius: 9px;
+
+    text-align: center;
+
+    color:
+        #ff9aa4;
+
+    background:
+        rgba(255,92,108,0.07);
+
+    border:
+        1px solid rgba(255,92,108,0.16);
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 500px) {
+
+    body {
+        padding: 18px;
+    }
+
+    .login-box {
+        padding: 29px 22px;
+
+        border-radius: 16px;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+
+    .subtitle {
+        margin-bottom: 25px;
+    }
+
+    input {
+        padding: 12px;
+    }
+
+    button {
+        padding: 13px;
+    }
+}
+
+
+/* =========================================================
+   SMALL PHONES
+========================================================= */
+
+@media (max-width: 360px) {
+
+    body {
+        padding: 12px;
+    }
+
+    .login-box {
+        padding: 25px 18px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+}
+</style>
+```
+
 </head>
 
 <body>

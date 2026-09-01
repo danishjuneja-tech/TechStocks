@@ -14,804 +14,1173 @@
     <title>Buy {{ stock.symbol }}</title>
 
 
-    <style>
+    ```html
+<style>
 
-        * {
-            box-sizing: border-box;
-        }
+/* =========================================================
+   PREMIUM FINTECH • BUY STOCK
+   Same design system as the rest of the platform
+========================================================= */
 
+:root {
+    --bg: #080a0d;
+    --surface: #11151a;
+    --surface-2: #151a20;
+    --surface-3: #0c0f13;
 
-        body {
+    --border: rgba(255,255,255,0.08);
+    --border-strong: rgba(255,255,255,0.13);
 
-            margin: 0;
+    --text: #f4f5f6;
+    --text-soft: #a7adb5;
+    --text-muted: #6f7781;
 
-            font-family:
-                Arial,
-                Helvetica,
-                sans-serif;
+    --green: #25d17f;
+    --green-bright: #39e695;
+    --red: #ff5c6c;
 
-            background:
-                radial-gradient(
-                    circle at top right,
-                    #172554 0%,
-                    #0f172a 40%,
-                    #020617 100%
-                );
+    --gold: #d6b56a;
+    --gold-light: #e4c77f;
 
-            color: white;
+    --gold-soft: rgba(214,181,106,0.10);
+    --green-soft: rgba(37,209,127,0.08);
+    --red-soft: rgba(255,92,108,0.08);
 
-            min-height: 100vh;
+    --shadow:
+        0 25px 70px rgba(0,0,0,0.42);
+}
 
-            display: flex;
 
-            justify-content: center;
+/* =========================================================
+   RESET
+========================================================= */
 
-            align-items: center;
+* {
+    box-sizing: border-box;
+}
 
-            padding: 20px;
 
-        }
+/* =========================================================
+   BODY
+========================================================= */
 
+body {
+    margin: 0;
 
-        /* ==========================================
-           MAIN BUY BOX
-        ========================================== */
+    min-height: 100vh;
 
-        .box {
+    padding: 35px 320px 35px 25px;
 
-            width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-            max-width: 520px;
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
 
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(30, 41, 59, 0.98),
-                    rgba(15, 23, 42, 0.98)
-                );
+    color: var(--text);
 
-            padding: 35px;
+    background:
+        radial-gradient(
+            circle at 50% -15%,
+            rgba(214,181,106,0.09),
+            transparent 38%
+        ),
+        radial-gradient(
+            circle at 5% 100%,
+            rgba(37,209,127,0.045),
+            transparent 35%
+        ),
+        linear-gradient(
+            180deg,
+            #080a0d,
+            #060709
+        );
 
-            border-radius: 20px;
+    overflow-x: hidden;
+}
 
-            border:
-                1px solid
-                rgba(148, 163, 184, 0.15);
 
-            box-shadow:
-                0 20px 55px
-                rgba(0, 0, 0, 0.35);
+/* =========================================================
+   MAIN BUY BOX
+========================================================= */
 
-            position: relative;
+.box {
+    position: relative;
 
-            z-index: 2;
+    width: 100%;
+    max-width: 520px;
 
-        }
+    padding: 36px;
 
+    border-radius: 21px;
 
-        h1 {
+    background:
+        linear-gradient(
+            145deg,
+            #12161b,
+            #0d1014
+        );
 
-            text-align: center;
+    border:
+        1px solid var(--border);
 
-            color: #4ade80;
+    box-shadow:
+        var(--shadow);
 
-            margin-top: 0;
+    overflow: hidden;
 
-            margin-bottom: 8px;
+    z-index: 2;
+}
 
-        }
 
+/* Premium gold edge */
 
-        .stock-name {
+.box::before {
+    content: "";
 
-            text-align: center;
+    position: absolute;
 
-            font-size: 22px;
+    top: 0;
+    left: 0;
 
-            font-weight: bold;
+    width: 100%;
+    height: 2px;
 
-            margin: 5px 0;
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold),
+            transparent
+        );
 
-        }
+    opacity: 0.8;
+}
 
 
-        .symbol {
+/* Subtle corner glow */
 
-            text-align: center;
+.box::after {
+    content: "";
 
-            color: #94a3b8;
+    position: absolute;
 
-            margin-bottom: 25px;
+    width: 280px;
+    height: 280px;
 
-        }
+    top: -200px;
+    right: -150px;
 
+    background:
+        radial-gradient(
+            circle,
+            rgba(214,181,106,0.10),
+            transparent 70%
+        );
 
-        /* ==========================================
-           PRICE
-        ========================================== */
+    pointer-events: none;
+}
 
-        .price-box {
 
-            background: #0f172a;
+/* =========================================================
+   HEADING
+========================================================= */
 
-            border-radius: 14px;
+h1 {
+    position: relative;
+    z-index: 1;
 
-            padding: 20px;
+    margin:
+        0 0 8px;
 
-            text-align: center;
+    text-align: center;
 
-            margin-bottom: 20px;
+    font-size: 28px;
 
-            border:
-                1px solid
-                rgba(56, 189, 248, 0.15);
+    font-weight: 850;
 
-        }
+    letter-spacing: -0.8px;
 
+    color: var(--text);
+}
 
-        .price-label {
 
-            color: #94a3b8;
+/* Gold dot */
 
-            font-size: 14px;
+h1::after {
+    content: ".";
 
-            margin-bottom: 7px;
+    color: var(--gold);
+}
 
-        }
 
+/* =========================================================
+   STOCK NAME
+========================================================= */
 
-        .price {
+.stock-name {
+    position: relative;
+    z-index: 1;
 
-            font-size: 38px;
+    margin:
+        5px 0 4px;
 
-            font-weight: 800;
+    text-align: center;
 
-            color: #38bdf8;
+    font-size: 21px;
 
-            transition:
-                color 0.25s,
-                transform 0.25s;
+    font-weight: 750;
 
-        }
+    color: var(--text);
+}
 
 
-        .price.up {
+/* =========================================================
+   SYMBOL
+========================================================= */
 
-            color: #22c55e;
+.symbol {
+    position: relative;
+    z-index: 1;
 
-            transform: scale(1.04);
+    margin-bottom: 27px;
 
-        }
+    text-align: center;
 
+    color: var(--text-muted);
 
-        .price.down {
+    font-size: 11px;
 
-            color: #ef4444;
+    font-weight: 750;
 
-            transform: scale(1.04);
+    letter-spacing: 1.2px;
 
-        }
+    text-transform: uppercase;
+}
 
 
-        .live {
+/* =========================================================
+   PRICE PANEL
+========================================================= */
 
-            margin-top: 8px;
+.price-box {
+    position: relative;
 
-            font-size: 12px;
+    padding: 22px;
 
-            color: #22c55e;
+    margin-bottom: 20px;
 
-        }
+    border-radius: 14px;
 
+    text-align: center;
 
-        .live-dot {
+    background:
+        linear-gradient(
+            145deg,
+            #0d1115,
+            #090c10
+        );
 
-            display: inline-block;
+    border:
+        1px solid var(--border);
 
-            width: 8px;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.025);
+}
 
-            height: 8px;
 
-            background: #22c55e;
+/* Small top accent */
 
-            border-radius: 50%;
+.price-box::before {
+    content: "";
 
-            margin-right: 5px;
+    position: absolute;
 
-            animation: pulse 1.5s infinite;
+    left: 50%;
+    top: 0;
 
-        }
+    width: 55px;
+    height: 2px;
 
+    transform: translateX(-50%);
 
-        @keyframes pulse {
+    background:
+        var(--gold);
 
-            0% {
-                opacity: 1;
-            }
+    opacity: 0.75;
+}
 
-            50% {
-                opacity: 0.3;
-            }
 
-            100% {
-                opacity: 1;
-            }
+.price-label {
+    margin-bottom: 8px;
 
-        }
+    color: var(--text-muted);
 
+    font-size: 11px;
 
-        /* ==========================================
-           FLOATING P&L PANEL
-        ========================================== */
+    font-weight: 750;
 
-        .floating-pnl {
+    text-transform: uppercase;
 
-            position: fixed;
+    letter-spacing: 1px;
+}
 
-            right: 25px;
 
-            top: 50%;
+.price {
+    font-size: 39px;
 
-            transform: translateY(-50%);
+    font-weight: 900;
 
-            width: 235px;
+    letter-spacing: -1.8px;
 
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(30, 41, 59, 0.97),
-                    rgba(15, 23, 42, 0.97)
-                );
+    color: var(--text);
 
-            border:
-                1px solid
-                rgba(56, 189, 248, 0.25);
+    transition:
+        color 0.25s ease,
+        transform 0.25s ease;
+}
 
-            border-radius: 18px;
 
-            padding: 20px;
+.price.up {
+    color: var(--green);
 
-            box-shadow:
-                0 15px 45px
-                rgba(0, 0, 0, 0.45);
+    transform:
+        scale(1.04);
+}
 
-            backdrop-filter: blur(12px);
 
-            z-index: 100;
+.price.down {
+    color: var(--red);
 
-            transition:
-                transform 0.25s,
-                box-shadow 0.25s;
+    transform:
+        scale(1.04);
+}
 
-        }
 
+/* =========================================================
+   LIVE INDICATOR
+========================================================= */
 
-        .floating-pnl:hover {
+.live {
+    margin-top: 9px;
 
-            transform:
-                translateY(-50%)
-                translateX(-4px);
+    color: var(--green);
 
-            box-shadow:
-                0 18px 55px
-                rgba(0, 0, 0, 0.6);
+    font-size: 11px;
 
-        }
+    font-weight: 750;
 
+    letter-spacing: 0.3px;
+}
 
-        .pnl-title {
 
-            text-align: center;
+.live-dot {
+    display: inline-block;
 
-            color: #cbd5e1;
+    width: 7px;
+    height: 7px;
 
-            font-size: 13px;
+    margin-right: 5px;
 
-            font-weight: bold;
+    border-radius: 50%;
 
-            text-transform: uppercase;
+    background: var(--green);
 
-            letter-spacing: 1px;
+    box-shadow:
+        0 0 10px rgba(37,209,127,0.45);
 
-            margin-bottom: 8px;
+    animation:
+        premiumPulse 1.5s infinite;
+}
 
-        }
 
+@keyframes premiumPulse {
 
-        .pnl-stock {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
 
-            text-align: center;
+    50% {
+        opacity: 0.35;
+        transform: scale(0.8);
+    }
 
-            color: #94a3b8;
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
 
-            font-size: 13px;
 
-            margin-bottom: 12px;
+/* =========================================================
+   FLOATING P&L PANEL
+========================================================= */
 
-        }
+.floating-pnl {
+    position: fixed;
 
+    right: 25px;
+    top: 50%;
 
-        .pnl-value {
+    transform:
+        translateY(-50%);
 
-            text-align: center;
+    width: 245px;
 
-            font-size: 29px;
+    padding: 21px;
 
-            font-weight: 900;
+    border-radius: 17px;
 
-            margin-bottom: 16px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(18,22,27,0.97),
+            rgba(11,14,18,0.97)
+        );
 
-            transition:
-                color 0.3s,
-                transform 0.3s;
+    border:
+        1px solid var(--border);
 
-        }
+    box-shadow:
+        0 25px 65px rgba(0,0,0,0.50);
 
+    backdrop-filter:
+        blur(18px);
 
-        .pnl-value.profit {
+    -webkit-backdrop-filter:
+        blur(18px);
 
-            color: #22c55e;
+    z-index: 100;
 
-        }
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
 
 
-        .pnl-value.loss {
+/* Gold line */
 
-            color: #ef4444;
+.floating-pnl::before {
+    content: "";
 
-        }
+    position: absolute;
 
+    top: 0;
+    left: 25%;
 
-        .pnl-value.neutral {
+    width: 50%;
 
-            color: #facc15;
+    height: 1px;
 
-        }
+    background:
+        var(--gold);
 
+    opacity: 0.65;
+}
 
-        .pnl-value.flash {
 
-            transform: scale(1.08);
+.floating-pnl:hover {
+    transform:
+        translateY(-50%)
+        translateX(-5px);
 
-        }
+    border-color:
+        rgba(214,181,106,0.20);
 
+    box-shadow:
+        0 30px 75px rgba(0,0,0,0.58);
+}
 
-        .pnl-divider {
 
-            height: 1px;
+/* =========================================================
+   P&L TITLE
+========================================================= */
 
-            background:
-                rgba(148, 163, 184, 0.15);
+.pnl-title {
+    margin-bottom: 7px;
 
-            margin: 12px 0;
+    text-align: center;
 
-        }
+    color: var(--text-muted);
 
+    font-size: 10px;
 
-        .pnl-row {
+    font-weight: 850;
 
-            display: flex;
+    text-transform: uppercase;
 
-            justify-content: space-between;
+    letter-spacing: 1.4px;
+}
 
-            align-items: center;
 
-            gap: 10px;
+/* =========================================================
+   P&L STOCK
+========================================================= */
 
-            margin: 11px 0;
+.pnl-stock {
+    margin-bottom: 13px;
 
-            font-size: 13px;
+    text-align: center;
 
-        }
+    color: var(--text-soft);
 
+    font-size: 12px;
+}
 
-        .pnl-row span:first-child {
 
-            color: #94a3b8;
+/* =========================================================
+   P&L VALUE
+========================================================= */
 
-        }
+.pnl-value {
+    margin-bottom: 17px;
 
+    text-align: center;
 
-        .pnl-row span:last-child {
+    font-size: 29px;
 
-            color: white;
+    font-weight: 900;
 
-            font-weight: bold;
+    letter-spacing: -1px;
 
-            text-align: right;
+    transition:
+        color 0.3s ease,
+        transform 0.3s ease;
+}
 
-        }
 
+.pnl-value.profit {
+    color: var(--green);
+}
 
-        .pnl-live {
 
-            text-align: center;
+.pnl-value.loss {
+    color: var(--red);
+}
 
-            margin-top: 13px;
 
-            padding: 7px;
+.pnl-value.neutral {
+    color: var(--gold);
+}
 
-            border-radius: 8px;
 
-            background:
-                rgba(34, 197, 94, 0.08);
+.pnl-value.flash {
+    transform:
+        scale(1.08);
+}
 
-            color: #22c55e;
 
-            font-size: 11px;
+/* =========================================================
+   P&L DIVIDER
+========================================================= */
 
-            font-weight: bold;
+.pnl-divider {
+    height: 1px;
 
-        }
+    margin: 12px 0;
 
+    background:
+        var(--border);
+}
 
-        .pnl-live-dot {
 
-            display: inline-block;
+/* =========================================================
+   P&L ROW
+========================================================= */
 
-            width: 6px;
+.pnl-row {
+    display: flex;
 
-            height: 6px;
+    justify-content: space-between;
+    align-items: center;
 
-            border-radius: 50%;
+    gap: 15px;
 
-            background: #22c55e;
+    margin: 12px 0;
 
-            margin-right: 4px;
+    font-size: 12px;
+}
 
-            animation: pulse 1.3s infinite;
 
-        }
+.pnl-row span:first-child {
+    color: var(--text-muted);
+}
 
 
-        /* ==========================================
-           WALLET
-        ========================================== */
+.pnl-row span:last-child {
+    color: var(--text);
 
-        .wallet {
+    font-weight: 750;
 
-            background: #334155;
+    text-align: right;
+}
 
-            padding: 17px;
 
-            border-radius: 10px;
+/* =========================================================
+   P&L LIVE
+========================================================= */
 
-            text-align: center;
+.pnl-live {
+    margin-top: 14px;
 
-            margin-bottom: 25px;
+    padding: 8px;
 
-            color: #cbd5e1;
+    border-radius: 8px;
 
-        }
+    text-align: center;
 
+    background:
+        var(--green-soft);
 
-        .wallet strong {
+    border:
+        1px solid rgba(37,209,127,0.09);
 
-            color: #38bdf8;
+    color: var(--green);
 
-            font-size: 20px;
+    font-size: 10px;
 
-        }
+    font-weight: 800;
 
+    text-transform: uppercase;
 
-        /* ==========================================
-           FORM
-        ========================================== */
+    letter-spacing: 0.5px;
+}
 
-        label {
 
-            display: block;
+.pnl-live-dot {
+    display: inline-block;
 
-            color: #cbd5e1;
+    width: 6px;
+    height: 6px;
 
-            font-weight: bold;
+    margin-right: 4px;
 
-            margin-bottom: 8px;
+    border-radius: 50%;
 
-        }
+    background:
+        var(--green);
 
+    animation:
+        premiumPulse 1.3s infinite;
+}
 
-        input {
 
-            width: 100%;
+/* =========================================================
+   WALLET
+========================================================= */
 
-            padding: 14px;
+.wallet {
+    position: relative;
 
-            border-radius: 8px;
+    padding: 17px;
 
-            border:
-                1px solid #475569;
+    margin-bottom: 25px;
 
-            background: #1e293b;
+    border-radius: 11px;
 
-            color: white;
+    text-align: center;
 
-            font-size: 18px;
+    background:
+        rgba(37,209,127,0.045);
 
-            margin-bottom: 10px;
+    border:
+        1px solid rgba(37,209,127,0.10);
 
-        }
+    color: var(--text-muted);
 
+    font-size: 12px;
+}
 
-        input:focus {
 
-            outline: none;
+.wallet strong {
+    display: block;
 
-            border-color: #38bdf8;
+    margin-top: 5px;
 
-        }
+    color: var(--green);
 
+    font-size: 21px;
 
-        /* ==========================================
-           BUY BUTTON
-        ========================================== */
+    font-weight: 850;
+}
 
-        .buy-button {
 
-            width: 100%;
+/* =========================================================
+   FORM LABEL
+========================================================= */
 
-            padding: 15px;
+label {
+    display: block;
 
-            margin-top: 15px;
+    margin-bottom: 8px;
 
-            background: #16a34a;
+    color: var(--text-soft);
 
-            color: white;
+    font-size: 11px;
 
-            border: none;
+    font-weight: 800;
 
-            border-radius: 9px;
+    text-transform: uppercase;
 
-            font-size: 18px;
+    letter-spacing: 0.6px;
+}
 
-            font-weight: bold;
 
-            cursor: pointer;
+/* =========================================================
+   INPUT
+========================================================= */
 
-            transition: 0.2s;
+input {
+    width: 100%;
 
-        }
+    padding: 14px;
 
+    margin-bottom: 10px;
 
-        .buy-button:hover {
+    border-radius: 9px;
 
-            background: #15803d;
+    border:
+        1px solid var(--border);
 
-            transform: translateY(-2px);
+    outline: none;
 
-        }
+    background:
+        #0b0e12;
 
+    color:
+        var(--text);
 
-        /* ==========================================
-           LIMIT BUY BUTTON
-        ========================================== */
+    font-family: inherit;
 
-        .limit-button {
+    font-size: 16px;
 
-            display: block;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
 
-            width: 100%;
 
-            padding: 15px;
+input:hover {
+    border-color:
+        rgba(255,255,255,0.13);
+}
 
-            margin-top: 14px;
 
-            background: #f59e0b;
+input:focus {
+    background:
+        #0d1115;
 
-            color: white;
+    border-color:
+        rgba(214,181,106,0.55);
 
-            border-radius: 9px;
+    box-shadow:
+        0 0 0 3px rgba(214,181,106,0.07);
+}
 
-            text-align: center;
 
-            text-decoration: none;
+/* =========================================================
+   BUY BUTTON
+========================================================= */
 
-            font-size: 18px;
+.buy-button {
+    width: 100%;
 
-            font-weight: bold;
+    padding: 15px;
 
-            transition: 0.2s;
+    margin-top: 15px;
 
-        }
+    border: none;
 
+    border-radius: 9px;
 
-        .limit-button:hover {
+    background:
+        linear-gradient(
+            135deg,
+            var(--green),
+            #1bbd70
+        );
 
-            background: #d97706;
+    color:
+        #04130c;
 
-            transform: translateY(-2px);
+    font-family: inherit;
 
-        }
+    font-size: 15px;
 
+    font-weight: 850;
 
-        /* ==========================================
-           ESTIMATE
-        ========================================== */
+    cursor: pointer;
 
-        .estimate {
+    box-shadow:
+        0 8px 25px rgba(37,209,127,0.12);
 
-            background: #172554;
+    transition:
+        0.2s ease;
+}
 
-            padding: 14px;
 
-            border-radius: 9px;
+.buy-button:hover {
+    transform:
+        translateY(-2px);
 
-            margin-top: 10px;
+    background:
+        linear-gradient(
+            135deg,
+            var(--green-bright),
+            var(--green)
+        );
 
-            text-align: center;
+    box-shadow:
+        0 13px 32px rgba(37,209,127,0.20);
+}
 
-            color: #bfdbfe;
 
-            font-size: 14px;
+.buy-button:active {
+    transform:
+        translateY(0);
+}
 
-        }
 
+/* =========================================================
+   LIMIT BUY
+========================================================= */
 
-        .estimate strong {
+.limit-button {
+    display: block;
 
-            color: #38bdf8;
+    width: 100%;
 
-            font-size: 19px;
+    padding: 14px;
 
-        }
+    margin-top: 12px;
 
+    border-radius: 9px;
 
-        /* ==========================================
-           MESSAGE
-        ========================================== */
+    text-align: center;
 
-        .message {
+    text-decoration: none;
 
-            background: #334155;
+    background:
+        var(--gold-soft);
 
-            padding: 12px;
+    border:
+        1px solid rgba(214,181,106,0.18);
 
-            border-radius: 8px;
+    color:
+        var(--gold-light);
 
-            margin-bottom: 20px;
+    font-size: 14px;
 
-            text-align: center;
+    font-weight: 800;
 
-        }
+    transition:
+        0.2s ease;
+}
 
 
-        /* ==========================================
-           INFO
-        ========================================== */
+.limit-button:hover {
+    transform:
+        translateY(-2px);
 
-        .info {
+    background:
+        rgba(214,181,106,0.17);
 
-            background: #0f172a;
+    border-color:
+        rgba(214,181,106,0.30);
+}
 
-            padding: 14px;
 
-            border-radius: 9px;
+/* =========================================================
+   ESTIMATE
+========================================================= */
 
-            margin-top: 18px;
+.estimate {
+    padding: 14px;
 
-            color: #94a3b8;
+    margin-top: 10px;
 
-            font-size: 13px;
+    border-radius: 9px;
 
-            line-height: 1.6;
+    text-align: center;
 
-            text-align: center;
+    background:
+        rgba(255,255,255,0.035);
 
-        }
+    border:
+        1px solid var(--border);
 
+    color:
+        var(--text-muted);
 
-        /* ==========================================
-           BACK
-        ========================================== */
+    font-size: 12px;
+}
 
-        .back {
 
-            display: block;
+.estimate strong {
+    color:
+        var(--gold);
 
-            text-align: center;
+    font-size: 18px;
+}
 
-            margin-top: 22px;
 
-            color: #38bdf8;
+/* =========================================================
+   MESSAGE
+========================================================= */
 
-            text-decoration: none;
+.message {
+    padding: 12px 13px;
 
-        }
+    margin-bottom: 20px;
 
+    border-radius: 9px;
 
-        .back:hover {
+    text-align: center;
 
-            text-decoration: underline;
+    background:
+        rgba(255,255,255,0.035);
 
-        }
+    border:
+        1px solid var(--border);
 
+    color:
+        var(--text-soft);
 
-        /* ==========================================
-           MOBILE
-        ========================================== */
+    font-size: 13px;
+}
 
-        @media (max-width: 900px) {
 
-            body {
+/* =========================================================
+   INFO
+========================================================= */
 
-                align-items: flex-start;
+.info {
+    padding: 14px;
 
-                flex-direction: column;
+    margin-top: 18px;
 
-            }
+    border-radius: 9px;
 
+    background:
+        #0b0e12;
 
-            .floating-pnl {
+    border:
+        1px solid var(--border);
 
-                position: relative;
+    color:
+        var(--text-muted);
 
-                right: auto;
+    font-size: 12px;
 
-                top: auto;
+    line-height: 1.7;
 
-                transform: none;
+    text-align: center;
+}
 
-                width: 100%;
 
-                max-width: 520px;
+/* =========================================================
+   BACK LINK
+========================================================= */
 
-                margin: 0 auto 20px auto;
+.back {
+    display: block;
 
-                order: -1;
+    margin-top: 21px;
 
-            }
+    text-align: center;
 
+    color:
+        var(--text-muted);
 
-            .floating-pnl:hover {
+    font-size: 13px;
 
-                transform: none;
+    font-weight: 600;
 
-            }
+    text-decoration: none;
 
+    transition:
+        color 0.2s ease;
+}
 
-            .box {
 
-                margin: 20px auto;
+.back:hover {
+    color:
+        var(--gold);
 
-            }
+    text-decoration: none;
+}
 
-        }
 
+/* =========================================================
+   TABLET
+========================================================= */
 
-        @media (max-width: 500px) {
+@media (max-width: 1050px) {
 
-            .box {
+    body {
+        padding:
+            30px 25px;
+    }
 
-                padding: 25px 20px;
+    .floating-pnl {
+        position: relative;
 
-            }
+        right: auto;
+        top: auto;
 
+        transform: none;
 
-            .price {
+        width: 100%;
 
-                font-size: 32px;
+        max-width: 520px;
 
-            }
+        margin:
+            0 auto 20px;
 
+        order: -1;
+    }
 
-            .floating-pnl {
+    .floating-pnl:hover {
+        transform:
+            translateY(-3px);
+    }
 
-                padding: 16px;
+    .box {
+        margin:
+            0 auto;
+    }
+}
 
-                border-radius: 15px;
 
-            }
+/* =========================================================
+   MOBILE
+========================================================= */
 
+@media (max-width: 600px) {
 
-            .pnl-value {
+    body {
+        padding:
+            18px 12px;
 
-                font-size: 25px;
+        display: block;
+    }
 
-            }
+    .box {
+        width: 100%;
 
-        }
+        padding:
+            27px 20px;
 
-    </style>
+        margin:
+            0 auto 20px;
+
+        border-radius: 16px;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+
+    .stock-name {
+        font-size: 19px;
+    }
+
+    .price-box {
+        padding: 19px;
+    }
+
+    .price {
+        font-size: 33px;
+    }
+
+    .floating-pnl {
+        padding: 17px;
+
+        border-radius: 15px;
+    }
+
+    .pnl-value {
+        font-size: 26px;
+    }
+}
+
+
+/* =========================================================
+   SMALL PHONES
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .box {
+        padding:
+            23px 16px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .price {
+        font-size: 30px;
+    }
+
+    .buy-button,
+    .limit-button {
+        padding: 13px;
+    }
+}
+
+
+/* =========================================================
+   SELECTION
+========================================================= */
+
+::selection {
+    background:
+        rgba(214,181,106,0.25);
+
+    color:
+        #ffffff;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background:
+        #080a0d;
+}
+
+::-webkit-scrollbar-thumb {
+    background:
+        #292e35;
+
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background:
+        #3a414a;
+}
+
+</style>
+```
+
 
 </head>
 

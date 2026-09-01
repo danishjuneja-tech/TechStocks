@@ -14,293 +14,771 @@
     <title>Limit Sell - {{ stock.symbol }}</title>
 
 
-    <style>
+    ```html
+<style>
 
-        * {
-            box-sizing: border-box;
-        }
+/* =========================================================
+   PREMIUM FINTECH • LIMIT BUY
+   Graphite / Champagne Gold / Emerald
+========================================================= */
 
+:root {
+    --bg: #080a0d;
 
-        body {
+    --surface: #11151a;
+    --surface-2: #151a20;
+    --surface-dark: #0b0e12;
 
-            margin: 0;
+    --border: rgba(255,255,255,0.08);
+    --border-strong: rgba(255,255,255,0.13);
 
-            min-height: 100vh;
+    --text: #f4f5f6;
+    --text-soft: #a7adb5;
+    --text-muted: #6f7781;
 
-            display: flex;
+    --gold: #d6b56a;
+    --gold-light: #e5c982;
+    --gold-bright: #f0d895;
 
-            justify-content: center;
+    --gold-soft: rgba(214,181,106,0.09);
+    --gold-border: rgba(214,181,106,0.20);
 
-            align-items: center;
+    --green: #25d17f;
+    --green-soft: rgba(37,209,127,0.08);
 
-            font-family: Arial, sans-serif;
+    --red: #ff5c6c;
+}
 
-            background: #0f172a;
 
-            color: white;
+/* =========================================================
+   RESET
+========================================================= */
 
-            padding: 20px;
+* {
+    box-sizing: border-box;
+}
 
-        }
 
+/* =========================================================
+   BODY
+========================================================= */
 
-        .box {
+body {
+    margin: 0;
 
-            width: 430px;
+    min-height: 100vh;
 
-            max-width: 95%;
+    display: flex;
 
-            background: #1e293b;
+    justify-content: center;
+    align-items: center;
 
-            padding: 32px;
+    padding: 25px;
 
-            border-radius: 18px;
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
 
-            box-shadow:
-                0 15px 40px
-                rgba(0,0,0,0.4);
+    color: var(--text);
 
-        }
+    background:
+        radial-gradient(
+            circle at 50% -15%,
+            rgba(214,181,106,0.10),
+            transparent 38%
+        ),
+        radial-gradient(
+            circle at 0% 100%,
+            rgba(37,209,127,0.035),
+            transparent 35%
+        ),
+        linear-gradient(
+            180deg,
+            #080a0d 0%,
+            #060709 100%
+        );
 
+    overflow-x: hidden;
+}
 
-        h1 {
 
-            text-align: center;
+/* =========================================================
+   MAIN BOX
+========================================================= */
 
-            color: #f59e0b;
+.box {
+    position: relative;
 
-            margin-top: 0;
+    width: 430px;
 
-        }
+    max-width: 95%;
 
+    padding: 34px;
 
-        .stock {
+    border-radius: 20px;
 
-            text-align: center;
+    background:
+        linear-gradient(
+            145deg,
+            #12161b,
+            #0d1014
+        );
 
-            font-size: 22px;
+    border:
+        1px solid var(--border);
 
-            font-weight: bold;
+    box-shadow:
+        0 28px 75px rgba(0,0,0,0.46);
 
-        }
+    overflow: hidden;
+}
 
 
-        .symbol {
+/* Gold premium line */
 
-            text-align: center;
+.box::before {
+    content: "";
 
-            color: #94a3b8;
+    position: absolute;
 
-            margin-top: 5px;
+    left: 0;
+    top: 0;
 
-        }
+    width: 100%;
+    height: 2px;
 
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold),
+            transparent
+        );
 
-        .price-box {
+    opacity: 0.85;
+}
 
-            text-align: center;
 
-            margin: 25px 0;
+/* Background glow */
 
-            padding: 20px;
+.box::after {
+    content: "";
 
-            background: #0f172a;
+    position: absolute;
 
-            border-radius: 12px;
+    width: 300px;
+    height: 300px;
 
-        }
+    top: -210px;
+    right: -160px;
 
+    background:
+        radial-gradient(
+            circle,
+            rgba(214,181,106,0.11),
+            transparent 70%
+        );
 
-        .price-label {
+    pointer-events: none;
+}
 
-            color: #94a3b8;
 
-            font-size: 14px;
+/* =========================================================
+   HEADING
+========================================================= */
 
-            margin-bottom: 8px;
+h1 {
+    position: relative;
+    z-index: 1;
 
-        }
+    margin:
+        0 0 13px;
 
+    text-align: center;
 
-        .price {
+    color: var(--text);
 
-            font-size: 36px;
+    font-size: 28px;
 
-            font-weight: bold;
+    font-weight: 850;
 
-            color: #38bdf8;
+    letter-spacing: -0.9px;
+}
 
-        }
 
+h1::after {
+    content: ".";
 
-        .live {
+    color: var(--gold);
+}
 
-            margin-top: 7px;
 
-            font-size: 12px;
+/* =========================================================
+   STOCK
+========================================================= */
 
-            color: #22c55e;
+.stock {
+    position: relative;
+    z-index: 1;
 
-        }
+    text-align: center;
 
+    font-size: 21px;
 
-        .owned {
+    font-weight: 750;
 
-            background: #334155;
+    color: var(--text);
+}
 
-            padding: 15px;
 
-            border-radius: 10px;
+/* =========================================================
+   SYMBOL
+========================================================= */
 
-            text-align: center;
+.symbol {
+    position: relative;
+    z-index: 1;
 
-            margin-bottom: 22px;
+    margin-top: 5px;
 
-            color: #cbd5e1;
+    text-align: center;
 
-        }
+    color: var(--text-muted);
 
+    font-size: 11px;
 
-        .owned strong {
+    font-weight: 750;
 
-            color: white;
+    text-transform: uppercase;
 
-            font-size: 20px;
+    letter-spacing: 1.2px;
+}
 
-        }
 
+/* =========================================================
+   PRICE BOX
+========================================================= */
 
-        label {
+.price-box {
+    position: relative;
 
-            display: block;
+    margin:
+        25px 0 20px;
 
-            margin-top: 16px;
+    padding: 21px;
 
-            margin-bottom: 7px;
+    text-align: center;
 
-            color: #cbd5e1;
+    background:
+        linear-gradient(
+            145deg,
+            #0e1216,
+            #090c10
+        );
 
-            font-weight: bold;
+    border-radius: 14px;
 
-        }
+    border:
+        1px solid var(--border);
 
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.025);
+}
 
-        input {
 
-            width: 100%;
+/* Gold price accent */
 
-            padding: 13px;
+.price-box::before {
+    content: "";
 
-            border: 1px solid #475569;
+    position: absolute;
 
-            border-radius: 8px;
+    left: 50%;
+    top: 0;
 
-            background: #334155;
+    width: 48px;
+    height: 2px;
 
-            color: white;
+    transform:
+        translateX(-50%);
 
-            font-size: 17px;
+    background:
+        var(--gold);
 
-        }
+    opacity: 0.8;
+}
 
 
-        input:focus {
+.price-label {
+    margin-bottom: 8px;
 
-            outline: 2px solid #38bdf8;
+    color: var(--text-muted);
 
-        }
+    font-size: 11px;
 
+    font-weight: 750;
 
-        .limit-btn {
+    text-transform: uppercase;
 
-            width: 100%;
+    letter-spacing: 0.9px;
+}
 
-            padding: 14px;
 
-            margin-top: 22px;
+.price {
+    font-size: 37px;
 
-            border: none;
+    font-weight: 900;
 
-            border-radius: 9px;
+    letter-spacing: -1.5px;
 
-            background: #f59e0b;
+    color: var(--text);
+}
 
-            color: white;
 
-            font-size: 17px;
+.live {
+    margin-top: 8px;
 
-            font-weight: bold;
+    color: var(--green);
 
-            cursor: pointer;
+    font-size: 11px;
 
-        }
+    font-weight: 800;
 
+    text-transform: uppercase;
 
-        .limit-btn:hover {
+    letter-spacing: 0.5px;
+}
 
-            background: #d97706;
 
-        }
+.live::before {
+    content: "";
 
+    display: inline-block;
 
-        .back {
+    width: 6px;
+    height: 6px;
 
-            display: block;
+    margin-right: 5px;
 
-            text-align: center;
+    border-radius: 50%;
 
-            margin-top: 20px;
+    background: var(--green);
 
-            color: #38bdf8;
+    box-shadow:
+        0 0 10px rgba(37,209,127,0.45);
+}
 
-            text-decoration: none;
 
-        }
+/* =========================================================
+   OWNED
+========================================================= */
 
+.owned {
+    padding: 16px;
 
-        .info {
+    margin-bottom: 23px;
 
-            margin-top: 18px;
+    border-radius: 10px;
 
-            padding: 14px;
+    text-align: center;
 
-            border-radius: 9px;
+    background:
+        rgba(255,255,255,0.035);
 
-            background: #0f172a;
+    border:
+        1px solid var(--border);
 
-            color: #94a3b8;
+    color:
+        var(--text-muted);
 
-            font-size: 13px;
+    font-size: 12px;
+}
 
-            line-height: 1.6;
 
-            text-align: center;
+.owned strong {
+    display: block;
 
-        }
+    margin-top: 5px;
 
+    color: var(--text);
 
-        .message {
+    font-size: 20px;
 
-            background: #334155;
+    font-weight: 850;
+}
 
-            padding: 10px;
 
-            border-radius: 8px;
+/* =========================================================
+   LABEL
+========================================================= */
 
-            margin-bottom: 15px;
+label {
+    display: block;
 
-            text-align: center;
+    margin-top: 17px;
 
-        }
+    margin-bottom: 8px;
 
+    color: var(--text-soft);
 
-        .error {
+    font-size: 11px;
 
-            color: #f87171;
+    font-weight: 800;
 
-        }
+    text-transform: uppercase;
 
-    </style>
+    letter-spacing: 0.6px;
+}
+
+
+/* =========================================================
+   INPUT
+========================================================= */
+
+input {
+    width: 100%;
+
+    padding: 14px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 9px;
+
+    outline: none;
+
+    background:
+        var(--surface-dark);
+
+    color:
+        var(--text);
+
+    font-family: inherit;
+
+    font-size: 16px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+
+input::placeholder {
+    color:
+        #555d66;
+}
+
+
+input:hover {
+    border-color:
+        rgba(255,255,255,0.13);
+}
+
+
+input:focus {
+    background:
+        #0d1115;
+
+    border-color:
+        rgba(214,181,106,0.58);
+
+    box-shadow:
+        0 0 0 3px rgba(214,181,106,0.07);
+}
+
+
+/* =========================================================
+   LIMIT BUY BUTTON
+========================================================= */
+
+.limit-btn {
+    width: 100%;
+
+    padding: 15px;
+
+    margin-top: 23px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--gold-light),
+            #c9a55a
+        );
+
+    color:
+        #17130a;
+
+    font-family: inherit;
+
+    font-size: 15px;
+
+    font-weight: 850;
+
+    letter-spacing: 0.1px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 25px rgba(214,181,106,0.14);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        filter 0.2s ease;
+}
+
+
+.limit-btn:hover {
+    transform:
+        translateY(-2px);
+
+    filter:
+        brightness(1.08);
+
+    box-shadow:
+        0 13px 35px rgba(214,181,106,0.22);
+}
+
+
+.limit-btn:active {
+    transform:
+        translateY(0);
+}
+
+
+/* =========================================================
+   BACK
+========================================================= */
+
+.back {
+    display: block;
+
+    margin-top: 21px;
+
+    text-align: center;
+
+    color:
+        var(--text-muted);
+
+    font-size: 13px;
+
+    font-weight: 650;
+
+    text-decoration: none;
+
+    transition:
+        color 0.2s ease;
+}
+
+
+.back:hover {
+    color:
+        var(--gold);
+
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   INFO
+========================================================= */
+
+.info {
+    margin-top: 18px;
+
+    padding: 14px;
+
+    border-radius: 9px;
+
+    background:
+        rgba(255,255,255,0.03);
+
+    border:
+        1px solid var(--border);
+
+    color:
+        var(--text-muted);
+
+    font-size: 12px;
+
+    line-height: 1.7;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+.message {
+    padding: 11px 13px;
+
+    margin-bottom: 15px;
+
+    border-radius: 9px;
+
+    text-align: center;
+
+    background:
+        rgba(255,255,255,0.035);
+
+    border:
+        1px solid var(--border);
+
+    color:
+        var(--text-soft);
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.error {
+    padding: 10px 12px;
+
+    border-radius: 8px;
+
+    color:
+        #ff8d99;
+
+    background:
+        rgba(255,92,108,0.07);
+
+    border:
+        1px solid rgba(255,92,108,0.15);
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   SELECTION
+========================================================= */
+
+::selection {
+    background:
+        rgba(214,181,106,0.25);
+
+    color:
+        #ffffff;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background:
+        #080a0d;
+}
+
+::-webkit-scrollbar-thumb {
+    background:
+        #292e35;
+
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background:
+        #3a414a;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 500px) {
+
+    body {
+        padding:
+            18px 12px;
+
+        align-items:
+            flex-start;
+    }
+
+    .box {
+        width: 100%;
+
+        max-width: 430px;
+
+        margin:
+            20px auto;
+
+        padding:
+            28px 21px;
+
+        border-radius:
+            17px;
+    }
+
+    h1 {
+        font-size:
+            25px;
+    }
+
+    .stock {
+        font-size:
+            19px;
+    }
+
+    .price-box {
+        padding:
+            19px;
+    }
+
+    .price {
+        font-size:
+            32px;
+    }
+}
+
+
+/* =========================================================
+   SMALL PHONES
+========================================================= */
+
+@media (max-width: 360px) {
+
+    .box {
+        padding:
+            24px 17px;
+    }
+
+    h1 {
+        font-size:
+            23px;
+    }
+
+    .price {
+        font-size:
+            29px;
+    }
+}
+
+</style>
+```
+
 
 </head>
 

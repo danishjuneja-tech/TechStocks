@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
@@ -52,6 +53,10 @@ def signup(request):
 
             user = form.save()
 
+            Wallet.objects.get_or_create(
+                user=user
+            )
+
             login(request, user)
 
             return redirect("market_home")
@@ -85,10 +90,6 @@ def buy_stock(request, symbol):
         user=request.user
     )
 
-    # ======================================
-    # MARKET OPEN / CLOSED
-    # ======================================
-
     settings = MarketSettings.objects.first()
 
     if settings and not settings.market_open:
@@ -106,10 +107,6 @@ def buy_stock(request, symbol):
                 "wallet": wallet
             }
         )
-
-    # ======================================
-    # BUY
-    # ======================================
 
     if request.method == "POST":
 
@@ -129,10 +126,6 @@ def buy_stock(request, symbol):
 
             quantity = 0
 
-        # ----------------------------------
-        # Validate quantity
-        # ----------------------------------
-
         if quantity <= 0:
 
             messages.error(
@@ -145,18 +138,10 @@ def buy_stock(request, symbol):
                 symbol=stock.symbol
             )
 
-        # ----------------------------------
-        # Calculate total
-        # ----------------------------------
-
         total = (
             stock.price *
             quantity
         )
-
-        # ----------------------------------
-        # Check wallet
-        # ----------------------------------
 
         if wallet.balance < total:
 
@@ -169,10 +154,6 @@ def buy_stock(request, symbol):
                 "buy_stock",
                 symbol=stock.symbol
             )
-
-        # ==================================
-        # COMPLETE BUY
-        # ==================================
 
         with transaction.atomic():
 
@@ -187,17 +168,9 @@ def buy_stock(request, symbol):
 
             old_quantity = holding.quantity
 
-            # --------------------------------
-            # First purchase
-            # --------------------------------
-
             if old_quantity == 0:
 
                 holding.average_price = stock.price
-
-            # --------------------------------
-            # Additional purchase
-            # --------------------------------
 
             else:
 
@@ -223,10 +196,6 @@ def buy_stock(request, symbol):
 
             holding.save()
 
-            # --------------------------------
-            # Transaction history
-            # --------------------------------
-
             Transaction.objects.create(
                 user=request.user,
                 stock=stock,
@@ -246,10 +215,6 @@ def buy_stock(request, symbol):
             symbol=stock.symbol
         )
 
-    # ======================================
-    # SHOW BUY PAGE
-    # ======================================
-
     return render(
         request,
         "buy.html",
@@ -261,7 +226,7 @@ def buy_stock(request, symbol):
 
 
 # ==========================================
-# MARKET SELL
+# SELL STOCK
 # ==========================================
 
 @login_required
@@ -281,10 +246,6 @@ def sell_stock(request, symbol):
         stock=stock
     ).first()
 
-    # ======================================
-    # MARKET OPEN / CLOSED
-    # ======================================
-
     settings = MarketSettings.objects.first()
 
     if settings and not settings.market_open:
@@ -302,10 +263,6 @@ def sell_stock(request, symbol):
                 "holding": holding
             }
         )
-
-    # ======================================
-    # MARKET SELL
-    # ======================================
 
     if request.method == "POST":
 
@@ -373,20 +330,12 @@ def sell_stock(request, symbol):
                 symbol=stock.symbol
             )
 
-        # ----------------------------------
-        # Current market price
-        # ----------------------------------
-
         sell_price = stock.price
 
         total = (
             sell_price *
             quantity
         )
-
-        # ==================================
-        # COMPLETE SELL
-        # ==================================
 
         with transaction.atomic():
 
@@ -423,10 +372,6 @@ def sell_stock(request, symbol):
             symbol=stock.symbol
         )
 
-    # ======================================
-    # SELL PAGE
-    # ======================================
-
     return render(
         request,
         "sell.html",
@@ -454,10 +399,6 @@ def limit_sell(request, symbol):
         stock=stock
     ).first()
 
-    # ======================================
-    # MARKET OPEN / CLOSED
-    # ======================================
-
     settings = MarketSettings.objects.first()
 
     if settings and not settings.market_open:
@@ -475,10 +416,6 @@ def limit_sell(request, symbol):
                 "holding": holding
             }
         )
-
-    # ======================================
-    # CREATE LIMIT ORDER
-    # ======================================
 
     if request.method == "POST":
 
@@ -514,10 +451,6 @@ def limit_sell(request, symbol):
                 symbol=stock.symbol
             )
 
-        # ----------------------------------
-        # Quantity
-        # ----------------------------------
-
         if quantity <= 0:
 
             messages.error(
@@ -530,10 +463,6 @@ def limit_sell(request, symbol):
                 symbol=stock.symbol
             )
 
-        # ----------------------------------
-        # Price
-        # ----------------------------------
-
         if limit_price <= 0:
 
             messages.error(
@@ -545,10 +474,6 @@ def limit_sell(request, symbol):
                 "limit_sell",
                 symbol=stock.symbol
             )
-
-        # ----------------------------------
-        # Holding
-        # ----------------------------------
 
         if not holding:
 
@@ -574,10 +499,6 @@ def limit_sell(request, symbol):
                 symbol=stock.symbol
             )
 
-        # ----------------------------------
-        # Target must be above current
-        # ----------------------------------
-
         if limit_price <= stock.price:
 
             messages.error(
@@ -591,17 +512,12 @@ def limit_sell(request, symbol):
                 symbol=stock.symbol
             )
 
-        # ==================================
-        # CREATE ORDER
-        # ==================================
-
         LimitOrder.objects.create(
             user=request.user,
             stock=stock,
             order_type=LimitOrder.SELL,
             quantity=quantity,
-            limit_price=limit_price,
-            executed=False
+            limit_price=limit_price
         )
 
         messages.success(
@@ -616,10 +532,6 @@ def limit_sell(request, symbol):
             symbol=stock.symbol
         )
 
-    # ======================================
-    # LIMIT SELL PAGE
-    # ======================================
-
     return render(
         request,
         "limit_sell.html",
@@ -631,7 +543,7 @@ def limit_sell(request, symbol):
 
 
 # ==========================================
-# REALIZED P&L CALCULATOR
+# REALIZED P&L
 # ==========================================
 
 def calculate_realized_pnl(user):
@@ -645,10 +557,6 @@ def calculate_realized_pnl(user):
         "id"
     )
 
-    # --------------------------------------
-    # Store current cost basis for each stock
-    # --------------------------------------
-
     positions = {}
 
     realized_pnl = Decimal("0")
@@ -657,13 +565,11 @@ def calculate_realized_pnl(user):
 
     total_buy_value = Decimal("0")
 
+    portfolio_details = {}
+
     for txn in transactions:
 
         symbol = txn.stock.symbol
-
-        # ----------------------------------
-        # Create position if necessary
-        # ----------------------------------
 
         if symbol not in positions:
 
@@ -672,21 +578,29 @@ def calculate_realized_pnl(user):
                 "average_price": Decimal("0")
             }
 
+        if symbol not in portfolio_details:
+
+            portfolio_details[symbol] = {
+                "stock": txn.stock,
+                "purchases": [],
+                "sales": []
+            }
+
         position = positions[symbol]
 
-        # ==================================
-        # BUY TRANSACTION
-        # ==================================
+        # ======================================
+        # BUY
+        # ======================================
 
         if txn.transaction_type == Transaction.BUY:
-
-            old_quantity = position["quantity"]
-
-            old_average = position["average_price"]
 
             buy_quantity = txn.quantity
 
             buy_price = txn.price
+
+            old_quantity = position["quantity"]
+
+            old_average = position["average_price"]
 
             old_value = (
                 Decimal(old_quantity) *
@@ -703,20 +617,31 @@ def calculate_realized_pnl(user):
                 buy_quantity
             )
 
-            if new_quantity > 0:
-
-                position["average_price"] = (
-                    old_value +
-                    new_value
-                ) / Decimal(new_quantity)
+            position["average_price"] = (
+                old_value +
+                new_value
+            ) / Decimal(new_quantity)
 
             position["quantity"] = new_quantity
 
             total_buy_value += new_value
 
-        # ==================================
-        # SELL TRANSACTION
-        # ==================================
+            portfolio_details[
+                symbol
+            ]["purchases"].append({
+
+                "date": txn.created_at,
+
+                "quantity": buy_quantity,
+
+                "price": buy_price,
+
+                "money": new_value
+            })
+
+        # ======================================
+        # SELL
+        # ======================================
 
         elif txn.transaction_type == Transaction.SELL:
 
@@ -724,35 +649,19 @@ def calculate_realized_pnl(user):
 
             sell_price = txn.price
 
-            # ----------------------------------
-            # Average purchase price BEFORE SELL
-            # ----------------------------------
-
             average_buy_price = position[
                 "average_price"
             ]
-
-            # ----------------------------------
-            # Cost of shares being sold
-            # ----------------------------------
 
             cost_of_sold_shares = (
                 Decimal(sell_quantity) *
                 average_buy_price
             )
 
-            # ----------------------------------
-            # Actual money received from sale
-            # ----------------------------------
-
             sale_value = (
                 Decimal(sell_quantity) *
                 sell_price
             )
-
-            # ----------------------------------
-            # REALIZED PROFIT / LOSS
-            # ----------------------------------
 
             sale_pnl = (
                 sale_value -
@@ -763,9 +672,22 @@ def calculate_realized_pnl(user):
 
             total_sell_value += sale_value
 
-            # ----------------------------------
-            # Remove sold shares from position
-            # ----------------------------------
+            portfolio_details[
+                symbol
+            ]["sales"].append({
+
+                "date": txn.created_at,
+
+                "quantity": sell_quantity,
+
+                "price": sell_price,
+
+                "money": sale_value,
+
+                "cost": cost_of_sold_shares,
+
+                "pnl": sale_pnl
+            })
 
             position["quantity"] -= sell_quantity
 
@@ -776,9 +698,14 @@ def calculate_realized_pnl(user):
                 position["average_price"] = Decimal("0")
 
     return {
+
         "realized_pnl": realized_pnl,
+
         "total_sell_value": total_sell_value,
+
         "total_buy_value": total_buy_value,
+
+        "portfolio_details": portfolio_details
     }
 
 
@@ -807,10 +734,6 @@ def portfolio(request):
         "-created_at"
     )
 
-    # ======================================
-    # PENDING ORDERS
-    # ======================================
-
     pending_orders = LimitOrder.objects.filter(
         user=request.user,
         executed=False
@@ -820,10 +743,6 @@ def portfolio(request):
         "-created_at"
     )
 
-    # ======================================
-    # CURRENT / UNREALIZED P&L
-    # ======================================
-
     total_value = Decimal("0")
 
     total_invested = Decimal("0")
@@ -832,13 +751,15 @@ def portfolio(request):
 
     for holding in holdings:
 
+        current_price = holding.stock.price
+
         current_value = (
-            holding.quantity *
-            holding.stock.price
+            Decimal(holding.quantity) *
+            current_price
         )
 
         invested_value = (
-            holding.quantity *
+            Decimal(holding.quantity) *
             holding.average_price
         )
 
@@ -846,6 +767,8 @@ def portfolio(request):
             current_value -
             invested_value
         )
+
+        holding.current_price = current_price
 
         holding.current_value = current_value
 
@@ -859,10 +782,6 @@ def portfolio(request):
 
         unrealized_pnl += pnl
 
-    # ======================================
-    # REALIZED P&L
-    # ======================================
-
     realized_data = calculate_realized_pnl(
         request.user
     )
@@ -875,42 +794,201 @@ def portfolio(request):
         "total_sell_value"
     ]
 
-    # ======================================
-    # TOTAL P&L
-    # ======================================
+    portfolio_details = realized_data[
+        "portfolio_details"
+    ]
 
     total_pnl = (
         unrealized_pnl +
         realized_pnl
     )
 
-    # ======================================
-    # PORTFOLIO PAGE
-    # ======================================
+    today = timezone.localdate()
+
+    today_realized_pnl = Decimal("0")
+
+    today_unrealized_pnl = Decimal("0")
+
+    for details in portfolio_details.values():
+
+        for sale in details["sales"]:
+
+            sale_date = timezone.localtime(
+                sale["date"]
+            ).date()
+
+            if sale_date == today:
+
+                today_realized_pnl += sale["pnl"]
+
+    for holding in holdings:
+
+        today_unrealized_pnl += (
+
+            holding.stock.price -
+            holding.stock.previous_price
+
+        ) * Decimal(holding.quantity)
+
+    today_pnl = (
+        today_realized_pnl +
+        today_unrealized_pnl
+    )
+
+    portfolio2 = []
+
+    for symbol, details in portfolio_details.items():
+
+        stock = details["stock"]
+
+        holding = Holding.objects.filter(
+            user=request.user,
+            stock=stock
+        ).first()
+
+        current_quantity = 0
+
+        average_price = Decimal("0")
+
+        current_value = Decimal("0")
+
+        invested_value = Decimal("0")
+
+        current_pnl = Decimal("0")
+
+        if holding:
+
+            current_quantity = holding.quantity
+
+            average_price = holding.average_price
+
+            current_value = (
+                Decimal(current_quantity) *
+                stock.price
+            )
+
+            invested_value = (
+                Decimal(current_quantity) *
+                average_price
+            )
+
+            current_pnl = (
+                current_value -
+                invested_value
+            )
+
+        total_purchased_shares = 0
+
+        total_purchase_money = Decimal("0")
+
+        for purchase in details["purchases"]:
+
+            total_purchased_shares += (
+                purchase["quantity"]
+            )
+
+            total_purchase_money += (
+                purchase["money"]
+            )
+
+        total_sold_shares = 0
+
+        total_sale_money = Decimal("0")
+
+        stock_realized_pnl = Decimal("0")
+
+        for sale in details["sales"]:
+
+            total_sold_shares += (
+                sale["quantity"]
+            )
+
+            total_sale_money += (
+                sale["money"]
+            )
+
+            stock_realized_pnl += (
+                sale["pnl"]
+            )
+
+        portfolio2.append({
+
+            "stock": stock,
+
+            "symbol": symbol,
+
+            "purchases": details["purchases"],
+
+            "total_purchased_shares":
+                total_purchased_shares,
+
+            "total_purchase_money":
+                total_purchase_money,
+
+            "sales": details["sales"],
+
+            "total_sold_shares":
+                total_sold_shares,
+
+            "total_sale_money":
+                total_sale_money,
+
+            "stock_realized_pnl":
+                stock_realized_pnl,
+
+            "current_quantity":
+                current_quantity,
+
+            "average_price":
+                average_price,
+
+            "current_price":
+                stock.price,
+
+            "current_value":
+                current_value,
+
+            "invested_value":
+                invested_value,
+
+            "current_pnl":
+                current_pnl,
+        })
 
     return render(
         request,
         "portfolio.html",
         {
+
             "wallet": wallet,
 
             "holdings": holdings,
-
-            "transactions": transactions,
-
-            "pending_orders": pending_orders,
 
             "total_value": total_value,
 
             "total_invested": total_invested,
 
-            "total_pnl": total_pnl,
-
             "realized_pnl": realized_pnl,
 
             "unrealized_pnl": unrealized_pnl,
 
+            "total_pnl": total_pnl,
+
             "total_sell_value": total_sell_value,
+
+            "today_pnl": today_pnl,
+
+            "today_realized_pnl":
+                today_realized_pnl,
+
+            "today_unrealized_pnl":
+                today_unrealized_pnl,
+
+            "transactions": transactions,
+
+            "pending_orders": pending_orders,
+
+            "portfolio2": portfolio2,
         }
     )
 
@@ -926,10 +1004,6 @@ def stock_chart(request, symbol):
         symbol=symbol
     )
 
-    # ======================================
-    # GRAPH API
-    # ======================================
-
     if request.GET.get("api") == "1":
 
         history = []
@@ -943,32 +1017,42 @@ def stock_chart(request, symbol):
         for item in prices:
 
             history.append({
-                "time": item.created_at.strftime(
-                    "%H:%M:%S"
-                ),
-                "price": float(
-                    item.price
-                )
+
+                "time":
+                    item.created_at.strftime(
+                        "%H:%M:%S"
+                    ),
+
+                "price":
+                    float(item.price)
             })
 
         if not history:
 
             history.append({
-                "time": timezone.localtime().strftime(
-                    "%H:%M:%S"
-                ),
-                "price": float(
-                    stock.price
-                )
+
+                "time":
+                    timezone.localtime().strftime(
+                        "%H:%M:%S"
+                    ),
+
+                "price":
+                    float(stock.price)
             })
 
         return JsonResponse({
-            "symbol": stock.symbol,
-            "name": stock.name,
-            "current_price": float(
-                stock.price
-            ),
-            "data": history
+
+            "symbol":
+                stock.symbol,
+
+            "name":
+                stock.name,
+
+            "current_price":
+                float(stock.price),
+
+            "data":
+                history
         })
 
     return render(
@@ -993,7 +1077,7 @@ def live_market(request):
 
 
 # ==========================================
-# STOCK PRICES API
+# STOCK PRICES + LIMIT ORDERS
 # ==========================================
 
 def stock_prices(request):
@@ -1001,7 +1085,7 @@ def stock_prices(request):
     stocks = Stock.objects.all()
 
     # ======================================
-    # UPDATE STOCK PRICES
+    # UPDATE PRICES
     # ======================================
 
     for stock in stocks:
@@ -1010,38 +1094,46 @@ def stock_prices(request):
 
             old_price = stock.price
 
-            # ==================================
-            # NATURAL RANDOM MOVEMENT
-            # ==================================
+            # 2% = 40%
+            # 5% = 40%
+            # 10% = 20%
 
-            movement = Decimal(
-                str(
-                    random.uniform(
-                        -0.015,
-                        0.015
-                    )
-                )
+            movement_percent = random.choices(
+                [
+                    Decimal("0.02"),
+                    Decimal("0.05"),
+                    Decimal("0.10")
+                ],
+                weights=[
+                    40,
+                    40,
+                    20
+                ],
+                k=1
+            )[0]
+
+            # Random direction
+
+            if random.choice([True, False]):
+
+                movement = movement_percent
+
+            else:
+
+                movement = -movement_percent
+
+            # Calculate new price
+
+            new_price = old_price * (
+                Decimal("1.00") +
+                movement
             )
 
-            new_price = (
-                old_price *
-                (
-                    Decimal("1.00") +
-                    movement
-                )
-            )
-
-            # ==================================
-            # MINIMUM PRICE
-            # ==================================
+            # Minimum price
 
             if new_price < Decimal("1.00"):
 
                 new_price = Decimal("1.00")
-
-            # ==================================
-            # SAVE PRICE
-            # ==================================
 
             stock.previous_price = old_price
 
@@ -1056,18 +1148,14 @@ def stock_prices(request):
                 ]
             )
 
-            # ==================================
-            # SAVE GRAPH HISTORY
-            # ==================================
-
             StockPriceHistory.objects.create(
                 stock=stock,
                 price=stock.price
             )
 
-    # ==========================================
-    # EXECUTE PENDING LIMIT ORDERS
-    # ==========================================
+    # ======================================
+    # EXECUTE LIMIT ORDERS
+    # ======================================
 
     pending_orders = LimitOrder.objects.filter(
         executed=False
@@ -1080,13 +1168,9 @@ def stock_prices(request):
 
         stock = order.stock
 
-        # ======================================
+        # ==================================
         # LIMIT BUY
-        #
-        # Executes when:
-        #
-        # current price <= limit price
-        # ======================================
+        # ==================================
 
         if order.order_type == LimitOrder.BUY:
 
@@ -1096,44 +1180,24 @@ def stock_prices(request):
 
             with transaction.atomic():
 
-                # ----------------------------------
-                # Wallet
-                # ----------------------------------
-
                 wallet, created = Wallet.objects.get_or_create(
                     user=order.user
                 )
 
-                # ----------------------------------
-                # Buy at limit price
-                # ----------------------------------
-
-                buy_price = order.limit_price
+                buy_price = stock.price
 
                 total = (
                     buy_price *
                     order.quantity
                 )
 
-                # ----------------------------------
-                # Check wallet
-                # ----------------------------------
-
                 if wallet.balance < total:
 
                     continue
 
-                # ----------------------------------
-                # Deduct money
-                # ----------------------------------
-
                 wallet.balance -= total
 
                 wallet.save()
-
-                # ----------------------------------
-                # Holding
-                # ----------------------------------
 
                 holding, created = Holding.objects.get_or_create(
                     user=order.user,
@@ -1142,17 +1206,9 @@ def stock_prices(request):
 
                 old_quantity = holding.quantity
 
-                # ----------------------------------
-                # First purchase
-                # ----------------------------------
-
                 if old_quantity == 0:
 
                     holding.average_price = buy_price
-
-                # ----------------------------------
-                # Additional purchase
-                # ----------------------------------
 
                 else:
 
@@ -1174,17 +1230,9 @@ def stock_prices(request):
                         order.quantity
                     )
 
-                # ----------------------------------
-                # Add shares
-                # ----------------------------------
-
                 holding.quantity += order.quantity
 
                 holding.save()
-
-                # ----------------------------------
-                # Transaction history
-                # ----------------------------------
 
                 Transaction.objects.create(
                     user=order.user,
@@ -1193,10 +1241,6 @@ def stock_prices(request):
                     quantity=order.quantity,
                     price=buy_price
                 )
-
-                # ----------------------------------
-                # Mark executed
-                # ----------------------------------
 
                 order.executed = True
 
@@ -1209,13 +1253,9 @@ def stock_prices(request):
                     ]
                 )
 
-        # ======================================
+        # ==================================
         # LIMIT SELL
-        #
-        # Executes when:
-        #
-        # current price >= limit price
-        # ======================================
+        # ==================================
 
         elif order.order_type == LimitOrder.SELL:
 
@@ -1229,10 +1269,6 @@ def stock_prices(request):
                     user=order.user,
                     stock=stock
                 ).first()
-
-                # ----------------------------------
-                # Holding no longer exists
-                # ----------------------------------
 
                 if not holding:
 
@@ -1249,10 +1285,6 @@ def stock_prices(request):
 
                     continue
 
-                # ----------------------------------
-                # Not enough shares
-                # ----------------------------------
-
                 if holding.quantity < order.quantity:
 
                     order.executed = True
@@ -1268,18 +1300,9 @@ def stock_prices(request):
 
                     continue
 
-                # ----------------------------------
-                # Wallet
-                # ----------------------------------
-
                 wallet, created = Wallet.objects.get_or_create(
                     user=order.user
                 )
-
-                # ----------------------------------
-                # IMPORTANT:
-                # Execute at CURRENT market price
-                # ----------------------------------
 
                 sell_price = stock.price
 
@@ -1287,10 +1310,6 @@ def stock_prices(request):
                     sell_price *
                     order.quantity
                 )
-
-                # ----------------------------------
-                # Remove shares
-                # ----------------------------------
 
                 holding.quantity -= order.quantity
 
@@ -1302,17 +1321,9 @@ def stock_prices(request):
 
                     holding.save()
 
-                # ----------------------------------
-                # Add money
-                # ----------------------------------
-
                 wallet.balance += total
 
                 wallet.save()
-
-                # ----------------------------------
-                # Transaction history
-                # ----------------------------------
 
                 Transaction.objects.create(
                     user=order.user,
@@ -1321,10 +1332,6 @@ def stock_prices(request):
                     quantity=order.quantity,
                     price=sell_price
                 )
-
-                # ----------------------------------
-                # Mark executed
-                # ----------------------------------
 
                 order.executed = True
 
@@ -1337,36 +1344,33 @@ def stock_prices(request):
                     ]
                 )
 
-    # ==========================================
-    # RETURN CURRENT PRICES
-    # ==========================================
-
-    stocks = Stock.objects.all()
+    # ======================================
+    # RETURN PRICES
+    # ======================================
 
     data = []
 
-    for stock in stocks:
+    for stock in Stock.objects.all():
 
         data.append({
-            "symbol": stock.symbol,
 
-            "name": stock.name,
+            "symbol":
+                stock.symbol,
 
-            "price": float(
-                stock.price
-            ),
+            "name":
+                stock.name,
 
-            "previous_price": float(
-                stock.previous_price
-            ),
+            "price":
+                float(stock.price),
 
-            "change": float(
-                stock.change
-            ),
+            "previous_price":
+                float(stock.previous_price),
 
-            "change_percent": float(
-                stock.change_percent
-            )
+            "change":
+                float(stock.change),
+
+            "change_percent":
+                float(stock.change_percent)
         })
 
     return JsonResponse({
@@ -1383,7 +1387,9 @@ def cancel_limit_order(request, order_id):
 
     if request.method != "POST":
 
-        return redirect("portfolio")
+        return redirect(
+            "portfolio"
+        )
 
     order = get_object_or_404(
         LimitOrder,
@@ -1404,14 +1410,11 @@ def cancel_limit_order(request, order_id):
         f"{quantity} shares of {symbol}."
     )
 
-    return redirect("portfolio")
+    return redirect(
+        "portfolio"
+    )
 
 
-# ==========================================
-# LIMIT BUY
-# ==========================================
-
-@login_required
 # ==========================================
 # LIMIT BUY
 # ==========================================
@@ -1430,10 +1433,6 @@ def limit_buy(request, symbol):
 
     settings = MarketSettings.objects.first()
 
-    # ======================================
-    # MARKET OPEN / CLOSED
-    # ======================================
-
     if settings and not settings.market_open:
 
         messages.error(
@@ -1449,10 +1448,6 @@ def limit_buy(request, symbol):
                 "wallet": wallet
             }
         )
-
-    # ======================================
-    # LIMIT BUY
-    # ======================================
 
     if request.method == "POST":
 
@@ -1488,10 +1483,6 @@ def limit_buy(request, symbol):
                 symbol=stock.symbol
             )
 
-        # ==================================
-        # VALIDATE QUANTITY
-        # ==================================
-
         if quantity <= 0:
 
             messages.error(
@@ -1503,10 +1494,6 @@ def limit_buy(request, symbol):
                 "limit_buy",
                 symbol=stock.symbol
             )
-
-        # ==================================
-        # VALIDATE PRICE
-        # ==================================
 
         if limit_price <= 0:
 
@@ -1520,18 +1507,10 @@ def limit_buy(request, symbol):
                 symbol=stock.symbol
             )
 
-        # ==================================
-        # CALCULATE ORDER VALUE
-        # ==================================
-
         total = (
             limit_price *
             quantity
         )
-
-        # ==================================
-        # CHECK WALLET
-        # ==================================
 
         if wallet.balance < total:
 
@@ -1547,10 +1526,6 @@ def limit_buy(request, symbol):
 
         # ==================================
         # IMMEDIATE EXECUTION
-        #
-        # BUY executes when:
-        #
-        # current price <= limit price
         # ==================================
 
         if stock.price <= limit_price:
@@ -1561,10 +1536,6 @@ def limit_buy(request, symbol):
                 buy_price *
                 quantity
             )
-
-            # ----------------------------------
-            # Final wallet check
-            # ----------------------------------
 
             if wallet.balance < total:
 
@@ -1578,23 +1549,11 @@ def limit_buy(request, symbol):
                     symbol=stock.symbol
                 )
 
-            # ==================================
-            # COMPLETE BUY
-            # ==================================
-
             with transaction.atomic():
-
-                # ----------------------------------
-                # Deduct money
-                # ----------------------------------
 
                 wallet.balance -= total
 
                 wallet.save()
-
-                # ----------------------------------
-                # Holding
-                # ----------------------------------
 
                 holding, created = Holding.objects.get_or_create(
                     user=request.user,
@@ -1603,17 +1562,9 @@ def limit_buy(request, symbol):
 
                 old_quantity = holding.quantity
 
-                # ----------------------------------
-                # First purchase
-                # ----------------------------------
-
                 if old_quantity == 0:
 
                     holding.average_price = buy_price
-
-                # ----------------------------------
-                # Additional purchase
-                # ----------------------------------
 
                 else:
 
@@ -1635,17 +1586,9 @@ def limit_buy(request, symbol):
                         quantity
                     )
 
-                # ----------------------------------
-                # Add shares
-                # ----------------------------------
-
                 holding.quantity += quantity
 
                 holding.save()
-
-                # ----------------------------------
-                # Transaction history
-                # ----------------------------------
 
                 Transaction.objects.create(
                     user=request.user,
@@ -1667,9 +1610,7 @@ def limit_buy(request, symbol):
             )
 
         # ==================================
-        # CREATE PENDING LIMIT ORDER
-        #
-        # Current price is ABOVE limit.
+        # PENDING ORDER
         # ==================================
 
         LimitOrder.objects.create(
@@ -1693,10 +1634,6 @@ def limit_buy(request, symbol):
             symbol=stock.symbol
         )
 
-    # ======================================
-    # SHOW LIMIT BUY PAGE
-    # ======================================
-
     return render(
         request,
         "limit_buy.html",
@@ -1705,6 +1642,8 @@ def limit_buy(request, symbol):
             "wallet": wallet
         }
     )
+
+
 # ==========================================
 # LIVE PORTFOLIO P&L API
 # ==========================================
@@ -1719,6 +1658,7 @@ def portfolio_prices(request):
     )
 
     total_value = Decimal("0")
+
     total_invested = Decimal("0")
 
     data = []
@@ -1726,12 +1666,12 @@ def portfolio_prices(request):
     for holding in holdings:
 
         current_value = (
-            holding.quantity *
+            Decimal(holding.quantity) *
             holding.stock.price
         )
 
         invested_value = (
-            holding.quantity *
+            Decimal(holding.quantity) *
             holding.average_price
         )
 
@@ -1741,28 +1681,29 @@ def portfolio_prices(request):
         )
 
         total_value += current_value
+
         total_invested += invested_value
 
         data.append({
-            "symbol": holding.stock.symbol,
-            "quantity": holding.quantity,
-            "price": float(
-                holding.stock.price
-            ),
-            "current_value": float(
-                current_value
-            ),
-            "invested_value": float(
-                invested_value
-            ),
-            "pnl": float(
-                pnl
-            ),
-        })
 
-    # ======================================
-    # REALIZED P&L
-    # ======================================
+            "symbol":
+                holding.stock.symbol,
+
+            "quantity":
+                holding.quantity,
+
+            "price":
+                float(holding.stock.price),
+
+            "current_value":
+                float(current_value),
+
+            "invested_value":
+                float(invested_value),
+
+            "pnl":
+                float(pnl)
+        })
 
     realized_data = calculate_realized_pnl(
         request.user
@@ -1776,49 +1717,80 @@ def portfolio_prices(request):
         "total_sell_value"
     ]
 
-    # ======================================
-    # UNREALIZED P&L
-    # ======================================
-
     unrealized_pnl = (
         total_value -
         total_invested
     )
-
-    # ======================================
-    # TOTAL P&L
-    # ======================================
 
     total_pnl = (
         unrealized_pnl +
         realized_pnl
     )
 
+    today = timezone.localdate()
+
+    today_realized_pnl = Decimal("0")
+
+    today_unrealized_pnl = Decimal("0")
+
+    for details in realized_data[
+        "portfolio_details"
+    ].values():
+
+        for sale in details["sales"]:
+
+            sale_date = timezone.localtime(
+                sale["date"]
+            ).date()
+
+            if sale_date == today:
+
+                today_realized_pnl += sale["pnl"]
+
+    for holding in holdings:
+
+        today_unrealized_pnl += (
+
+            holding.stock.price -
+            holding.stock.previous_price
+
+        ) * Decimal(holding.quantity)
+
+    today_pnl = (
+        today_realized_pnl +
+        today_unrealized_pnl
+    )
+
     return JsonResponse({
 
-        "holdings": data,
+        "holdings":
+            data,
 
-        "total_value": float(
-            total_value
-        ),
+        "total_value":
+            float(total_value),
 
-        "total_invested": float(
-            total_invested
-        ),
+        "total_invested":
+            float(total_invested),
 
-        "unrealized_pnl": float(
-            unrealized_pnl
-        ),
+        "unrealized_pnl":
+            float(unrealized_pnl),
 
-        "realized_pnl": float(
-            realized_pnl
-        ),
+        "realized_pnl":
+            float(realized_pnl),
 
-        "total_pnl": float(
-            total_pnl
-        ),
+        "total_pnl":
+            float(total_pnl),
 
-        "total_sell_value": float(
-            total_sell_value
-        ),
+        "total_sell_value":
+            float(total_sell_value),
+
+        "today_pnl":
+            float(today_pnl),
+
+        "today_realized_pnl":
+            float(today_realized_pnl),
+
+        "today_unrealized_pnl":
+            float(today_unrealized_pnl)
     })
+

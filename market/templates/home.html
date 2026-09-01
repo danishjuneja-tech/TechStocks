@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,330 +9,1018 @@
 ```
 <title>Danish Stock Market</title>
 
+```html
 <style>
-    * {
-        box-sizing: border-box;
-    }
+/* =========================================================
+   PREMIUM FINTECH MARKET UI
+   Complete visual redesign
+========================================================= */
 
-    body {
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        background:
-            radial-gradient(
-                circle at top right,
-                #172554 0%,
-                #0f172a 40%,
-                #020617 100%
-            );
-        color: #f8fafc;
-        min-height: 100vh;
-    }
+:root {
+    --bg: #080a0d;
+    --bg-soft: #0d1014;
+    --surface: #11151a;
+    --surface-2: #151a20;
+    --surface-hover: #191f26;
+
+    --border: rgba(255,255,255,0.08);
+    --border-strong: rgba(255,255,255,0.13);
+
+    --text: #f4f5f6;
+    --text-soft: #a7adb5;
+    --text-muted: #6f7781;
+
+    --green: #25d17f;
+    --green-dark: #15945a;
+    --red: #ff5c6c;
+
+    --gold: #d6b56a;
+    --gold-soft: rgba(214,181,106,0.12);
+
+    --shadow:
+        0 20px 60px rgba(0,0,0,0.35);
+
+    --radius: 16px;
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    color: var(--text);
+
+    background:
+        radial-gradient(
+            circle at 50% -20%,
+            rgba(214,181,106,0.07),
+            transparent 38%
+        ),
+        linear-gradient(
+            180deg,
+            #080a0d 0%,
+            #090b0e 55%,
+            #060709 100%
+        );
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    min-height: 70px;
+
+    padding: 13px 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 25px;
+
+    background:
+        rgba(8,10,13,0.90);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    border-bottom:
+        1px solid var(--border);
+
+    box-shadow:
+        0 8px 30px rgba(0,0,0,0.25);
+}
+
+
+/* Brand */
+
+nav h1 {
+    margin: 0;
+
+    font-size: 21px;
+    font-weight: 850;
+
+    letter-spacing: -0.7px;
+
+    color: var(--text);
+}
+
+nav h1::after {
+    content: ".";
+    color: var(--gold);
+}
+
+
+/* Navigation */
+
+.nav-buttons {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    flex-wrap: wrap;
+}
+
+.username {
+    padding: 9px 13px;
+
+    color: var(--text-soft);
+
+    font-size: 13px;
+    font-weight: 650;
+
+    border-right:
+        1px solid var(--border);
+
+    margin-right: 4px;
+}
+
+
+/* Nav links */
+
+.nav-buttons a,
+.nav-buttons button {
+    padding: 9px 14px;
+
+    border: 1px solid transparent;
+    border-radius: 9px;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        0.2s ease;
+}
+
+.nav-buttons a:hover,
+.nav-buttons button:hover {
+    transform: translateY(-1px);
+}
+
+
+/* Login */
+
+.login {
+    background: var(--text);
+    color: #090b0e;
+
+    box-shadow:
+        0 5px 18px rgba(255,255,255,0.08);
+}
+
+.login:hover {
+    background: #ffffff;
+}
+
+
+/* Portfolio */
+
+.portfolio {
+    background:
+        rgba(255,255,255,0.04);
+
+    color: var(--text);
+
+    border-color:
+        var(--border) !important;
+}
+
+.portfolio:hover {
+    background:
+        rgba(255,255,255,0.08);
+}
+
+
+/* Signup */
+
+.singup {
+    background:
+        var(--gold-soft);
+
+    color: var(--gold);
+
+    border-color:
+        rgba(214,181,106,0.20) !important;
+}
+
+.singup:hover {
+    background:
+        rgba(214,181,106,0.18);
+}
+
+
+/* Logout */
+
+.logout {
+    background:
+        rgba(255,92,108,0.07);
+
+    color: #ff8995;
+
+    border-color:
+        rgba(255,92,108,0.16) !important;
+}
+
+.logout:hover {
+    background:
+        rgba(255,92,108,0.13);
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.container {
+    width: min(1180px, calc(100% - 36px));
+
+    margin: auto;
+
+    padding:
+        42px 0 80px;
+}
+
+
+/* =========================================================
+   WELCOME PANEL
+========================================================= */
+
+.welcome {
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 34px;
+
+    margin-bottom: 28px;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #12161b,
+            #0d1014
+        );
+
+    border:
+        1px solid var(--border);
+
+    box-shadow:
+        var(--shadow);
+}
+
+
+/* Gold top line */
+
+.welcome::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 100%;
+    height: 2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold),
+            transparent
+        );
+
+    opacity: 0.7;
+}
+
+
+/* Decorative glow */
+
+.welcome::after {
+    content: "";
+
+    position: absolute;
+
+    width: 350px;
+    height: 350px;
+
+    right: -180px;
+    top: -220px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(214,181,106,0.09),
+            transparent 70%
+        );
+
+    pointer-events: none;
+}
+
+
+.welcome h2 {
+    position: relative;
+    z-index: 1;
+
+    margin: 0 0 9px;
+
+    font-size: 30px;
+    font-weight: 800;
+
+    letter-spacing: -1px;
+
+    color: var(--text);
+}
+
+
+.welcome p {
+    position: relative;
+    z-index: 1;
+
+    margin: 0;
+
+    max-width: 700px;
+
+    color: var(--text-soft);
+
+    font-size: 14px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   LIVE STATUS
+========================================================= */
+
+.live-row {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    flex-wrap: wrap;
+
+    margin-top: 26px;
+    padding-top: 18px;
+
+    border-top:
+        1px solid var(--border);
+}
+
+
+.live {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    margin: 0;
+
+    color: var(--green) !important;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.7px;
+}
+
+
+.live::before {
+    content: "";
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    box-shadow:
+        0 0 0 4px rgba(37,209,127,0.08),
+        0 0 14px rgba(37,209,127,0.45);
+}
+
+
+.status {
+    margin: 5px 0 0;
+
+    color: var(--text-muted) !important;
+
+    font-size: 12px;
+}
+
+
+#update-status {
+    color: var(--green);
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   STOCK GRID
+========================================================= */
+
+.market-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(310px, 1fr));
+
+    gap: 17px;
+}
+
+
+/* =========================================================
+   STOCK CARD
+========================================================= */
+
+.stock {
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 24px;
+
+    border-radius: var(--radius);
+
+    background:
+        linear-gradient(
+            145deg,
+            #12161b,
+            #0e1115
+        );
+
+    border:
+        1px solid var(--border);
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,0.22);
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+.stock::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 3px;
+    height: 0;
+
+    background:
+        var(--green);
+
+    transition:
+        height 0.3s ease;
+}
+
+
+.stock:hover {
+    transform: translateY(-5px);
+
+    border-color:
+        rgba(214,181,106,0.22);
+
+    box-shadow:
+        0 22px 55px rgba(0,0,0,0.38);
+}
+
+
+.stock:hover::before {
+    height: 100%;
+}
+
+
+/* =========================================================
+   STOCK TITLE
+========================================================= */
+
+.stock h3 {
+    margin: 0 0 6px;
+
+    padding-right: 65px;
+
+    font-size: 18px;
+    font-weight: 750;
+
+    letter-spacing: -0.25px;
+
+    color: var(--text);
+}
+
+
+.symbol {
+    color: var(--text-muted);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   PRICE
+========================================================= */
+
+.price {
+    margin: 20px 0 6px;
+
+    font-size: 34px;
+    font-weight: 850;
+
+    letter-spacing: -1.4px;
+
+    color: var(--text);
+}
+
+
+.price::first-letter {
+    color: var(--gold);
+}
+
+
+/* =========================================================
+   YOUR STOCK VALUE
+========================================================= */
+
+.my-stock-value {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin:
+        10px 0 14px;
+
+    padding: 11px 13px;
+
+    border-radius: 10px;
+
+    background:
+        rgba(37,209,127,0.045);
+
+    border:
+        1px solid rgba(37,209,127,0.10);
+}
+
+
+.my-stock-label {
+    color: var(--text-muted);
+
+    font-size: 11px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+}
+
+
+.my-stock-value strong {
+    color: var(--green);
+
+    font-size: 16px;
+}
+
+
+/* =========================================================
+   PRICE CHANGE
+========================================================= */
+
+.change-label {
+    color: var(--text-muted);
+
+    font-size: 12px;
+}
+
+
+.stock-change {
+    font-weight: 800;
+
+    color: var(--green);
+}
+
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.description {
+    min-height: 42px;
+
+    margin-top: 13px;
+
+    color: var(--text-soft);
+
+    font-size: 13px;
+
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.buttons {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    margin-top: 21px;
+}
+
+
+.buttons a {
+    flex: 1;
+
+    min-width: 78px;
+
+    padding: 10px 12px;
+
+    border-radius: 8px;
+
+    text-align: center;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 750;
+
+    transition:
+        0.2s ease;
+}
+
+
+.buttons a:hover {
+    transform: translateY(-2px);
+}
+
+
+/* BUY */
+
+.buy {
+    background:
+        var(--green);
+
+    color: #04130c;
+
+    box-shadow:
+        0 5px 18px rgba(37,209,127,0.14);
+}
+
+.buy:hover {
+    background:
+        #38e391;
+}
+
+
+/* LIMIT BUY */
+
+.limit-buy {
+    background:
+        rgba(214,181,106,0.10);
+
+    color:
+        var(--gold);
+
+    border:
+        1px solid rgba(214,181,106,0.18);
+}
+
+.limit-buy:hover {
+    background:
+        rgba(214,181,106,0.17);
+}
+
+
+/* SELL */
+
+.sell {
+    background:
+        rgba(255,92,108,0.09);
+
+    color:
+        #ff7b88;
+
+    border:
+        1px solid rgba(255,92,108,0.16);
+}
+
+.sell:hover {
+    background:
+        rgba(255,92,108,0.16);
+}
+
+
+/* GRAPH */
+
+.graph {
+    background:
+        rgba(255,255,255,0.045);
+
+    color:
+        #d8dde3;
+
+    border:
+        1px solid var(--border);
+}
+
+.graph:hover {
+    background:
+        rgba(255,255,255,0.09);
+}
+
+
+/* LOGIN TRADE */
+
+.login-trade {
+    background:
+        var(--text);
+
+    color:
+        #090b0e;
+}
+
+.login-trade:hover {
+    background:
+        #ffffff;
+}
+
+
+/* =========================================================
+   MARKET BADGE
+========================================================= */
+
+.market-badge {
+    position: absolute;
+
+    top: 18px;
+    right: 18px;
+
+    padding: 5px 9px;
+
+    border-radius: 5px;
+
+    background:
+        rgba(37,209,127,0.08);
+
+    color:
+        var(--green);
+
+    border:
+        1px solid rgba(37,209,127,0.12);
+
+    font-size: 9px;
+
+    font-weight: 850;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.8px;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty {
+    grid-column: 1 / -1;
+
+    padding: 70px 30px;
+
+    text-align: center;
+
+    border-radius: var(--radius);
+
+    background:
+        var(--surface);
+
+    border:
+        1px dashed var(--border-strong);
+
+    color:
+        var(--text-muted);
+}
+
+
+/* =========================================================
+   SELECTION
+========================================================= */
+
+::selection {
+    background:
+        rgba(214,181,106,0.25);
+
+    color:
+        #ffffff;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background:
+        #080a0d;
+}
+
+::-webkit-scrollbar-thumb {
+    background:
+        #252a31;
+
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background:
+        #353b44;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
 
     nav {
-        position: sticky;
-        top: 0;
-        z-index: 1000;
+        padding: 13px 17px;
 
-        background: rgba(15, 23, 42, 0.96);
-        backdrop-filter: blur(12px);
+        align-items: flex-start;
 
-        border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+        flex-direction: column;
 
-        padding: 16px 30px;
-
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        gap: 20px;
+        gap: 13px;
     }
 
     nav h1 {
-        margin: 0;
-        color: #38bdf8;
-        font-size: 24px;
+        font-size: 19px;
     }
 
     .nav-buttons {
-        display: flex;
-        align-items: center;
-        gap: 9px;
-        flex-wrap: wrap;
+        width: 100%;
+
+        justify-content: flex-start;
     }
 
     .username {
-        color: #cbd5e1;
-        font-weight: bold;
-        padding: 8px;
-    }
+        width: 100%;
 
-    .nav-buttons a,
-    .nav-buttons button {
-        padding: 10px 15px;
-        border: none;
-        border-radius: 9px;
+        border-right: none;
 
-        text-decoration: none;
-        font-weight: bold;
+        border-bottom:
+            1px solid var(--border);
 
-        cursor: pointer;
-        transition: 0.2s;
-    }
+        padding-left: 0;
 
-    .nav-buttons a:hover,
-    .nav-buttons button:hover {
-        transform: translateY(-2px);
-        filter: brightness(1.1);
-    }
-
-    .login {
-        background: #2563eb;
-        color: white;
-    }
-
-    .logout {
-        background: #dc2626;
-        color: white;
-    }
-
-    .portfolio {
-        background: #7c3aed;
-        color: white;
+        padding-bottom: 10px;
     }
 
     .container {
-        max-width: 1150px;
-        margin: auto;
-        padding: 35px 20px 60px;
+        width: min(
+            100% - 24px,
+            1180px
+        );
+
+        padding-top: 27px;
     }
 
     .welcome {
-        background:
-            linear-gradient(
-                135deg,
-                rgba(30, 41, 59, 0.98),
-                rgba(15, 23, 42, 0.98)
-            );
+        padding: 25px 21px;
 
-        border: 1px solid rgba(56, 189, 248, 0.18);
-
-        padding: 28px;
-        border-radius: 18px;
-
-        margin-bottom: 25px;
-
-        box-shadow:
-            0 15px 45px rgba(0, 0, 0, 0.25);
+        border-radius: 16px;
     }
 
     .welcome h2 {
-        margin-top: 0;
-        color: #38bdf8;
-    }
-
-    .welcome p {
-        color: #cbd5e1;
-    }
-
-    .live-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        gap: 15px;
-        flex-wrap: wrap;
-
-        margin-top: 20px;
-    }
-
-    .live {
-        color: #22c55e !important;
-        font-weight: bold;
-        margin: 0;
-    }
-
-    .status {
-        color: #94a3b8 !important;
-        font-size: 14px;
-        margin: 6px 0 0;
-    }
-
-    #update-status {
-        color: #22c55e;
-        font-weight: bold;
-        font-size: 14px;
+        font-size: 25px;
     }
 
     .market-grid {
-        display: grid;
         grid-template-columns:
-            repeat(auto-fit, minmax(300px, 1fr));
-
-        gap: 18px;
+            1fr;
     }
 
     .stock {
-        position: relative;
-
-        background:
-            linear-gradient(
-                145deg,
-                rgba(30, 41, 59, 0.98),
-                rgba(15, 23, 42, 0.98)
-            );
-
-        border: 1px solid rgba(148, 163, 184, 0.13);
-
-        padding: 24px;
-        border-radius: 17px;
-
-        box-shadow:
-            0 12px 35px rgba(0, 0, 0, 0.22);
-
-        transition: 0.25s;
-    }
-
-    .stock:hover {
-        transform: translateY(-4px);
-
-        border-color:
-            rgba(56, 189, 248, 0.35);
-
-        box-shadow:
-            0 18px 45px rgba(0, 0, 0, 0.3);
-    }
-
-    .stock h3 {
-        margin: 0 0 10px;
-        font-size: 20px;
-        padding-right: 55px;
-    }
-
-    .symbol {
-        color: #94a3b8;
-        font-size: 14px;
+        padding: 21px;
     }
 
     .price {
-        font-size: 34px;
-        font-weight: 800;
-
-        margin: 18px 0 8px;
-
-        color: #f8fafc;
-    }
-
-    .change-label {
-        color: #94a3b8;
-    }
-
-    .stock-change {
-        font-weight: bold;
-    }
-
-    .description {
-        color: #cbd5e1;
-        line-height: 1.5;
-        font-size: 14px;
-        min-height: 20px;
-    }
-
-    .buttons {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-
-        margin-top: 20px;
+        font-size: 31px;
     }
 
     .buttons a {
-        padding: 10px 14px;
+        min-width: 70px;
+    }
+}
 
-        border-radius: 9px;
 
-        text-decoration: none;
-        font-weight: bold;
+/* =========================================================
+   SMALL PHONES
+========================================================= */
 
-        transition: 0.2s;
+@media (max-width: 430px) {
+
+    .nav-buttons a,
+    .nav-buttons button {
+        padding: 8px 10px;
+
+        font-size: 12px;
     }
 
-    .buttons a:hover {
-        transform: translateY(-2px);
-        filter: brightness(1.1);
+    .welcome {
+        padding: 22px 18px;
     }
 
-    .buy {
-        background: #16a34a;
-        color: white;
+    .stock {
+        padding: 19px;
     }
 
-    .sell {
-        background: #dc2626;
-        color: white;
+    .price {
+        font-size: 29px;
     }
 
-    .graph {
-        background: #0891b2;
-        color: white;
+    .buttons {
+        display: grid;
+
+        grid-template-columns:
+            1fr 1fr;
     }
 
-    .login-trade {
-        background: #2563eb;
-        color: white;
+    .buttons a {
+        width: 100%;
     }
-
-    .market-badge {
-        position: absolute;
-
-        top: 18px;
-        right: 18px;
-
-        padding: 5px 9px;
-
-        border-radius: 20px;
-
-        background: rgba(34, 197, 94, 0.12);
-        color: #22c55e;
-
-        font-size: 11px;
-        font-weight: bold;
-    }
-
-    .empty {
-        text-align: center;
-        padding: 45px;
-        grid-column: 1 / -1;
-    }
-
-    @media (max-width: 650px) {
-
-        nav {
-            padding: 14px 16px;
-            align-items: flex-start;
-            flex-direction: column;
-        }
-
-        nav h1 {
-            font-size: 20px;
-        }
-
-        .container {
-            padding: 25px 14px 45px;
-        }
-
-        .welcome {
-            padding: 22px;
-        }
-
-        .price {
-            font-size: 30px;
-        }
-
-        .nav-buttons {
-            width: 100%;
-        }
-    }
+}
 </style>
+```
+
 ```
 
 </head>
@@ -363,6 +1052,7 @@
             action="{% url 'logout' %}"
             style="display:inline;"
         >
+
             {% csrf_token %}
 
             <button
@@ -371,6 +1061,7 @@
             >
                 Logout
             </button>
+
         </form>
 
     {% else %}
@@ -381,7 +1072,8 @@
         >
             🔐 Login
         </a>
-          <a
+
+        <a
             class="singup"
             href="{% url 'signup' %}"
         >
@@ -475,6 +1167,8 @@
             </h3>
 
 
+            <!-- CURRENT PRICE -->
+
             <div class="price">
 
                 ₹<span class="stock-price">
@@ -482,6 +1176,25 @@
                 </span>
 
             </div>
+
+
+            <!-- YOUR TOTAL STOCK VALUE -->
+
+            {% if user.is_authenticated %}
+
+                <div class="my-stock-value">
+
+                    <span class="my-stock-label">
+                        Your Stock Value
+                    </span>
+
+                    <strong>
+                        ₹<span class="stock-value">0.00</span>
+                    </strong>
+
+                </div>
+
+            {% endif %}
 
 
             <p>
@@ -527,13 +1240,14 @@
                         href="{% url 'buy_stock' stock.symbol %}"
                     >
                         🟢 Buy
-                        <a href="{% url 'limit_buy' stock.symbol %}">
-                            🎯 Limit Buy
-                        </a>            
                     </a>
 
-
-
+                    <a
+                        class="limit-buy"
+                        href="{% url 'limit_buy' stock.symbol %}"
+                    >
+                        🎯 Limit Buy
+                    </a>
 
                     <a
                         class="sell"
@@ -589,11 +1303,7 @@
 <script>
 
     /*
-     * Ask Django for the latest prices.
-     *
-     * IMPORTANT:
-     * We use /market/api/prices/
-     * instead of /market/?prices=1
+     * Update stock prices AND your stock values.
      */
 
     async function updateStocks() {
@@ -603,16 +1313,21 @@
 
         try {
 
-            const response = await fetch(
-                "{% url 'stock_prices' %}",
-                {
-                    method: "GET",
-                    cache: "no-store",
-                    headers: {
-                        "Accept": "application/json"
+            /* ==========================================
+               GET LIVE STOCK PRICES
+               ========================================== */
+
+            const response =
+                await fetch(
+                    "{% url 'stock_prices' %}",
+                    {
+                        method: "GET",
+                        cache: "no-store",
+                        headers: {
+                            "Accept": "application/json"
+                        }
                     }
-                }
-            );
+                );
 
 
             if (!response.ok) {
@@ -637,6 +1352,55 @@
             }
 
 
+            /* ==========================================
+               GET USER'S CURRENT HOLDINGS
+               ========================================== */
+
+            let portfolioData = null;
+
+
+            {% if user.is_authenticated %}
+
+                try {
+
+                    const portfolioResponse =
+                        await fetch(
+                            "{% url 'portfolio_prices' %}",
+                            {
+                                method: "GET",
+                                cache: "no-store",
+                                headers: {
+                                    "Accept": "application/json"
+                                }
+                            }
+                        );
+
+
+                    if (portfolioResponse.ok) {
+
+                        portfolioData =
+                            await portfolioResponse.json();
+
+                    }
+
+                }
+
+                catch (portfolioError) {
+
+                    console.error(
+                        "Portfolio update error:",
+                        portfolioError
+                    );
+
+                }
+
+            {% endif %}
+
+
+            /* ==========================================
+               UPDATE EVERY STOCK CARD
+               ========================================== */
+
             data.stocks.forEach(function(stock) {
 
                 const card =
@@ -648,7 +1412,9 @@
 
 
                 if (!card) {
+
                     return;
+
                 }
 
 
@@ -682,9 +1448,17 @@
                     Number(stock.change_percent);
 
 
+                /* ==========================================
+                   UPDATE CURRENT PRICE
+                   ========================================== */
+
                 priceElement.textContent =
                     price.toFixed(2);
 
+
+                /* ==========================================
+                   UPDATE CHANGE
+                   ========================================== */
 
                 if (change >= 0) {
 
@@ -695,7 +1469,9 @@
                         percent.toFixed(2) +
                         "%)";
 
-                } else {
+                }
+
+                else {
 
                     changeElement.textContent =
                         "📉 ₹" +
@@ -706,8 +1482,75 @@
 
                 }
 
+
+                /* ==========================================
+                   CALCULATE YOUR STOCK VALUE
+                   ========================================== */
+
+                {% if user.is_authenticated %}
+
+                    const valueElement =
+                        card.querySelector(
+                            ".stock-value"
+                        );
+
+
+                    if (valueElement) {
+
+                        let quantity = 0;
+
+
+                        if (portfolioData &&
+                            portfolioData.holdings) {
+
+                            const holding =
+                                portfolioData.holdings.find(
+                                    function(item) {
+
+                                        return (
+                                            item.symbol ===
+                                            stock.symbol
+                                        );
+
+                                    }
+                                );
+
+
+                            if (holding) {
+
+                                quantity =
+                                    Number(
+                                        holding.quantity
+                                    );
+
+                            }
+
+                        }
+
+
+                        /*
+                         * Your Stock Value
+                         *
+                         * quantity × current price
+                         */
+
+                        const stockValue =
+                            quantity * price;
+
+
+                        valueElement.textContent =
+                            stockValue.toFixed(2);
+
+                    }
+
+                {% endif %}
+
             });
 
+
+            /* ==========================================
+               UPDATE STATUS
+               ========================================== */
 
             const now =
                 new Date().toLocaleTimeString();
@@ -735,16 +1578,16 @@
     }
 
 
-    /*
-     * Start immediately.
-     */
+    /* ==========================================
+       START IMMEDIATELY
+       ========================================== */
 
     updateStocks();
 
 
-    /*
-     * Update every 2 seconds.
-     */
+    /* ==========================================
+       UPDATE EVERY 2 SECONDS
+       ========================================== */
 
     setInterval(
         updateStocks,
