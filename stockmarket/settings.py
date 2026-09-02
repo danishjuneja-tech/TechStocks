@@ -31,6 +31,7 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
     "techstocks.onrender.com",
+    "techstocks-1.onrender.com",
 ]
 
 
