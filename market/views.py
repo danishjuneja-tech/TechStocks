@@ -1,4 +1,3 @@
-
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
@@ -776,6 +775,12 @@ def portfolio(request):
 
         holding.pnl = pnl
 
+        # NEW
+        holding.pnl_per_share = (
+            current_price -
+            holding.average_price
+        )
+
         total_value += current_value
 
         total_invested += invested_value
@@ -856,6 +861,8 @@ def portfolio(request):
 
         current_pnl = Decimal("0")
 
+        pnl_per_share = Decimal("0")
+
         if holding:
 
             current_quantity = holding.quantity
@@ -875,6 +882,12 @@ def portfolio(request):
             current_pnl = (
                 current_value -
                 invested_value
+            )
+
+            # NEW
+            pnl_per_share = (
+                stock.price -
+                average_price
             )
 
         total_purchased_shares = 0
@@ -953,6 +966,10 @@ def portfolio(request):
 
             "current_pnl":
                 current_pnl,
+
+            # NEW
+            "pnl_per_share":
+                pnl_per_share,
         })
 
     return render(
@@ -1094,10 +1111,6 @@ def stock_prices(request):
 
             old_price = stock.price
 
-            # 2% = 40%
-            # 5% = 40%
-            # 10% = 20%
-
             movement_percent = random.choices(
                 [
                     Decimal("0.02"),
@@ -1112,8 +1125,6 @@ def stock_prices(request):
                 k=1
             )[0]
 
-            # Random direction
-
             if random.choice([True, False]):
 
                 movement = movement_percent
@@ -1122,14 +1133,10 @@ def stock_prices(request):
 
                 movement = -movement_percent
 
-            # Calculate new price
-
             new_price = old_price * (
                 Decimal("1.00") +
                 movement
             )
-
-            # Minimum price
 
             if new_price < Decimal("1.00"):
 
@@ -1665,15 +1672,42 @@ def portfolio_prices(request):
 
     for holding in holdings:
 
+        # ======================================
+        # LIVE PRICE
+        # ======================================
+
+        current_price = holding.stock.price
+
+        # ======================================
+        # CURRENT VALUE
+        # ======================================
+
         current_value = (
             Decimal(holding.quantity) *
-            holding.stock.price
+            current_price
         )
+
+        # ======================================
+        # INVESTED VALUE
+        # ======================================
 
         invested_value = (
             Decimal(holding.quantity) *
             holding.average_price
         )
+
+        # ======================================
+        # P&L PER SHARE
+        # ======================================
+
+        pnl_per_share = (
+            current_price -
+            holding.average_price
+        )
+
+        # ======================================
+        # TOTAL P&L
+        # ======================================
 
         pnl = (
             current_value -
@@ -1693,7 +1727,13 @@ def portfolio_prices(request):
                 holding.quantity,
 
             "price":
-                float(holding.stock.price),
+                float(current_price),
+
+            "average_price":
+                float(holding.average_price),
+
+            "pnl_per_share":
+                float(pnl_per_share),
 
             "current_value":
                 float(current_value),
@@ -1704,6 +1744,10 @@ def portfolio_prices(request):
             "pnl":
                 float(pnl)
         })
+
+    # ==========================================
+    # REALIZED P&L
+    # ==========================================
 
     realized_data = calculate_realized_pnl(
         request.user
@@ -1717,15 +1761,27 @@ def portfolio_prices(request):
         "total_sell_value"
     ]
 
+    # ==========================================
+    # UNREALIZED P&L
+    # ==========================================
+
     unrealized_pnl = (
         total_value -
         total_invested
     )
 
+    # ==========================================
+    # TOTAL P&L
+    # ==========================================
+
     total_pnl = (
         unrealized_pnl +
         realized_pnl
     )
+
+    # ==========================================
+    # TODAY'S P&L
+    # ==========================================
 
     today = timezone.localdate()
 
@@ -1747,6 +1803,10 @@ def portfolio_prices(request):
 
                 today_realized_pnl += sale["pnl"]
 
+    # ==========================================
+    # TODAY'S UNREALIZED
+    # ==========================================
+
     for holding in holdings:
 
         today_unrealized_pnl += (
@@ -1756,6 +1816,10 @@ def portfolio_prices(request):
 
         ) * Decimal(holding.quantity)
 
+    # ==========================================
+    # TODAY'S TOTAL
+    # ==========================================
+
     today_pnl = (
         today_realized_pnl +
         today_unrealized_pnl
@@ -1763,8 +1827,16 @@ def portfolio_prices(request):
 
     return JsonResponse({
 
+        # ======================================
+        # HOLDINGS
+        # ======================================
+
         "holdings":
             data,
+
+        # ======================================
+        # PORTFOLIO TOTALS
+        # ======================================
 
         "total_value":
             float(total_value),
@@ -1784,6 +1856,10 @@ def portfolio_prices(request):
         "total_sell_value":
             float(total_sell_value),
 
+        # ======================================
+        # TODAY
+        # ======================================
+
         "today_pnl":
             float(today_pnl),
 
@@ -1793,4 +1869,3 @@ def portfolio_prices(request):
         "today_unrealized_pnl":
             float(today_unrealized_pnl)
     })
-

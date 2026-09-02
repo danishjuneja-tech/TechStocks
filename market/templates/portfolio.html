@@ -4,3290 +4,3443 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<title>My Portfolio - Danish Stock Market</title>
+    <title>My Portfolio - Danish Stock Market</title>
 
-```html
-<style>
+    <style>
 
-/* =========================================================
-   PREMIUM FINTECH PORTFOLIO
-   Graphite / Champagne / Emerald / Coral
-========================================================= */
+        /* =========================================================
+           PREMIUM FINTECH PORTFOLIO
+           Graphite / Champagne / Emerald / Coral
+        ========================================================= */
 
-:root {
-    --bg: #07090c;
-    --surface: #101419;
-    --surface-2: #14191f;
-    --surface-3: #0b0e12;
+        :root {
+            --bg: #07090c;
+            --surface: #101419;
+            --surface-2: #14191f;
+            --surface-3: #0b0e12;
 
-    --border: rgba(255,255,255,0.075);
-    --border-hover: rgba(255,255,255,0.14);
+            --border: rgba(255,255,255,0.075);
+            --border-hover: rgba(255,255,255,0.14);
 
-    --text: #f4f5f6;
-    --soft: #a7adb5;
-    --muted: #707780;
+            --text: #f4f5f6;
+            --soft: #a7adb5;
+            --muted: #707780;
 
-    --gold: #d6b56a;
-    --gold-light: #e4c77f;
-    --gold-soft: rgba(214,181,106,0.09);
+            --gold: #d6b56a;
+            --gold-light: #e4c77f;
+            --gold-soft: rgba(214,181,106,0.09);
 
-    --green: #25d17f;
-    --green-soft: rgba(37,209,127,0.08);
+            --green: #25d17f;
+            --green-soft: rgba(37,209,127,0.08);
 
-    --red: #ff5c6c;
-    --red-soft: rgba(255,92,108,0.08);
+            --red: #ff5c6c;
+            --red-soft: rgba(255,92,108,0.08);
 
-    --blue-soft: rgba(100,160,255,0.07);
-}
+            --blue-soft: rgba(100,160,255,0.07);
+        }
 
 
-/* =========================================================
-   RESET
-========================================================= */
+        /* =========================================================
+           RESET
+        ========================================================= */
 
-* {
-    box-sizing: border-box;
-}
+        * {
+            box-sizing: border-box;
+        }
 
 
-/* =========================================================
-   BODY
-========================================================= */
+        /* =========================================================
+           BODY
+        ========================================================= */
 
-body {
-    margin: 0;
+        body {
+            margin: 0;
 
-    font-family:
-        Inter,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Arial,
-        sans-serif;
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Arial,
+                sans-serif;
 
-    background:
-        radial-gradient(
-            circle at 80% -10%,
-            rgba(214,181,106,0.07),
-            transparent 32%
-        ),
-        radial-gradient(
-            circle at 0% 40%,
-            rgba(37,209,127,0.025),
-            transparent 28%
-        ),
-        #07090c;
+            background:
+                radial-gradient(
+                    circle at 80% -10%,
+                    rgba(214,181,106,0.07),
+                    transparent 32%
+                ),
+                radial-gradient(
+                    circle at 0% 40%,
+                    rgba(37,209,127,0.025),
+                    transparent 28%
+                ),
+                #07090c;
 
-    color: var(--text);
+            color: var(--text);
 
-    min-height: 100vh;
-}
+            min-height: 100vh;
+        }
 
 
-/* =========================================================
-   NAVIGATION
-========================================================= */
+        /* =========================================================
+           NAVIGATION
+        ========================================================= */
 
-nav {
-    position: sticky;
+        nav {
+            position: sticky;
 
-    top: 0;
+            top: 0;
 
-    z-index: 1000;
+            z-index: 1000;
 
-    display: flex;
+            display: flex;
 
-    justify-content: space-between;
+            justify-content: space-between;
 
-    align-items: center;
+            align-items: center;
 
-    gap: 20px;
+            gap: 20px;
 
-    padding: 17px 30px;
+            padding: 17px 30px;
 
-    background:
-        rgba(10,13,17,0.90);
+            background:
+                rgba(10,13,17,0.90);
 
-    backdrop-filter:
-        blur(18px);
+            backdrop-filter:
+                blur(18px);
 
-    -webkit-backdrop-filter:
-        blur(18px);
+            -webkit-backdrop-filter:
+                blur(18px);
 
-    border-bottom:
-        1px solid var(--border);
+            border-bottom:
+                1px solid var(--border);
 
-    box-shadow:
-        0 10px 35px rgba(0,0,0,0.20);
-}
+            box-shadow:
+                0 10px 35px rgba(0,0,0,0.20);
+        }
 
 
-/* Navigation gold line */
+        nav::after {
+            content: "";
 
-nav::after {
-    content: "";
+            position: absolute;
 
-    position: absolute;
+            left: 0;
+            bottom: -1px;
 
-    left: 0;
-    bottom: -1px;
+            width: 100%;
+            height: 1px;
 
-    width: 100%;
-    height: 1px;
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(214,181,106,0.35),
+                    transparent
+                );
+        }
 
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            rgba(214,181,106,0.35),
-            transparent
-        );
-}
 
+        nav h1 {
+            margin: 0;
 
-nav h1 {
-    margin: 0;
+            color: var(--text);
 
-    color: var(--text);
+            font-size: 22px;
 
-    font-size: 22px;
+            font-weight: 850;
 
-    font-weight: 850;
+            letter-spacing: -0.6px;
+        }
 
-    letter-spacing: -0.6px;
-}
 
+        nav h1::after {
+            content: ".";
 
-nav h1::after {
-    content: ".";
+            color: var(--gold);
+        }
 
-    color: var(--gold);
-}
 
+        nav a {
+            color: var(--text);
 
-nav a {
-    color: var(--text);
+            text-decoration: none;
 
-    text-decoration: none;
+            background:
+                rgba(255,255,255,0.045);
 
-    background:
-        rgba(255,255,255,0.045);
+            border:
+                1px solid var(--border);
 
-    border:
-        1px solid var(--border);
+            padding:
+                9px 15px;
 
-    padding:
-        9px 15px;
+            border-radius: 8px;
 
-    border-radius: 8px;
+            font-size: 13px;
 
-    font-size: 13px;
+            font-weight: 750;
 
-    font-weight: 750;
+            transition:
+                0.2s ease;
+        }
 
-    transition:
-        0.2s ease;
-}
 
+        nav a:hover {
+            background:
+                var(--gold-soft);
 
-nav a:hover {
-    background:
-        var(--gold-soft);
+            border-color:
+                rgba(214,181,106,0.25);
 
-    border-color:
-        rgba(214,181,106,0.25);
+            color:
+                var(--gold-light);
 
-    color:
-        var(--gold-light);
+            transform:
+                translateY(-1px);
+        }
 
-    transform:
-        translateY(-1px);
-}
 
+        /* =========================================================
+           MAIN CONTAINER
+        ========================================================= */
 
-/* =========================================================
-   MAIN CONTAINER
-========================================================= */
+        .container {
+            max-width: 1160px;
 
-.container {
-    max-width: 1160px;
+            margin:
+                34px auto;
 
-    margin:
-        34px auto;
+            padding:
+                0 24px 70px;
+        }
 
-    padding:
-        0 24px 70px;
-}
 
+        /* =========================================================
+           FLOATING P&L
+        ========================================================= */
 
-/* =========================================================
-   FLOATING P&L
-========================================================= */
+        .floating-pnl {
+            position: fixed;
 
-.floating-pnl {
-    position: fixed;
+            right: 24px;
 
-    right: 24px;
+            top: 50%;
 
-    top: 50%;
+            transform:
+                translateY(-50%);
 
-    transform:
-        translateY(-50%);
+            width: 215px;
 
-    width: 215px;
+            padding: 19px;
 
-    padding: 19px;
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(20,25,31,0.97),
+                    rgba(11,14,18,0.97)
+                );
 
-    background:
-        linear-gradient(
-            145deg,
-            rgba(20,25,31,0.97),
-            rgba(11,14,18,0.97)
-        );
+            border:
+                1px solid var(--border);
 
-    border:
-        1px solid var(--border);
+            border-radius: 16px;
 
-    border-radius: 16px;
+            z-index: 999;
 
-    z-index: 999;
+            box-shadow:
+                0 22px 55px rgba(0,0,0,0.42);
 
-    box-shadow:
-        0 22px 55px rgba(0,0,0,0.42);
+            backdrop-filter:
+                blur(16px);
 
-    backdrop-filter:
-        blur(16px);
+            -webkit-backdrop-filter:
+                blur(16px);
 
-    -webkit-backdrop-filter:
-        blur(16px);
+            transition:
+                transform 0.25s ease,
+                border-color 0.25s ease,
+                box-shadow 0.25s ease;
+        }
 
-    transition:
-        transform 0.25s ease,
-        border-color 0.25s ease,
-        box-shadow 0.25s ease;
-}
 
+        .floating-pnl:hover {
+            transform:
+                translateY(-50%)
+                translateX(-4px);
 
-.floating-pnl:hover {
-    transform:
-        translateY(-50%)
-        translateX(-4px);
+            border-color:
+                rgba(214,181,106,0.18);
 
-    border-color:
-        rgba(214,181,106,0.18);
+            box-shadow:
+                0 25px 65px rgba(0,0,0,0.52);
+        }
 
-    box-shadow:
-        0 25px 65px rgba(0,0,0,0.52);
-}
 
+        .floating-pnl-title {
+            color:
+                var(--muted);
 
-.floating-pnl-title {
-    color:
-        var(--muted);
+            font-size: 10px;
 
-    font-size: 10px;
+            font-weight: 800;
 
-    font-weight: 800;
+            text-transform: uppercase;
 
-    text-transform: uppercase;
+            letter-spacing: 1.3px;
 
-    letter-spacing: 1.3px;
+            margin-bottom: 8px;
+        }
 
-    margin-bottom: 8px;
-}
 
+        .floating-pnl-value {
+            font-size: 27px;
 
-.floating-pnl-value {
-    font-size: 27px;
+            font-weight: 900;
 
-    font-weight: 900;
+            letter-spacing: -0.8px;
 
-    letter-spacing: -0.8px;
+            margin-bottom: 12px;
+        }
 
-    margin-bottom: 12px;
-}
 
+        .floating-pnl-value.profit {
+            color:
+                var(--green);
+        }
 
-.floating-pnl-value.profit {
-    color:
-        var(--green);
-}
 
+        .floating-pnl-value.loss {
+            color:
+                var(--red);
+        }
 
-.floating-pnl-value.loss {
-    color:
-        var(--red);
-}
 
+        .floating-pnl-line {
+            height: 1px;
 
-.floating-pnl-line {
-    height: 1px;
+            background:
+                var(--border);
 
-    background:
-        var(--border);
+            margin:
+                11px 0 13px;
+        }
 
-    margin:
-        11px 0 13px;
-}
 
+        .floating-pnl-label {
+            color:
+                var(--muted);
 
-.floating-pnl-label {
-    color:
-        var(--muted);
+            font-size: 11px;
+        }
 
-    font-size: 11px;
-}
 
+        .floating-status {
+            display: flex;
 
-.floating-status {
-    display: flex;
+            align-items: center;
 
-    align-items: center;
+            gap: 7px;
 
-    gap: 7px;
+            color:
+                var(--green);
 
-    color:
-        var(--green);
+            font-size: 10px;
 
-    font-size: 10px;
+            font-weight: 800;
 
-    font-weight: 800;
+            text-transform: uppercase;
 
-    text-transform: uppercase;
+            letter-spacing: 0.5px;
 
-    letter-spacing: 0.5px;
+            margin-top: 11px;
+        }
 
-    margin-top: 11px;
-}
 
+        .live-dot {
+            width: 6px;
 
-.live-dot {
-    width: 6px;
+            height: 6px;
 
-    height: 6px;
+            flex-shrink: 0;
 
-    flex-shrink: 0;
+            background:
+                var(--green);
 
-    background:
-        var(--green);
+            border-radius: 50%;
 
-    border-radius: 50%;
+            box-shadow:
+                0 0 9px rgba(37,209,127,0.55);
 
-    box-shadow:
-        0 0 9px rgba(37,209,127,0.55);
+            animation:
+                pulse 1.4s infinite;
+        }
 
-    animation:
-        pulse 1.4s infinite;
-}
 
+        @keyframes pulse {
 
-@keyframes pulse {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
 
-    0% {
-        opacity: 1;
-        transform: scale(1);
-    }
+            50% {
+                opacity: 0.4;
+                transform: scale(0.75);
+            }
 
-    50% {
-        opacity: 0.4;
-        transform: scale(0.75);
-    }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
 
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
+        }
 
-}
 
+        /* =========================================================
+           WELCOME
+        ========================================================= */
 
-/* =========================================================
-   WELCOME
-========================================================= */
+        .welcome {
+            position: relative;
 
-.welcome {
-    position: relative;
+            overflow: hidden;
 
-    overflow: hidden;
+            background:
+                linear-gradient(
+                    145deg,
+                    #13181e,
+                    #0d1115
+                );
 
-    background:
-        linear-gradient(
-            145deg,
-            #13181e,
-            #0d1115
-        );
+            padding:
+                27px;
 
-    padding:
-        27px;
+            border-radius:
+                16px;
 
-    border-radius:
-        16px;
+            margin-bottom:
+                18px;
 
-    margin-bottom:
-        18px;
+            border:
+                1px solid var(--border);
 
-    border:
-        1px solid var(--border);
+            box-shadow:
+                0 15px 40px rgba(0,0,0,0.20);
+        }
 
-    box-shadow:
-        0 15px 40px rgba(0,0,0,0.20);
-}
 
+        .welcome::after {
+            content: "";
 
-.welcome::after {
-    content: "";
+            position: absolute;
 
-    position: absolute;
+            width: 260px;
+            height: 260px;
 
-    width: 260px;
-    height: 260px;
+            right: -140px;
+            top: -160px;
 
-    right: -140px;
-    top: -160px;
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(214,181,106,0.10),
+                    transparent 70%
+                );
 
-    background:
-        radial-gradient(
-            circle,
-            rgba(214,181,106,0.10),
-            transparent 70%
-        );
+            pointer-events:
+                none;
+        }
 
-    pointer-events:
-        none;
-}
 
+        .welcome h2 {
+            position: relative;
 
-.welcome h2 {
-    position: relative;
+            z-index: 1;
 
-    z-index: 1;
+            color:
+                var(--text);
 
-    color:
-        var(--text);
+            margin-top:
+                0;
 
-    margin-top:
-        0;
+            margin-bottom:
+                9px;
 
-    margin-bottom:
-        9px;
+            font-size:
+                24px;
 
-    font-size:
-        24px;
+            letter-spacing:
+                -0.6px;
+        }
 
-    letter-spacing:
-        -0.6px;
-}
 
+        .welcome h2::after {
+            content:
+                " ✦";
 
-.welcome h2::after {
-    content:
-        " ✦";
+            color:
+                var(--gold);
 
-    color:
-        var(--gold);
+            font-size:
+                15px;
+        }
 
-    font-size:
-        15px;
-}
 
+        .welcome p {
+            position: relative;
 
-.welcome p {
-    position: relative;
+            z-index: 1;
 
-    z-index: 1;
+            color:
+                var(--soft);
 
-    color:
-        var(--soft);
+            line-height:
+                1.7;
 
-    line-height:
-        1.7;
+            margin:
+                0;
 
-    margin:
-        0;
+            font-size:
+                13px;
+        }
 
-    font-size:
-        13px;
-}
 
+        /* =========================================================
+           SUMMARY
+        ========================================================= */
 
-/* =========================================================
-   SUMMARY
-========================================================= */
+        .summary {
+            display:
+                grid;
 
-.summary {
-    display:
-        grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(200px, 1fr));
 
-    grid-template-columns:
-        repeat(auto-fit, minmax(200px, 1fr));
+            gap:
+                13px;
 
-    gap:
-        13px;
+            margin-bottom:
+                22px;
+        }
 
-    margin-bottom:
-        22px;
-}
 
+        .summary-card {
+            position: relative;
 
-.summary-card {
-    position: relative;
+            overflow: hidden;
 
-    overflow: hidden;
+            background:
+                linear-gradient(
+                    145deg,
+                    #13181e,
+                    #0f1317
+                );
 
-    background:
-        linear-gradient(
-            145deg,
-            #13181e,
-            #0f1317
-        );
+            padding:
+                21px;
 
-    padding:
-        21px;
+            border-radius:
+                14px;
 
-    border-radius:
-        14px;
+            border:
+                1px solid var(--border);
 
-    border:
-        1px solid var(--border);
+            box-shadow:
+                0 10px 30px rgba(0,0,0,0.18);
 
-    box-shadow:
-        0 10px 30px rgba(0,0,0,0.18);
+            transition:
+                transform 0.22s ease,
+                border-color 0.22s ease,
+                box-shadow 0.22s ease;
+        }
 
-    transition:
-        transform 0.22s ease,
-        border-color 0.22s ease,
-        box-shadow 0.22s ease;
-}
 
+        .summary-card:hover {
+            transform:
+                translateY(-3px);
 
-.summary-card:hover {
-    transform:
-        translateY(-3px);
+            border-color:
+                var(--border-hover);
 
-    border-color:
-        var(--border-hover);
+            box-shadow:
+                0 16px 38px rgba(0,0,0,0.27);
+        }
 
-    box-shadow:
-        0 16px 38px rgba(0,0,0,0.27);
-}
 
+        .summary-card::before {
+            content: "";
 
-.summary-card::before {
-    content: "";
+            position: absolute;
 
-    position: absolute;
+            top: 0;
+            left: 0;
 
-    top: 0;
-    left: 0;
+            width: 28px;
+            height: 2px;
 
-    width: 28px;
-    height: 2px;
+            background:
+                var(--gold);
 
-    background:
-        var(--gold);
+            opacity:
+                0.55;
+        }
 
-    opacity:
-        0.55;
-}
 
+        .summary-card h3 {
+            color:
+                var(--muted);
 
-.summary-card h3 {
-    color:
-        var(--muted);
+            font-size:
+                10px;
 
-    font-size:
-        10px;
+            font-weight:
+                800;
 
-    font-weight:
-        800;
+            text-transform:
+                uppercase;
 
-    text-transform:
-        uppercase;
+            letter-spacing:
+                0.9px;
 
-    letter-spacing:
-        0.9px;
+            margin:
+                0 0 10px;
+        }
 
-    margin:
-        0 0 10px;
-}
 
+        .summary-card .value {
+            font-size:
+                25px;
 
-.summary-card .value {
-    font-size:
-        25px;
+            font-weight:
+                900;
 
-    font-weight:
-        900;
+            letter-spacing:
+                -0.7px;
+        }
 
-    letter-spacing:
-        -0.7px;
-}
 
+        .wallet {
+            color:
+                var(--gold-light);
+        }
 
-/* SUMMARY COLORS */
 
-.wallet {
-    color:
-        var(--gold-light);
-}
+        .stock-value {
+            color:
+                #e8dba9;
+        }
 
 
-.stock-value {
-    color:
-        #e8dba9;
-}
+        .invested {
+            color:
+                #b9a4e8;
+        }
 
 
-.invested {
-    color:
-        #b9a4e8;
-}
+        .profit {
+            color:
+                var(--green);
 
+            font-weight:
+                800;
+        }
 
-.profit {
-    color:
-        var(--green);
 
-    font-weight:
-        800;
-}
+        .loss {
+            color:
+                var(--red);
 
+            font-weight:
+                800;
+        }
 
-.loss {
-    color:
-        var(--red);
 
-    font-weight:
-        800;
-}
+        /* =========================================================
+           TODAY P&L
+        ========================================================= */
 
+        .today-pnl-section {
+            position:
+                relative;
 
-/* =========================================================
-   TODAY P&L
-========================================================= */
+            overflow:
+                hidden;
 
-.today-pnl-section {
-    position:
-        relative;
+            background:
+                linear-gradient(
+                    145deg,
+                    #13181e,
+                    #0d1115
+                );
 
-    overflow:
-        hidden;
+            border:
+                1px solid var(--border);
 
-    background:
-        linear-gradient(
-            145deg,
-            #13181e,
-            #0d1115
-        );
+            padding:
+                25px;
 
-    border:
-        1px solid var(--border);
+            border-radius:
+                16px;
 
-    padding:
-        25px;
+            margin-bottom:
+                22px;
 
-    border-radius:
-        16px;
+            box-shadow:
+                0 15px 40px rgba(0,0,0,0.20);
+        }
 
-    margin-bottom:
-        22px;
 
-    box-shadow:
-        0 15px 40px rgba(0,0,0,0.20);
-}
+        .today-pnl-section::before {
+            content: "";
 
+            position:
+                absolute;
 
-.today-pnl-section::before {
-    content: "";
+            left:
+                0;
 
-    position:
-        absolute;
+            top:
+                0;
 
-    left:
-        0;
+            width:
+                100%;
 
-    top:
-        0;
+            height:
+                2px;
 
-    width:
-        100%;
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    var(--gold),
+                    transparent
+                );
 
-    height:
-        2px;
+            opacity:
+                0.5;
+        }
 
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            var(--gold),
-            transparent
-        );
 
-    opacity:
-        0.5;
-}
+        .today-pnl-title {
+            color:
+                var(--text);
 
+            font-size:
+                19px;
 
-.today-pnl-title {
-    color:
-        var(--text);
+            font-weight:
+                850;
 
-    font-size:
-        19px;
+            letter-spacing:
+                -0.3px;
 
-    font-weight:
-        850;
+            margin-bottom:
+                18px;
+        }
 
-    letter-spacing:
-        -0.3px;
 
-    margin-bottom:
-        18px;
-}
+        .today-pnl-title::before {
+            content:
+                "P&L  ";
 
+            color:
+                var(--gold);
+        }
 
-.today-pnl-title::before {
-    content:
-        "P&L  ";
 
-    color:
-        var(--gold);
-}
+        .today-pnl-grid {
+            display:
+                grid;
 
+            grid-template-columns:
+                repeat(auto-fit, minmax(190px, 1fr));
 
-.today-pnl-grid {
-    display:
-        grid;
+            gap:
+                12px;
+        }
 
-    grid-template-columns:
-        repeat(auto-fit, minmax(190px, 1fr));
 
-    gap:
-        12px;
-}
+        .today-box {
+            background:
+                #0b0e12;
 
+            border:
+                1px solid var(--border);
 
-.today-box {
-    background:
-        #0b0e12;
+            padding:
+                17px;
 
-    border:
-        1px solid var(--border);
+            border-radius:
+                11px;
 
-    padding:
-        17px;
+            transition:
+                border-color 0.2s ease,
+                transform 0.2s ease;
+        }
 
-    border-radius:
-        11px;
 
-    transition:
-        border-color 0.2s ease,
-        transform 0.2s ease;
-}
+        .today-box:hover {
+            border-color:
+                rgba(214,181,106,0.16);
 
+            transform:
+                translateY(-2px);
+        }
 
-.today-box:hover {
-    border-color:
-        rgba(214,181,106,0.16);
 
-    transform:
-        translateY(-2px);
-}
+        .today-box small {
+            display:
+                block;
 
+            color:
+                var(--muted);
 
-.today-box small {
-    display:
-        block;
+            font-size:
+                10px;
 
-    color:
-        var(--muted);
+            font-weight:
+                750;
 
-    font-size:
-        10px;
+            text-transform:
+                uppercase;
 
-    font-weight:
-        750;
+            letter-spacing:
+                0.5px;
 
-    text-transform:
-        uppercase;
+            margin-bottom:
+                8px;
+        }
 
-    letter-spacing:
-        0.5px;
 
-    margin-bottom:
-        8px;
-}
+        .today-value {
+            font-size:
+                23px;
 
+            font-weight:
+                900;
 
-.today-value {
-    font-size:
-        23px;
+            letter-spacing:
+                -0.5px;
+        }
 
-    font-weight:
-        900;
 
-    letter-spacing:
-        -0.5px;
-}
+        /* =========================================================
+           GENERAL SECTIONS
+        ========================================================= */
 
+        .section {
+            background:
+                linear-gradient(
+                    145deg,
+                    #13181e,
+                    #0e1216
+                );
 
-/* =========================================================
-   GENERAL SECTIONS
-========================================================= */
+            padding:
+                24px;
 
-.section {
-    background:
-        linear-gradient(
-            145deg,
-            #13181e,
-            #0e1216
-        );
+            border-radius:
+                16px;
 
-    padding:
-        24px;
+            margin-bottom:
+                22px;
 
-    border-radius:
-        16px;
+            border:
+                1px solid var(--border);
 
-    margin-bottom:
-        22px;
+            box-shadow:
+                0 13px 38px rgba(0,0,0,0.18);
+        }
 
-    border:
-        1px solid var(--border);
 
-    box-shadow:
-        0 13px 38px rgba(0,0,0,0.18);
-}
+        .section h2 {
+            margin-top:
+                0;
 
+            color:
+                var(--text);
 
-.section h2 {
-    margin-top:
-        0;
+            margin-bottom:
+                18px;
 
-    color:
-        var(--text);
+            font-size:
+                19px;
 
-    margin-bottom:
-        18px;
+            font-weight:
+                850;
 
-    font-size:
-        19px;
+            letter-spacing:
+                -0.3px;
+        }
 
-    font-weight:
-        850;
 
-    letter-spacing:
-        -0.3px;
-}
+        .section h2::after {
+            content:
+                "";
 
+            display:
+                block;
 
-.section h2::after {
-    content:
-        "";
+            width:
+                35px;
 
-    display:
-        block;
+            height:
+                2px;
 
-    width:
-        35px;
+            margin-top:
+                8px;
 
-    height:
-        2px;
+            background:
+                var(--gold);
 
-    margin-top:
-        8px;
+            opacity:
+                0.7;
+        }
 
-    background:
-        var(--gold);
 
-    opacity:
-        0.7;
-}
+        /* =========================================================
+           HOLDINGS
+        ========================================================= */
 
+        .holding {
+            background:
+                #0b0e12;
 
-/* =========================================================
-   HOLDINGS
-========================================================= */
+            padding:
+                19px;
 
-.holding {
-    background:
-        #0b0e12;
+            border-radius:
+                12px;
 
-    padding:
-        19px;
+            margin-bottom:
+                11px;
 
-    border-radius:
-        12px;
+            border:
+                1px solid var(--border);
 
-    margin-bottom:
-        11px;
+            transition:
+                0.22s ease;
+        }
 
-    border:
-        1px solid var(--border);
 
-    transition:
-        0.22s ease;
-}
+        .holding:hover {
+            border-color:
+                rgba(214,181,106,0.18);
 
+            transform:
+                translateY(-2px);
 
-.holding:hover {
-    border-color:
-        rgba(214,181,106,0.18);
+            box-shadow:
+                0 10px 28px rgba(0,0,0,0.20);
+        }
 
-    transform:
-        translateY(-2px);
 
-    box-shadow:
-        0 10px 28px rgba(0,0,0,0.20);
-}
+        .holding:last-child {
+            margin-bottom:
+                0;
+        }
 
 
-.holding:last-child {
-    margin-bottom:
-        0;
-}
+        .holding-header {
+            display:
+                flex;
 
+            justify-content:
+                space-between;
 
-.holding-header {
-    display:
-        flex;
+            align-items:
+                center;
 
-    justify-content:
-        space-between;
+            flex-wrap:
+                wrap;
 
-    align-items:
-        center;
+            gap:
+                10px;
+        }
 
-    flex-wrap:
-        wrap;
 
-    gap:
-        10px;
-}
+        .holding h3 {
+            margin:
+                0;
 
+            font-size:
+                18px;
 
-.holding h3 {
-    margin:
-        0;
+            font-weight:
+                800;
+        }
 
-    font-size:
-        18px;
 
-    font-weight:
-        800;
-}
+        .symbol {
+            color:
+                var(--muted);
 
+            font-size:
+                11px;
 
-.symbol {
-    color:
-        var(--muted);
+            font-weight:
+                700;
 
-    font-size:
-        11px;
+            letter-spacing:
+                0.8px;
+        }
 
-    font-weight:
-        700;
 
-    letter-spacing:
-        0.8px;
-}
+        .holding-info {
+            display:
+                grid;
 
+            grid-template-columns:
+                repeat(auto-fit, minmax(150px, 1fr));
 
-.holding-info {
-    display:
-        grid;
+            gap:
+                10px;
 
-    grid-template-columns:
-        repeat(auto-fit, minmax(150px, 1fr));
+            margin-top:
+                17px;
+        }
 
-    gap:
-        10px;
 
-    margin-top:
-        17px;
-}
+        .info-box {
+            background:
+                #13181e;
 
+            padding:
+                12px;
 
-.info-box {
-    background:
-        #13181e;
+            border-radius:
+                9px;
 
-    padding:
-        12px;
+            border:
+                1px solid rgba(255,255,255,0.045);
+        }
 
-    border-radius:
-        9px;
 
-    border:
-        1px solid rgba(255,255,255,0.045);
-}
+        .info-box small {
+            display:
+                block;
 
+            color:
+                var(--muted);
 
-.info-box small {
-    display:
-        block;
+            margin-bottom:
+                5px;
 
-    color:
-        var(--muted);
+            font-size:
+                10px;
 
-    margin-bottom:
-        5px;
+            text-transform:
+                uppercase;
 
-    font-size:
-        10px;
+            letter-spacing:
+                0.4px;
+        }
 
-    text-transform:
-        uppercase;
 
-    letter-spacing:
-        0.4px;
-}
+        .live-price {
+            color:
+                var(--gold-light);
 
+            font-weight:
+                800;
+        }
 
-.live-price {
-    color:
-        var(--gold-light);
 
-    font-weight:
-        800;
-}
+        .live-value {
+            color:
+                #e6d58e;
 
+            font-weight:
+                800;
+        }
 
-.live-value {
-    color:
-        #e6d58e;
 
-    font-weight:
-        800;
-}
+        .live-invested {
+            color:
+                #bca9e9;
 
+            font-weight:
+                800;
+        }
 
-.live-invested {
-    color:
-        #bca9e9;
 
-    font-weight:
-        800;
-}
+        .live-pnl {
+            font-weight:
+                850;
+        }
 
 
-.live-pnl {
-    font-weight:
-        850;
-}
+        /* =========================================================
+           TRADE CARDS
+        ========================================================= */
 
+        .trade-card {
+            background:
+                #0b0e12;
 
-/* =========================================================
-   TRADE CARDS
-========================================================= */
+            border:
+                1px solid var(--border);
 
-.trade-card {
-    background:
-        #0b0e12;
+            padding:
+                19px;
 
-    border:
-        1px solid var(--border);
+            border-radius:
+                13px;
 
-    padding:
-        19px;
+            margin-bottom:
+                12px;
 
-    border-radius:
-        13px;
+            transition:
+                0.2s ease;
+        }
 
-    margin-bottom:
-        12px;
 
-    transition:
-        0.2s ease;
-}
+        .trade-card:hover {
+            border-color:
+                var(--border-hover);
 
+            transform:
+                translateY(-1px);
+        }
 
-.trade-card:hover {
-    border-color:
-        var(--border-hover);
 
-    transform:
-        translateY(-1px);
-}
+        .trade-header {
+            display:
+                flex;
 
+            justify-content:
+                space-between;
 
-.trade-header {
-    display:
-        flex;
+            align-items:
+                center;
 
-    justify-content:
-        space-between;
+            flex-wrap:
+                wrap;
 
-    align-items:
-        center;
+            gap:
+                10px;
 
-    flex-wrap:
-        wrap;
+            margin-bottom:
+                15px;
+        }
 
-    gap:
-        10px;
 
-    margin-bottom:
-        15px;
-}
+        .trade-stock {
+            font-size:
+                18px;
 
+            font-weight:
+                800;
+        }
 
-.trade-stock {
-    font-size:
-        18px;
 
-    font-weight:
-        800;
-}
+        .trade-buy {
+            border-left:
+                3px solid var(--green);
+        }
 
 
-.trade-buy {
-    border-left:
-        3px solid var(--green);
-}
+        .trade-sell {
+            border-left:
+                3px solid var(--red);
+        }
 
 
-.trade-sell {
-    border-left:
-        3px solid var(--red);
-}
+        .trade-badge {
+            padding:
+                6px 10px;
 
+            border-radius:
+                20px;
 
-.trade-badge {
-    padding:
-        6px 10px;
+            font-size:
+                10px;
 
-    border-radius:
-        20px;
+            font-weight:
+                850;
 
-    font-size:
-        10px;
+            text-transform:
+                uppercase;
 
-    font-weight:
-        850;
+            letter-spacing:
+                0.5px;
+        }
 
-    text-transform:
-        uppercase;
 
-    letter-spacing:
-        0.5px;
-}
+        .trade-badge.buy {
+            background:
+                var(--green-soft);
 
+            color:
+                var(--green);
 
-.trade-badge.buy {
-    background:
-        var(--green-soft);
+            border:
+                1px solid rgba(37,209,127,0.13);
+        }
 
-    color:
-        var(--green);
 
-    border:
-        1px solid rgba(37,209,127,0.13);
-}
+        .trade-badge.sell {
+            background:
+                var(--red-soft);
 
+            color:
+                var(--red);
 
-.trade-badge.sell {
-    background:
-        var(--red-soft);
+            border:
+                1px solid rgba(255,92,108,0.13);
+        }
 
-    color:
-        var(--red);
 
-    border:
-        1px solid rgba(255,92,108,0.13);
-}
+        .trade-info {
+            display:
+                grid;
 
+            grid-template-columns:
+                repeat(auto-fit, minmax(150px, 1fr));
 
-.trade-info {
-    display:
-        grid;
+            gap:
+                10px;
+        }
 
-    grid-template-columns:
-        repeat(auto-fit, minmax(150px, 1fr));
 
-    gap:
-        10px;
-}
+        .trade-box {
+            background:
+                #13181e;
 
+            padding:
+                13px;
 
-.trade-box {
-    background:
-        #13181e;
+            border-radius:
+                9px;
 
-    padding:
-        13px;
+            border:
+                1px solid rgba(255,255,255,0.045);
+        }
 
-    border-radius:
-        9px;
 
-    border:
-        1px solid rgba(255,255,255,0.045);
-}
+        .trade-box small {
+            display:
+                block;
 
+            color:
+                var(--muted);
 
-.trade-box small {
-    display:
-        block;
+            margin-bottom:
+                6px;
 
-    color:
-        var(--muted);
+            font-size:
+                10px;
 
-    margin-bottom:
-        6px;
+            text-transform:
+                uppercase;
 
-    font-size:
-        10px;
+            letter-spacing:
+                0.4px;
+        }
 
-    text-transform:
-        uppercase;
 
-    letter-spacing:
-        0.4px;
-}
+        .trade-money {
+            color:
+                var(--gold-light);
 
+            font-size:
+                16px;
 
-.trade-money {
-    color:
-        var(--gold-light);
+            font-weight:
+                850;
+        }
 
-    font-size:
-        16px;
 
-    font-weight:
-        850;
-}
+        .trade-price {
+            color:
+                #d8e0ea;
 
+            font-size:
+                16px;
 
-.trade-price {
-    color:
-        #d8e0ea;
+            font-weight:
+                800;
+        }
 
-    font-size:
-        16px;
 
-    font-weight:
-        800;
-}
+        .trade-date {
+            color:
+                var(--muted);
 
+            font-size:
+                12px;
+        }
 
-.trade-date {
-    color:
-        var(--muted);
 
-    font-size:
-        12px;
-}
+        /* =========================================================
+           TRANSACTIONS
+        ========================================================= */
 
+        .transaction {
+            background:
+                #0b0e12;
 
-/* =========================================================
-   TRANSACTIONS
-========================================================= */
+            padding:
+                15px 17px;
 
-.transaction {
-    background:
-        #0b0e12;
+            border-radius:
+                10px;
 
-    padding:
-        15px 17px;
+            margin-bottom:
+                9px;
 
-    border-radius:
-        10px;
+            display:
+                flex;
 
-    margin-bottom:
-        9px;
+            justify-content:
+                space-between;
 
-    display:
-        flex;
+            align-items:
+                center;
 
-    justify-content:
-        space-between;
+            gap:
+                15px;
 
-    align-items:
-        center;
+            flex-wrap:
+                wrap;
 
-    gap:
-        15px;
+            border:
+                1px solid var(--border);
 
-    flex-wrap:
-        wrap;
+            transition:
+                0.2s ease;
+        }
 
-    border:
-        1px solid var(--border);
 
-    transition:
-        0.2s ease;
-}
+        .transaction:hover {
+            border-color:
+                var(--border-hover);
+        }
 
 
-.transaction:hover {
-    border-color:
-        var(--border-hover);
-}
+        .transaction:last-child {
+            margin-bottom:
+                0;
+        }
 
 
-.transaction:last-child {
-    margin-bottom:
-        0;
-}
+        .buy {
+            color:
+                var(--green);
 
+            font-weight:
+                850;
+        }
 
-.buy {
-    color:
-        var(--green);
 
-    font-weight:
-        850;
-}
+        .sell {
+            color:
+                var(--red);
 
+            font-weight:
+                850;
+        }
 
-.sell {
-    color:
-        var(--red);
 
-    font-weight:
-        850;
-}
+        .date {
+            color:
+                var(--muted);
 
+            font-size:
+                11px;
+        }
 
-.date {
-    color:
-        var(--muted);
 
-    font-size:
-        11px;
-}
+        /* =========================================================
+           PENDING ORDERS
+        ========================================================= */
 
+        .pending-order {
+            background:
+                #0b0e12;
 
-/* =========================================================
-   PENDING ORDERS
-========================================================= */
+            padding:
+                19px;
 
-.pending-order {
-    background:
-        #0b0e12;
+            border-radius:
+                12px;
 
-    padding:
-        19px;
+            margin-bottom:
+                12px;
 
-    border-radius:
-        12px;
+            border:
+                1px solid var(--border);
 
-    margin-bottom:
-        12px;
+            transition:
+                0.2s ease;
+        }
 
-    border:
-        1px solid var(--border);
 
-    transition:
-        0.2s ease;
-}
+        .pending-order:hover {
+            transform:
+                translateY(-1px);
 
+            border-color:
+                var(--border-hover);
+        }
 
-.pending-order:hover {
-    transform:
-        translateY(-1px);
 
-    border-color:
-        var(--border-hover);
-}
+        .pending-buy {
+            border-left:
+                3px solid var(--green);
+        }
 
 
-.pending-buy {
-    border-left:
-        3px solid var(--green);
-}
+        .pending-sell {
+            border-left:
+                3px solid var(--red);
+        }
 
 
-.pending-sell {
-    border-left:
-        3px solid var(--red);
-}
+        .pending-header {
+            display:
+                flex;
 
+            justify-content:
+                space-between;
 
-.pending-header {
-    display:
-        flex;
+            align-items:
+                center;
 
-    justify-content:
-        space-between;
+            gap:
+                15px;
 
-    align-items:
-        center;
+            flex-wrap:
+                wrap;
 
-    gap:
-        15px;
+            margin-bottom:
+                17px;
+        }
 
-    flex-wrap:
-        wrap;
 
-    margin-bottom:
-        17px;
-}
+        .pending-title {
+            font-size:
+                18px;
 
+            font-weight:
+                800;
+        }
 
-.pending-title {
-    font-size:
-        18px;
 
-    font-weight:
-        800;
-}
+        .pending-badge {
+            padding:
+                6px 10px;
 
+            border-radius:
+                20px;
 
-.pending-badge {
-    padding:
-        6px 10px;
+            font-size:
+                10px;
 
-    border-radius:
-        20px;
+            font-weight:
+                850;
 
-    font-size:
-        10px;
+            text-transform:
+                uppercase;
 
-    font-weight:
-        850;
+            letter-spacing:
+                0.5px;
+        }
 
-    text-transform:
-        uppercase;
 
-    letter-spacing:
-        0.5px;
-}
+        .buy-badge {
+            background:
+                var(--green-soft);
 
+            color:
+                var(--green);
 
-.buy-badge {
-    background:
-        var(--green-soft);
+            border:
+                1px solid rgba(37,209,127,0.13);
+        }
 
-    color:
-        var(--green);
 
-    border:
-        1px solid rgba(37,209,127,0.13);
-}
+        .sell-badge {
+            background:
+                var(--red-soft);
 
+            color:
+                var(--red);
 
-.sell-badge {
-    background:
-        var(--red-soft);
+            border:
+                1px solid rgba(255,92,108,0.13);
+        }
 
-    color:
-        var(--red);
 
-    border:
-        1px solid rgba(255,92,108,0.13);
-}
+        .pending-info {
+            display:
+                grid;
 
+            grid-template-columns:
+                repeat(auto-fit, minmax(150px, 1fr));
 
-.pending-info {
-    display:
-        grid;
+            gap:
+                10px;
 
-    grid-template-columns:
-        repeat(auto-fit, minmax(150px, 1fr));
+            margin-bottom:
+                17px;
+        }
 
-    gap:
-        10px;
 
-    margin-bottom:
-        17px;
-}
+        .pending-box {
+            background:
+                #13181e;
 
+            padding:
+                13px;
 
-.pending-box {
-    background:
-        #13181e;
+            border-radius:
+                9px;
 
-    padding:
-        13px;
+            border:
+                1px solid rgba(255,255,255,0.045);
+        }
 
-    border-radius:
-        9px;
 
-    border:
-        1px solid rgba(255,255,255,0.045);
-}
+        .pending-box small {
+            display:
+                block;
 
+            color:
+                var(--muted);
 
-.pending-box small {
-    display:
-        block;
+            margin-bottom:
+                6px;
 
-    color:
-        var(--muted);
+            font-size:
+                10px;
 
-    margin-bottom:
-        6px;
+            text-transform:
+                uppercase;
 
-    font-size:
-        10px;
+            letter-spacing:
+                0.4px;
+        }
 
-    text-transform:
-        uppercase;
 
-    letter-spacing:
-        0.4px;
-}
+        .target-price {
+            color:
+                var(--gold-light);
 
+            font-weight:
+                850;
 
-.target-price {
-    color:
-        var(--gold-light);
+            font-size:
+                17px;
+        }
 
-    font-weight:
-        850;
 
-    font-size:
-        17px;
-}
+        .current-price {
+            color:
+                #d8e0ea;
 
+            font-weight:
+                850;
 
-.current-price {
-    color:
-        #d8e0ea;
+            font-size:
+                17px;
+        }
 
-    font-weight:
-        850;
 
-    font-size:
-        17px;
-}
+        .shares {
+            color:
+                var(--text);
 
+            font-size:
+                17px;
 
-.shares {
-    color:
-        var(--text);
+            font-weight:
+                850;
+        }
 
-    font-size:
-        17px;
 
-    font-weight:
-        850;
-}
+        /* =========================================================
+           CANCEL
+        ========================================================= */
 
+        .cancel-button {
+            width:
+                100%;
 
-/* =========================================================
-   CANCEL
-========================================================= */
+            padding:
+                12px;
 
-.cancel-button {
-    width:
-        100%;
+            background:
+                transparent;
 
-    padding:
-        12px;
+            color:
+                var(--red);
 
-    background:
-        transparent;
+            border:
+                1px solid rgba(255,92,108,0.25);
 
-    color:
-        var(--red);
+            border-radius:
+                8px;
 
-    border:
-        1px solid rgba(255,92,108,0.25);
+            font-size:
+                13px;
 
-    border-radius:
-        8px;
+            font-weight:
+                800;
 
-    font-size:
-        13px;
+            cursor:
+                pointer;
 
-    font-weight:
-        800;
+            transition:
+                0.2s ease;
+        }
 
-    cursor:
-        pointer;
 
-    transition:
-        0.2s ease;
-}
+        .cancel-button:hover {
+            background:
+                var(--red-soft);
 
+            border-color:
+                rgba(255,92,108,0.45);
 
-.cancel-button:hover {
-    background:
-        var(--red-soft);
+            transform:
+                translateY(-1px);
+        }
 
-    border-color:
-        rgba(255,92,108,0.45);
 
-    transform:
-        translateY(-1px);
-}
+        .pending-note {
+            color:
+                var(--muted);
 
+            font-size:
+                11px;
 
-.pending-note {
-    color:
-        var(--muted);
+            margin-top:
+                11px;
 
-    font-size:
-        11px;
+            line-height:
+                1.6;
 
-    margin-top:
-        11px;
+            text-align:
+                center;
+        }
 
-    line-height:
-        1.6;
 
-    text-align:
-        center;
-}
+        /* =========================================================
+           EMPTY
+        ========================================================= */
 
+        .empty {
+            text-align:
+                center;
 
-/* =========================================================
-   EMPTY
-========================================================= */
+            padding:
+                32px;
 
-.empty {
-    text-align:
-        center;
+            color:
+                var(--muted);
 
-    padding:
-        32px;
+            line-height:
+                1.7;
 
-    color:
-        var(--muted);
+            font-size:
+                13px;
+        }
 
-    line-height:
-        1.7;
 
-    font-size:
-        13px;
-}
+        /* =========================================================
+           LINKS
+        ========================================================= */
 
+        .back,
+        .graph-button {
+            color:
+                var(--gold-light);
 
-/* =========================================================
-   LINKS
-========================================================= */
+            text-decoration:
+                none;
 
-.back,
-.graph-button {
-    color:
-        var(--gold-light);
+            font-weight:
+                750;
 
-    text-decoration:
-        none;
+            transition:
+                0.2s ease;
+        }
 
-    font-weight:
-        750;
 
-    transition:
-        0.2s ease;
-}
+        .graph-button {
+            display:
+                inline-block;
 
+            margin-top:
+                14px;
 
-.graph-button {
-    display:
-        inline-block;
+            padding:
+                8px 12px;
 
-    margin-top:
-        14px;
+            border:
+                1px solid var(--border);
 
-    padding:
-        8px 12px;
+            border-radius:
+                7px;
 
-    border:
-        1px solid var(--border);
+            font-size:
+                12px;
+        }
 
-    border-radius:
-        7px;
 
-    font-size:
-        12px;
-}
+        .back:hover,
+        .graph-button:hover {
+            color:
+                #f0d895;
 
+            text-decoration:
+                none;
+        }
 
-.back:hover,
-.graph-button:hover {
-    color:
-        #f0d895;
 
-    text-decoration:
-        none;
-}
+        .graph-button:hover {
+            background:
+                var(--gold-soft);
 
+            border-color:
+                rgba(214,181,106,0.20);
+        }
 
-.graph-button:hover {
-    background:
-        var(--gold-soft);
 
-    border-color:
-        rgba(214,181,106,0.20);
-}
+        /* =========================================================
+           RESPONSIVE P&L
+        ========================================================= */
 
+        @media (max-width: 900px) {
 
-/* =========================================================
-   RESPONSIVE P&L
-========================================================= */
+            .floating-pnl {
+                position:
+                    fixed;
 
-@media (max-width: 900px) {
+                top:
+                    auto;
 
-    .floating-pnl {
-        position:
-            fixed;
+                bottom:
+                    14px;
 
-        top:
-            auto;
+                left:
+                    50%;
 
-        bottom:
-            14px;
+                right:
+                    auto;
 
-        left:
-            50%;
+                transform:
+                    translateX(-50%);
 
-        right:
-            auto;
+                width:
+                    calc(100% - 28px);
 
-        transform:
-            translateX(-50%);
+                max-width:
+                    430px;
 
-        width:
-            calc(100% - 28px);
+                display:
+                    flex;
 
-        max-width:
-            430px;
+                align-items:
+                    center;
 
-        display:
-            flex;
+                justify-content:
+                    space-between;
 
-        align-items:
-            center;
+                gap:
+                    14px;
 
-        justify-content:
-            space-between;
+                padding:
+                    12px 16px;
+            }
 
-        gap:
-            14px;
 
-        padding:
-            12px 16px;
-    }
+            .floating-pnl:hover {
+                transform:
+                    translateX(-50%);
+            }
 
-    .floating-pnl:hover {
-        transform:
-            translateX(-50%);
-    }
 
-    .floating-pnl-title {
-        margin-bottom:
-            3px;
-    }
+            .floating-pnl-title {
+                margin-bottom:
+                    3px;
+            }
 
-    .floating-pnl-value {
-        margin-bottom:
-            0;
 
-        font-size:
-            21px;
-    }
+            .floating-pnl-value {
+                margin-bottom:
+                    0;
 
-    .floating-pnl-line {
-        display:
-            none;
-    }
+                font-size:
+                    21px;
+            }
 
-    .floating-status {
-        margin-top:
-            0;
-    }
-}
 
+            .floating-pnl-line {
+                display:
+                    none;
+            }
 
-/* =========================================================
-   TABLET
-========================================================= */
 
-@media (max-width: 700px) {
+            .floating-status {
+                margin-top:
+                    0;
+            }
 
-    .container {
-        margin:
-            23px auto;
+        }
 
-        padding:
-            0 15px 90px;
-    }
 
-    .welcome {
-        padding:
-            22px;
-    }
+        /* =========================================================
+           TABLET
+        ========================================================= */
 
-    .summary {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
+        @media (max-width: 700px) {
 
-    .summary-card {
-        padding:
-            18px;
-    }
+            .container {
+                margin:
+                    23px auto;
 
-    .section {
-        padding:
-            19px;
-    }
+                padding:
+                    0 15px 90px;
+            }
 
-}
 
+            .welcome {
+                padding:
+                    22px;
+            }
 
-/* =========================================================
-   MOBILE
-========================================================= */
 
-@media (max-width: 600px) {
+            .summary {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
 
-    nav {
-        padding:
-            14px 16px;
 
-        flex-direction:
-            column;
+            .summary-card {
+                padding:
+                    18px;
+            }
 
-        gap:
-            11px;
 
-        text-align:
-            center;
-    }
+            .section {
+                padding:
+                    19px;
+            }
 
-    nav h1 {
-        font-size:
-            20px;
-    }
+        }
 
-    nav a {
-        width:
-            100%;
 
-        text-align:
-            center;
-    }
+        /* =========================================================
+           MOBILE
+        ========================================================= */
 
-    .container {
-        margin:
-            18px auto;
+        @media (max-width: 600px) {
 
-        padding:
-            0 12px 100px;
-    }
+            nav {
+                padding:
+                    14px 16px;
 
-    .welcome {
-        padding:
-            20px;
+                flex-direction:
+                    column;
 
-        border-radius:
-            14px;
-    }
+                gap:
+                    11px;
 
-    .welcome h2 {
-        font-size:
-            21px;
-    }
+                text-align:
+                    center;
+            }
 
-    .summary {
-        grid-template-columns:
-            1fr;
-    }
 
-    .summary-card .value {
-        font-size:
-            23px;
-    }
+            nav h1 {
+                font-size:
+                    20px;
+            }
 
-    .today-pnl-section,
-    .section {
-        padding:
-            18px;
 
-        border-radius:
-            14px;
-    }
+            nav a {
+                width:
+                    100%;
 
-    .today-pnl-grid {
-        grid-template-columns:
-            1fr;
-    }
+                text-align:
+                    center;
+            }
 
-    .holding-info,
-    .trade-info,
-    .pending-info {
-        grid-template-columns:
-            1fr 1fr;
-    }
 
-    .transaction {
-        flex-direction:
-            column;
+            .container {
+                margin:
+                    18px auto;
 
-        align-items:
-            flex-start;
-    }
+                padding:
+                    0 12px 100px;
+            }
 
-}
 
+            .welcome {
+                padding:
+                    20px;
 
-/* =========================================================
-   SMALL PHONES
-========================================================= */
+                border-radius:
+                    14px;
+            }
 
-@media (max-width: 420px) {
 
-    .holding-info,
-    .trade-info,
-    .pending-info {
-        grid-template-columns:
-            1fr;
-    }
+            .welcome h2 {
+                font-size:
+                    21px;
+            }
 
-    .floating-pnl {
-        padding:
-            11px 13px;
-    }
 
-    .floating-pnl-value {
-        font-size:
-            19px;
-    }
+            .summary {
+                grid-template-columns:
+                    1fr;
+            }
 
-    .floating-pnl-label {
-        font-size:
-            9px;
-    }
 
-}
+            .summary-card .value {
+                font-size:
+                    23px;
+            }
 
 
-/* =========================================================
-   PRICE FLASH
-========================================================= */
+            .today-pnl-section,
+            .section {
+                padding:
+                    18px;
 
-.price-flash {
-    animation:
-        priceFlash 0.35s ease;
-}
+                border-radius:
+                    14px;
+            }
 
 
-@keyframes priceFlash {
+            .today-pnl-grid {
+                grid-template-columns:
+                    1fr;
+            }
 
-    0% {
-        opacity:
-            0.45;
 
-        transform:
-            scale(1.04);
-    }
+            .holding-info,
+            .trade-info,
+            .pending-info {
+                grid-template-columns:
+                    1fr 1fr;
+            }
 
-    100% {
-        opacity:
-            1;
 
-        transform:
-            scale(1);
-    }
+            .transaction {
+                flex-direction:
+                    column;
 
-}
+                align-items:
+                    flex-start;
+            }
 
+        }
 
-/* =========================================================
-   SELECTION
-========================================================= */
 
-::selection {
-    background:
-        rgba(214,181,106,0.24);
+        /* =========================================================
+           SMALL PHONES
+        ========================================================= */
 
-    color:
-        #ffffff;
-}
+        @media (max-width: 420px) {
 
+            .holding-info,
+            .trade-info,
+            .pending-info {
+                grid-template-columns:
+                    1fr;
+            }
 
-/* =========================================================
-   SCROLLBAR
-========================================================= */
 
-::-webkit-scrollbar {
-    width:
-        8px;
-}
+            .floating-pnl {
+                padding:
+                    11px 13px;
+            }
 
-::-webkit-scrollbar-track {
-    background:
-        #07090c;
-}
 
-::-webkit-scrollbar-thumb {
-    background:
-        #292f36;
+            .floating-pnl-value {
+                font-size:
+                    19px;
+            }
 
-    border-radius:
-        20px;
-}
 
-::-webkit-scrollbar-thumb:hover {
-    background:
-        #3a424b;
-}
+            .floating-pnl-label {
+                font-size:
+                    9px;
+            }
 
-</style>
-```
+        }
 
+
+        /* =========================================================
+           PRICE FLASH
+        ========================================================= */
+
+        .price-flash {
+            animation:
+                priceFlash 0.35s ease;
+        }
+
+
+        @keyframes priceFlash {
+
+            0% {
+                opacity:
+                    0.45;
+
+                transform:
+                    scale(1.04);
+            }
+
+            100% {
+                opacity:
+                    1;
+
+                transform:
+                    scale(1);
+            }
+
+        }
+
+
+        /* =========================================================
+           SELECTION
+        ========================================================= */
+
+        ::selection {
+            background:
+                rgba(214,181,106,0.24);
+
+            color:
+                #ffffff;
+        }
+
+
+        /* =========================================================
+           SCROLLBAR
+        ========================================================= */
+
+        ::-webkit-scrollbar {
+            width:
+                8px;
+        }
+
+
+        ::-webkit-scrollbar-track {
+            background:
+                #07090c;
+        }
+
+
+        ::-webkit-scrollbar-thumb {
+            background:
+                #292f36;
+
+            border-radius:
+                20px;
+        }
+
+
+        ::-webkit-scrollbar-thumb:hover {
+            background:
+                #3a424b;
+        }
+
+    </style>
 
 </head>
 
+
 <body>
 
-<nav>
 
-    <h1>
-        📈 Danish Stock Market
-    </h1>
+    <!-- =========================================================
+         NAVIGATION
+    ========================================================= -->
 
-    <a href="{% url 'market_home' %}">
-        🏠 Market
-    </a>
+    <nav>
 
-</nav>
+        <h1>
+            📈 Danish Stock Market
+        </h1>
 
+        <a href="{% url 'market_home' %}">
+            🏠 Market
+        </a>
 
-<!-- =========================================
-     FLOATING P&L
-========================================= -->
-
-<div class="floating-pnl">
-
-    <div>
-
-        <div class="floating-pnl-title">
-            📈 Live Portfolio P&L
-        </div>
-
-        <div
-            id="floating-pnl"
-            class="floating-pnl-value
-            {% if total_pnl >= 0 %}profit{% else %}loss{% endif %}"
-        >
-
-            {% if total_pnl >= 0 %}
-                +₹{{ total_pnl|floatformat:2 }}
-            {% else %}
-                ₹{{ total_pnl|floatformat:2 }}
-            {% endif %}
-
-        </div>
-
-        <div class="floating-pnl-line"></div>
-
-        <div class="floating-pnl-label">
-            Updates automatically
-        </div>
-
-    </div>
-
-    <div class="floating-status">
-
-        <span class="live-dot"></span>
-
-        LIVE
-
-    </div>
-
-</div>
+    </nav>
 
 
-<div class="container">
+    <!-- =========================================================
+         FLOATING P&L
+    ========================================================= -->
 
+    <div class="floating-pnl">
 
-<!-- =========================================
-     WELCOME
-========================================= -->
+        <div>
 
-<div class="welcome">
-
-    <h2>
-        👤 {{ user.username }}'s Portfolio
-    </h2>
-
-    <p>
-        Track your current holdings, every individual
-        trade, money invested, money received and
-        your complete P&amp;L.
-    </p>
-
-</div>
-
-
-<!-- =========================================
-     PORTFOLIO 1 SUMMARY
-========================================= -->
-
-<div class="summary">
-
-    <div class="summary-card">
-
-        <h3>
-            💰 Wallet Balance
-        </h3>
-
-        <div class="value wallet">
-
-            ₹{{ wallet.balance|floatformat:2 }}
-
-        </div>
-
-    </div>
-
-
-    <div class="summary-card">
-
-        <h3>
-            📊 Current Stock Value
-        </h3>
-
-        <div
-            id="total-value"
-            class="value stock-value"
-        >
-            ₹{{ total_value|floatformat:2 }}
-        </div>
-
-    </div>
-
-
-    <div class="summary-card">
-
-        <h3>
-            💵 Currently Invested
-        </h3>
-
-        <div
-            id="total-invested"
-            class="value invested"
-        >
-            ₹{{ total_invested|floatformat:2 }}
-        </div>
-
-    </div>
-
-
-    <div class="summary-card">
-
-        <h3>
-            📈 Total P&amp;L
-        </h3>
-
-        <div
-            id="total-pnl"
-            class="value
-            {% if total_pnl >= 0 %}profit{% else %}loss{% endif %}"
-        >
-
-            {% if total_pnl >= 0 %}
-                +₹{{ total_pnl|floatformat:2 }}
-            {% else %}
-                ₹{{ total_pnl|floatformat:2 }}
-            {% endif %}
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- =========================================
-     TODAY'S P&L
-========================================= -->
-
-<div class="today-pnl-section">
-
-    <div class="today-pnl-title">
-        📅 Today's P&amp;L
-    </div>
-
-    <div class="today-pnl-grid">
-
-        <div class="today-box">
-
-            <small>
-                Today's Realized P&amp;L
-            </small>
+            <div class="floating-pnl-title">
+                📈 Live Portfolio P&L
+            </div>
 
             <div
-                id="today-realized-pnl"
-                class="today-value"
+                id="floating-pnl"
+                class="floating-pnl-value {% if total_pnl >= 0 %}profit{% else %}loss{% endif %}"
             >
-                ₹0.00
+
+                {% if total_pnl >= 0 %}
+                    +₹{{ total_pnl|floatformat:2 }}
+                {% else %}
+                    ₹{{ total_pnl|floatformat:2 }}
+                {% endif %}
+
+            </div>
+
+            <div class="floating-pnl-line"></div>
+
+            <div class="floating-pnl-label">
+                Updates automatically
             </div>
 
         </div>
 
+        <div class="floating-status">
 
-        <div class="today-box">
+            <span class="live-dot"></span>
 
-            <small>
-                Today's Unrealized P&amp;L
-            </small>
-
-            <div
-                id="today-unrealized-pnl"
-                class="today-value"
-            >
-                ₹0.00
-            </div>
-
-        </div>
-
-
-        <div class="today-box">
-
-            <small>
-                Today's Total P&amp;L
-            </small>
-
-            <div
-                id="today-total-pnl"
-                class="today-value"
-            >
-                ₹0.00
-            </div>
+            LIVE
 
         </div>
 
     </div>
 
-</div>
+
+    <div class="container">
 
 
-<!-- =========================================
-     PORTFOLIO 1
-========================================= -->
+        <!-- =====================================================
+             WELCOME
+        ===================================================== -->
 
-<div class="section">
+        <div class="welcome">
 
-    <h2>
-        📦 Portfolio 1 • Current Holdings
-    </h2>
+            <h2>
+                👤 {{ user.username }}'s Portfolio
+            </h2>
+
+            <p>
+                Track your current holdings, every individual
+                trade, money invested, money received and
+                your complete P&amp;L.
+            </p>
+
+        </div>
 
 
-    {% for holding in holdings %}
+        <!-- =====================================================
+             PORTFOLIO SUMMARY
+        ===================================================== -->
 
-        <div
-            class="holding"
-            data-symbol="{{ holding.stock.symbol }}"
-        >
+        <div class="summary">
 
-            <div class="holding-header">
+
+            <div class="summary-card">
 
                 <h3>
-
-                    {{ holding.stock.name }}
-
-                    <span class="symbol">
-                        ({{ holding.stock.symbol }})
-                    </span>
-
+                    💰 Wallet Balance
                 </h3>
 
-                <strong>
-                    {{ holding.quantity }} shares
-                </strong>
+                <div class="value wallet">
 
-            </div>
-
-
-            <div class="holding-info">
-
-                <div class="info-box">
-
-                    <small>
-                        Average Buy Price
-                    </small>
-
-                    ₹{{ holding.average_price|floatformat:2 }}
-
-                </div>
-
-
-                <div class="info-box">
-
-                    <small>
-                        Current Share Price
-                    </small>
-
-                    <span class="live-price">
-                        ₹{{ holding.stock.price|floatformat:2 }}
-                    </span>
-
-                </div>
-
-
-                <div class="info-box">
-
-                    <small>
-                        Number of Shares
-                    </small>
-
-                    {{ holding.quantity }}
-
-                </div>
-
-
-                <div class="info-box">
-
-                    <small>
-                        Money Invested
-                    </small>
-
-                    <span class="live-invested">
-                        ₹{{ holding.invested_value|floatformat:2 }}
-                    </span>
-
-                </div>
-
-
-                <div class="info-box">
-
-                    <small>
-                        Current Value
-                    </small>
-
-                    <span class="live-value">
-                        ₹{{ holding.current_value|floatformat:2 }}
-                    </span>
-
-                </div>
-
-
-                <div class="info-box">
-
-                    <small>
-                        Unrealized P&amp;L
-                    </small>
-
-                    <span class="live-pnl">
-
-                        {% if holding.pnl >= 0 %}
-
-                            <span class="profit">
-                                📈 +₹{{ holding.pnl|floatformat:2 }}
-                            </span>
-
-                        {% else %}
-
-                            <span class="loss">
-                                📉 ₹{{ holding.pnl|floatformat:2 }}
-                            </span>
-
-                        {% endif %}
-
-                    </span>
+                    ₹{{ wallet.balance|floatformat:2 }}
 
                 </div>
 
             </div>
 
 
-            <a
-                class="graph-button"
-                href="{% url 'stock_chart' holding.stock.symbol %}"
-            >
-                📈 View Live Graph →
-            </a>
+            <div class="summary-card">
 
-        </div>
+                <h3>
+                    📊 Current Stock Value
+                </h3>
 
-
-    {% empty %}
-
-        <div class="empty">
-
-            📭 You don't own any stocks yet.
-
-            <br><br>
-
-            <a
-                class="back"
-                href="{% url 'market_home' %}"
-            >
-                Browse Stocks →
-            </a>
-
-        </div>
-
-    {% endfor %}
-
-</div>
-
-
-<!-- =========================================
-     PORTFOLIO 2
-     EVERY INDIVIDUAL TRADE
-========================================= -->
-
-<div class="section">
-
-    <h2>
-        📋 Portfolio 2 • Complete Trade Breakdown
-    </h2>
-
-    <p style="color:#94a3b8; line-height:1.6;">
-
-        Every purchase and sale is shown separately.
-        This means you can see exactly how many shares
-        you bought, the exact price per share and the
-        exact amount of money used or received.
-
-    </p>
-
-
-    {% for transaction in transactions %}
-
-        {% if transaction.transaction_type == "BUY" %}
-
-            <div class="trade-card trade-buy">
-
-                <div class="trade-header">
-
-                    <div class="trade-stock">
-
-                        {{ transaction.stock.name }}
-
-                        <span class="symbol">
-                            ({{ transaction.stock.symbol }})
-                        </span>
-
-                    </div>
-
-                    <div class="trade-badge buy">
-                        🟢 BUY
-                    </div>
-
-                </div>
-
-
-                <div class="trade-info">
-
-                    <div class="trade-box">
-
-                        <small>
-                            Shares Bought
-                        </small>
-
-                        <strong>
-                            {{ transaction.quantity }}
-                        </strong>
-
-                    </div>
-
-
-                    <div class="trade-box">
-
-                        <small>
-                            Bought At
-                        </small>
-
-                        <div class="trade-price">
-                            ₹{{ transaction.price|floatformat:2 }}
-                        </div>
-
-                    </div>
-
-
-                    <div class="trade-box">
-
-                        <small>
-                            Money Invested
-                        </small>
-
-                        <div class="trade-money">
-
-                            ₹{{ transaction.quantity|floatformat:0 }}
-                            ×
-                            ₹{{ transaction.price|floatformat:2 }}
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="trade-box">
-
-                        <small>
-                            Total Cost
-                        </small>
-
-                        <div class="trade-money">
-
-                            ₹{{ transaction.total_value|floatformat:2 }}
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="trade-box">
-
-                        <small>
-                            Date
-                        </small>
-
-                        <div class="trade-date">
-
-                            {{ transaction.created_at|date:"d M Y, h:i A" }}
-
-                        </div>
-
-                    </div>
-
+                <div
+                    id="total-value"
+                    class="value stock-value"
+                >
+                    ₹{{ total_value|floatformat:2 }}
                 </div>
 
             </div>
 
 
-        {% else %}
+            <div class="summary-card">
 
-            <div class="trade-card trade-sell">
+                <h3>
+                    💵 Currently Invested
+                </h3>
 
-                <div class="trade-header">
-
-                    <div class="trade-stock">
-
-                        {{ transaction.stock.name }}
-
-                        <span class="symbol">
-                            ({{ transaction.stock.symbol }})
-                        </span>
-
-                    </div>
-
-                    <div class="trade-badge sell">
-                        🔴 SELL
-                    </div>
-
-                </div>
-
-
-                <div class="trade-info">
-
-                    <div class="trade-box">
-
-                        <small>
-                            Shares Sold
-                        </small>
-
-                        <strong>
-                            {{ transaction.quantity }}
-                        </strong>
-
-                    </div>
-
-
-                    <div class="trade-box">
-
-                        <small>
-                            Sold At
-                        </small>
-
-                        <div class="trade-price">
-                            ₹{{ transaction.price|floatformat:2 }}
-                        </div>
-
-                    </div>
-
-
-                    <div class="trade-box">
-
-                        <small>
-                            Money Received
-                        </small>
-
-                        <div class="trade-money">
-
-                            ₹{{ transaction.total_value|floatformat:2 }}
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="trade-box">
-
-                        <small>
-                            Date
-                        </small>
-
-                        <div class="trade-date">
-
-                            {{ transaction.created_at|date:"d M Y, h:i A" }}
-
-                        </div>
-
-                    </div>
-
+                <div
+                    id="total-invested"
+                    class="value invested"
+                >
+                    ₹{{ total_invested|floatformat:2 }}
                 </div>
 
             </div>
 
-        {% endif %}
 
+            <div class="summary-card">
 
-    {% empty %}
+                <h3>
+                    📈 Total P&amp;L
+                </h3>
 
-        <div class="empty">
+                <div
+                    id="total-pnl"
+                    class="value {% if total_pnl >= 0 %}profit{% else %}loss{% endif %}"
+                >
 
-            🧾 No trades yet.
-
-        </div>
-
-    {% endfor %}
-
-</div>
-
-
-<!-- =========================================
-     PENDING LIMIT ORDERS
-========================================= -->
-
-<div class="section">
-
-    <h2>
-        🎯 Pending Limit Orders
-    </h2>
-
-
-    {% for order in pending_orders %}
-
-        <div
-            class="pending-order
-            {% if order.order_type == 'BUY' %}
-                pending-buy
-            {% else %}
-                pending-sell
-            {% endif %}"
-        >
-
-            <div class="pending-header">
-
-                <div class="pending-title">
-
-                    {% if order.order_type == "BUY" %}
-                        🟢 BUY
+                    {% if total_pnl >= 0 %}
+                        +₹{{ total_pnl|floatformat:2 }}
                     {% else %}
-                        🔴 SELL
+                        ₹{{ total_pnl|floatformat:2 }}
                     {% endif %}
 
-                    {{ order.stock.name }}
-
-                    <span class="symbol">
-                        ({{ order.stock.symbol }})
-                    </span>
-
-                </div>
-
-
-                {% if order.order_type == "BUY" %}
-
-                    <div class="pending-badge buy-badge">
-                        🟢 BUY PENDING
-                    </div>
-
-                {% else %}
-
-                    <div class="pending-badge sell-badge">
-                        🔴 SELL PENDING
-                    </div>
-
-                {% endif %}
-
-            </div>
-
-
-            <div class="pending-info">
-
-                <div class="pending-box">
-
-                    <small>
-                        Shares
-                    </small>
-
-                    <div class="shares">
-                        {{ order.quantity }}
-                    </div>
-
-                </div>
-
-
-                <div class="pending-box">
-
-                    <small>
-                        Limit Price
-                    </small>
-
-                    <div class="target-price">
-                        ₹{{ order.limit_price|floatformat:2 }}
-                    </div>
-
-                </div>
-
-
-                <div class="pending-box">
-
-                    <small>
-                        Current Price
-                    </small>
-
-                    <div class="current-price">
-                        ₹{{ order.stock.price|floatformat:2 }}
-                    </div>
-
-                </div>
-
-
-                <div class="pending-box">
-
-                    <small>
-                        Order Value
-                    </small>
-
-                    ₹{{ order.limit_price|floatformat:2 }}
-                    ×
-                    {{ order.quantity }}
-
-                </div>
-
-
-                <div class="pending-box">
-
-                    <small>
-                        Order Placed
-                    </small>
-
-                    <span class="date">
-                        {{ order.created_at|date:"d M Y, h:i A" }}
-                    </span>
-
                 </div>
 
             </div>
 
+        </div>
 
-            <form
-                method="POST"
-                action="{% url 'cancel_limit_order' order.id %}"
-            >
 
-                {% csrf_token %}
+        <!-- =====================================================
+             TODAY'S P&L
+        ===================================================== -->
 
-                <button
-                    type="submit"
-                    class="cancel-button"
-                    onclick="return confirm('Cancel this limit order?');"
+        <div class="today-pnl-section">
+
+            <div class="today-pnl-title">
+                📅 Today's P&amp;L
+            </div>
+
+
+            <div class="today-pnl-grid">
+
+
+                <div class="today-box">
+
+                    <small>
+                        Today's Realized P&amp;L
+                    </small>
+
+                    <div
+                        id="today-realized-pnl"
+                        class="today-value"
+                    >
+                        ₹0.00
+                    </div>
+
+                </div>
+
+
+                <div class="today-box">
+
+                    <small>
+                        Today's Unrealized P&amp;L
+                    </small>
+
+                    <div
+                        id="today-unrealized-pnl"
+                        class="today-value"
+                    >
+                        ₹0.00
+                    </div>
+
+                </div>
+
+
+                <div class="today-box">
+
+                    <small>
+                        Today's Total P&amp;L
+                    </small>
+
+                    <div
+                        id="today-total-pnl"
+                        class="today-value"
+                    >
+                        ₹0.00
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             PORTFOLIO 1
+             CURRENT HOLDINGS
+        ===================================================== -->
+
+        <div class="section">
+
+            <h2>
+                📦 Portfolio 1 • Current Holdings
+            </h2>
+
+
+            {% for holding in holdings %}
+
+
+                <div
+                    class="holding"
+                    data-symbol="{{ holding.stock.symbol }}"
                 >
-                    ❌ CANCEL LIMIT ORDER
-                </button>
-
-            </form>
 
 
-            <div class="pending-note">
+                    <div class="holding-header">
 
-                {% if order.order_type == "BUY" %}
+                        <h3>
 
-                    ⏳ This Limit Buy will execute when
-                    the stock price reaches
-                    <strong>
-                        ₹{{ order.limit_price|floatformat:2 }}
-                    </strong>
-                    or lower.
+                            {{ holding.stock.name }}
 
-                    <br>
+                            <span class="symbol">
+                                ({{ holding.stock.symbol }})
+                            </span>
 
-                    💰 Money is deducted only when
-                    the order executes.
+                        </h3>
 
-                {% else %}
 
-                    ⏳ This Limit Sell will execute when
-                    the stock price reaches
-                    <strong>
-                        ₹{{ order.limit_price|floatformat:2 }}
-                    </strong>
-                    or higher.
+                        <strong>
+                            {{ holding.quantity }} shares
+                        </strong>
 
-                    <br>
+                    </div>
 
-                    📦 Shares are sold only when
-                    the order executes.
 
-                {% endif %}
+                    <div class="holding-info">
 
-            </div>
+
+                        <div class="info-box">
+
+                            <small>
+                                Average Buy Price
+                            </small>
+
+                            ₹{{ holding.average_price|floatformat:2 }}
+
+                        </div>
+
+
+                        <div class="info-box">
+
+                            <small>
+                                Current Share Price
+                            </small>
+
+                            <span class="live-price">
+                                ₹{{ holding.stock.price|floatformat:2 }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-box">
+
+                            <small>
+                                Number of Shares
+                            </small>
+
+                            {{ holding.quantity }}
+
+                        </div>
+
+
+                        <div class="info-box">
+
+                            <small>
+                                Money Invested
+                            </small>
+
+                            <span class="live-invested">
+                                ₹{{ holding.invested_value|floatformat:2 }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-box">
+
+                            <small>
+                                Current Value
+                            </small>
+
+                            <span class="live-value">
+                                ₹{{ holding.current_value|floatformat:2 }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-box">
+
+                            <small>
+                                Unrealized P&amp;L
+                            </small>
+
+                            <span class="live-pnl">
+
+                                {% if holding.pnl >= 0 %}
+
+                                    <span class="profit">
+                                        📈 +₹{{ holding.pnl|floatformat:2 }}
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="loss">
+                                        📉 ₹{{ holding.pnl|floatformat:2 }}
+                                    </span>
+
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <a
+                        class="graph-button"
+                        href="{% url 'stock_chart' holding.stock.symbol %}"
+                    >
+                        📈 View Live Graph →
+                    </a>
+
+
+                </div>
+
+
+            {% empty %}
+
+
+                <div class="empty">
+
+                    📭 You don't own any stocks yet.
+
+                    <br><br>
+
+                    <a
+                        class="back"
+                        href="{% url 'market_home' %}"
+                    >
+                        Browse Stocks →
+                    </a>
+
+                </div>
+
+
+            {% endfor %}
 
         </div>
 
-    {% empty %}
 
-        <div class="empty">
+        <!-- =====================================================
+             PORTFOLIO 2
+             COMPLETE TRADE BREAKDOWN
+        ===================================================== -->
 
-            📭 No pending limit orders.
+        <div class="section">
 
-        </div>
-
-    {% endfor %}
-
-
-</div>
-
-
-<!-- =========================================
-     TRANSACTION HISTORY
-========================================= -->
-
-<div class="section">
-
-    <h2>
-        🧾 Transaction History
-    </h2>
+            <h2>
+                📋 Portfolio 2 • Complete Trade Breakdown
+            </h2>
 
 
-    {% for transaction in transactions %}
+            <p style="color:#94a3b8; line-height:1.6;">
 
-        <div class="transaction">
+                Every purchase and sale is shown separately.
+                This means you can see exactly how many shares
+                you bought, the exact price per share and the
+                exact amount of money used or received.
 
-            <div>
+            </p>
+
+
+            {% for transaction in transactions %}
+
 
                 {% if transaction.transaction_type == "BUY" %}
 
-                    <div class="buy">
-                        🟢 BUY
+
+                    <div class="trade-card trade-buy">
+
+
+                        <div class="trade-header">
+
+                            <div class="trade-stock">
+
+                                {{ transaction.stock.name }}
+
+                                <span class="symbol">
+                                    ({{ transaction.stock.symbol }})
+                                </span>
+
+                            </div>
+
+
+                            <div class="trade-badge buy">
+                                🟢 BUY
+                            </div>
+
+                        </div>
+
+
+                        <div class="trade-info">
+
+
+                            <div class="trade-box">
+
+                                <small>
+                                    Shares Bought
+                                </small>
+
+                                <strong>
+                                    {{ transaction.quantity }}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="trade-box">
+
+                                <small>
+                                    Bought At
+                                </small>
+
+                                <div class="trade-price">
+                                    ₹{{ transaction.price|floatformat:2 }}
+                                </div>
+
+                            </div>
+
+
+                            <div class="trade-box">
+
+                                <small>
+                                    Money Invested
+                                </small>
+
+                                <div class="trade-money">
+
+                                    ₹{{ transaction.quantity|floatformat:0 }}
+                                    ×
+                                    ₹{{ transaction.price|floatformat:2 }}
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="trade-box">
+
+                                <small>
+                                    Total Cost
+                                </small>
+
+                                <div class="trade-money">
+
+                                    ₹{{ transaction.total_value|floatformat:2 }}
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="trade-box">
+
+                                <small>
+                                    Date
+                                </small>
+
+                                <div class="trade-date">
+
+                                    {{ transaction.created_at|date:"d M Y, h:i A" }}
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
                     </div>
+
 
                 {% else %}
 
-                    <div class="sell">
-                        🔴 SELL
+
+                    <div class="trade-card trade-sell">
+
+
+                        <div class="trade-header">
+
+                            <div class="trade-stock">
+
+                                {{ transaction.stock.name }}
+
+                                <span class="symbol">
+                                    ({{ transaction.stock.symbol }})
+                                </span>
+
+                            </div>
+
+
+                            <div class="trade-badge sell">
+                                🔴 SELL
+                            </div>
+
+                        </div>
+
+
+                        <div class="trade-info">
+
+
+                            <div class="trade-box">
+
+                                <small>
+                                    Shares Sold
+                                </small>
+
+                                <strong>
+                                    {{ transaction.quantity }}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="trade-box">
+
+                                <small>
+                                    Sold At
+                                </small>
+
+                                <div class="trade-price">
+                                    ₹{{ transaction.price|floatformat:2 }}
+                                </div>
+
+                            </div>
+
+
+                            <div class="trade-box">
+
+                                <small>
+                                    Money Received
+                                </small>
+
+                                <div class="trade-money">
+
+                                    ₹{{ transaction.total_value|floatformat:2 }}
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="trade-box">
+
+                                <small>
+                                    Date
+                                </small>
+
+                                <div class="trade-date">
+
+                                    {{ transaction.created_at|date:"d M Y, h:i A" }}
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
                     </div>
+
 
                 {% endif %}
 
-                <strong>
 
-                    {{ transaction.stock.name }}
-
-                    ({{ transaction.stock.symbol }})
-
-                </strong>
-
-            </div>
+            {% empty %}
 
 
-            <div>
+                <div class="empty">
 
-                {{ transaction.quantity }}
-                shares
+                    🧾 No trades yet.
 
-            </div>
-
-
-            <div>
-
-                ₹{{ transaction.price|floatformat:2 }}
-                / share
-
-            </div>
+                </div>
 
 
-            <div class="date">
-
-                {{ transaction.created_at|date:"d M Y, h:i A" }}
-
-            </div>
+            {% endfor %}
 
         </div>
 
 
-    {% empty %}
+        <!-- =====================================================
+             PENDING LIMIT ORDERS
+        ===================================================== -->
 
-        <div class="empty">
-            🧾 No transactions yet.
+        <div class="section">
+
+            <h2>
+                🎯 Pending Limit Orders
+            </h2>
+
+
+            {% for order in pending_orders %}
+
+
+                <div
+                    class="pending-order
+                    {% if order.order_type == 'BUY' %}
+                        pending-buy
+                    {% else %}
+                        pending-sell
+                    {% endif %}"
+                >
+
+
+                    <div class="pending-header">
+
+
+                        <div class="pending-title">
+
+
+                            {% if order.order_type == "BUY" %}
+
+                                🟢 BUY
+
+                            {% else %}
+
+                                🔴 SELL
+
+                            {% endif %}
+
+
+                            {{ order.stock.name }}
+
+
+                            <span class="symbol">
+                                ({{ order.stock.symbol }})
+                            </span>
+
+
+                        </div>
+
+
+                        {% if order.order_type == "BUY" %}
+
+
+                            <div class="pending-badge buy-badge">
+
+                                🟢 BUY PENDING
+
+                            </div>
+
+
+                        {% else %}
+
+
+                            <div class="pending-badge sell-badge">
+
+                                🔴 SELL PENDING
+
+                            </div>
+
+
+                        {% endif %}
+
+
+                    </div>
+
+
+                    <div class="pending-info">
+
+
+                        <div class="pending-box">
+
+                            <small>
+                                Shares
+                            </small>
+
+                            <div class="shares">
+                                {{ order.quantity }}
+                            </div>
+
+                        </div>
+
+
+                        <div class="pending-box">
+
+                            <small>
+                                Limit Price
+                            </small>
+
+                            <div class="target-price">
+                                ₹{{ order.limit_price|floatformat:2 }}
+                            </div>
+
+                        </div>
+
+
+                        <div class="pending-box">
+
+                            <small>
+                                Current Price
+                            </small>
+
+                            <div class="current-price">
+                                ₹{{ order.stock.price|floatformat:2 }}
+                            </div>
+
+                        </div>
+
+
+                        <div class="pending-box">
+
+                            <small>
+                                Order Value
+                            </small>
+
+                            ₹{{ order.limit_price|floatformat:2 }}
+                            ×
+                            {{ order.quantity }}
+
+                        </div>
+
+
+                        <div class="pending-box">
+
+                            <small>
+                                Order Placed
+                            </small>
+
+                            <span class="date">
+                                {{ order.created_at|date:"d M Y, h:i A" }}
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <form
+                        method="POST"
+                        action="{% url 'cancel_limit_order' order.id %}"
+                    >
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="cancel-button"
+                            onclick="return confirm('Cancel this limit order?');"
+                        >
+                            ❌ CANCEL LIMIT ORDER
+                        </button>
+
+                    </form>
+
+
+                    <div class="pending-note">
+
+
+                        {% if order.order_type == "BUY" %}
+
+
+                            ⏳ This Limit Buy will execute when
+                            the stock price reaches
+                            <strong>
+                                ₹{{ order.limit_price|floatformat:2 }}
+                            </strong>
+                            or lower.
+
+                            <br>
+
+                            💰 Money is deducted only when
+                            the order executes.
+
+
+                        {% else %}
+
+
+                            ⏳ This Limit Sell will execute when
+                            the stock price reaches
+                            <strong>
+                                ₹{{ order.limit_price|floatformat:2 }}
+                            </strong>
+                            or higher.
+
+                            <br>
+
+                            📦 Shares are sold only when
+                            the order executes.
+
+
+                        {% endif %}
+
+
+                    </div>
+
+
+                </div>
+
+
+            {% empty %}
+
+
+                <div class="empty">
+
+                    📭 No pending limit orders.
+
+                </div>
+
+
+            {% endfor %}
+
+
         </div>
 
-    {% endfor %}
 
+        <!-- =====================================================
+             TRANSACTION HISTORY
+        ===================================================== -->
 
-</div>
+        <div class="section">
 
+            <h2>
+                🧾 Transaction History
+            </h2>
 
-</div>
 
+            {% for transaction in transactions %}
 
-<!-- =========================================
-     LIVE PORTFOLIO JAVASCRIPT
-========================================= -->
 
-<script>
+                <div class="transaction">
 
-async function updatePortfolio() {
 
-    try {
+                    <div>
 
-        /* =====================================
-           UPDATE MARKET PRICES
-        ===================================== */
+                        {% if transaction.transaction_type == "BUY" %}
 
-        const priceResponse = await fetch(
-            "{% url 'stock_prices' %}",
-            {
-                cache: "no-store"
-            }
-        );
+                            <div class="buy">
+                                🟢 BUY
+                            </div>
 
-        if (!priceResponse.ok) {
-            return;
-        }
+                        {% else %}
 
+                            <div class="sell">
+                                🔴 SELL
+                            </div>
 
-        /* =====================================
-           GET PORTFOLIO DATA
-        ===================================== */
+                        {% endif %}
 
-        const response = await fetch(
-            "{% url 'portfolio_prices' %}",
-            {
-                cache: "no-store"
-            }
-        );
 
-        if (!response.ok) {
-            return;
-        }
+                        <strong>
 
-        const data = await response.json();
+                            {{ transaction.stock.name }}
 
+                            ({{ transaction.stock.symbol }})
 
-        /* =====================================
-           TOTAL VALUE
-        ===================================== */
+                        </strong>
 
-        const totalValue =
-            document.getElementById("total-value");
+                    </div>
 
-        if (totalValue) {
 
-            totalValue.textContent =
-                "₹" +
-                Number(data.total_value).toFixed(2);
+                    <div>
 
-        }
+                        {{ transaction.quantity }}
+                        shares
 
+                    </div>
 
-        /* =====================================
-           TOTAL INVESTED
-        ===================================== */
 
-        const totalInvested =
-            document.getElementById("total-invested");
+                    <div>
 
-        if (totalInvested) {
+                        ₹{{ transaction.price|floatformat:2 }}
+                        / share
 
-            totalInvested.textContent =
-                "₹" +
-                Number(data.total_invested).toFixed(2);
+                    </div>
 
-        }
 
+                    <div class="date">
 
-        /* =====================================
-           TOTAL P&L
-        ===================================== */
+                        {{ transaction.created_at|date:"d M Y, h:i A" }}
 
-        const totalPnl =
-            Number(data.total_pnl);
+                    </div>
 
-        const totalPnlElement =
-            document.getElementById("total-pnl");
 
-        const floatingPnl =
-            document.getElementById("floating-pnl");
+                </div>
 
 
-        if (totalPnl >= 0) {
+            {% empty %}
 
-            if (totalPnlElement) {
 
-                totalPnlElement.textContent =
-                    "+₹" +
-                    totalPnl.toFixed(2);
+                <div class="empty">
+                    🧾 No transactions yet.
+                </div>
 
-                totalPnlElement.className =
-                    "value profit";
 
-            }
+            {% endfor %}
 
 
-            if (floatingPnl) {
+        </div>
 
-                floatingPnl.textContent =
-                    "+₹" +
-                    totalPnl.toFixed(2);
 
-                floatingPnl.className =
-                    "floating-pnl-value profit";
+    </div>
 
-            }
 
-        } else {
+    <!-- =========================================================
+         LIVE PORTFOLIO JAVASCRIPT
+    ========================================================= -->
 
-            if (totalPnlElement) {
+    <script>
 
-                totalPnlElement.textContent =
-                    "₹" +
-                    totalPnl.toFixed(2);
+        async function updatePortfolio() {
 
-                totalPnlElement.className =
-                    "value loss";
+            try {
 
-            }
 
-
-            if (floatingPnl) {
-
-                floatingPnl.textContent =
-                    "₹" +
-                    totalPnl.toFixed(2);
-
-                floatingPnl.className =
-                    "floating-pnl-value loss";
-
-            }
-
-        }
-
-
-        /* =====================================
-           TODAY P&L
-        ===================================== */
-
-        const todayRealized =
-            Number(
-                data.today_realized_pnl || 0
-            );
-
-        const todayUnrealized =
-            Number(
-                data.today_unrealized_pnl || 0
-            );
-
-        const todayTotal =
-            Number(
-                data.today_total_pnl || 0
-            );
-
-
-        updatePnlElement(
-            "today-realized-pnl",
-            todayRealized
-        );
-
-        updatePnlElement(
-            "today-unrealized-pnl",
-            todayUnrealized
-        );
-
-        updatePnlElement(
-            "today-total-pnl",
-            todayTotal
-        );
-
-
-        /* =====================================
-           EACH HOLDING
-        ===================================== */
-
-        data.holdings.forEach(
-            function(holding) {
-
-                const card =
-                    document.querySelector(
-                        `.holding[data-symbol="${holding.symbol}"]`
-                    );
-
-                if (!card) {
+                /* =====================================
+                   UPDATE MARKET PRICES
+                ===================================== */
+
+                const priceResponse = await fetch(
+                    "{% url 'stock_prices' %}",
+                    {
+                        cache: "no-store"
+                    }
+                );
+
+
+                if (!priceResponse.ok) {
                     return;
                 }
 
 
-                const price =
-                    card.querySelector(".live-price");
+                /* =====================================
+                   GET PORTFOLIO DATA
+                ===================================== */
 
-                if (price) {
+                const response = await fetch(
+                    "{% url 'portfolio_prices' %}",
+                    {
+                        cache: "no-store"
+                    }
+                );
 
-                    const newPrice =
+
+                if (!response.ok) {
+                    return;
+                }
+
+
+                const data = await response.json();
+
+
+                /* =====================================
+                   TOTAL VALUE
+                ===================================== */
+
+                const totalValue =
+                    document.getElementById("total-value");
+
+
+                if (totalValue) {
+
+                    totalValue.textContent =
                         "₹" +
-                        Number(
-                            holding.price
-                        ).toFixed(2);
+                        Number(data.total_value).toFixed(2);
 
-                    if (
-                        price.textContent.trim()
-                        !== newPrice
-                    ) {
+                }
 
-                        price.textContent =
-                            newPrice;
 
-                        price.classList.remove(
-                            "price-flash"
-                        );
+                /* =====================================
+                   TOTAL INVESTED
+                ===================================== */
 
-                        void price.offsetWidth;
+                const totalInvested =
+                    document.getElementById("total-invested");
 
-                        price.classList.add(
-                            "price-flash"
-                        );
+
+                if (totalInvested) {
+
+                    totalInvested.textContent =
+                        "₹" +
+                        Number(data.total_invested).toFixed(2);
+
+                }
+
+
+                /* =====================================
+                   TOTAL P&L
+                ===================================== */
+
+                const totalPnl =
+                    Number(data.total_pnl);
+
+
+                const totalPnlElement =
+                    document.getElementById("total-pnl");
+
+
+                const floatingPnl =
+                    document.getElementById("floating-pnl");
+
+
+                if (totalPnl >= 0) {
+
+
+                    if (totalPnlElement) {
+
+                        totalPnlElement.textContent =
+                            "+₹" +
+                            totalPnl.toFixed(2);
+
+                        totalPnlElement.className =
+                            "value profit";
+
+                    }
+
+
+                    if (floatingPnl) {
+
+                        floatingPnl.textContent =
+                            "+₹" +
+                            totalPnl.toFixed(2);
+
+                        floatingPnl.className =
+                            "floating-pnl-value profit";
+
+                    }
+
+
+                } else {
+
+
+                    if (totalPnlElement) {
+
+                        totalPnlElement.textContent =
+                            "₹" +
+                            totalPnl.toFixed(2);
+
+                        totalPnlElement.className =
+                            "value loss";
+
+                    }
+
+
+                    if (floatingPnl) {
+
+                        floatingPnl.textContent =
+                            "₹" +
+                            totalPnl.toFixed(2);
+
+                        floatingPnl.className =
+                            "floating-pnl-value loss";
 
                     }
 
                 }
 
 
-                const invested =
-                    card.querySelector(".live-invested");
+                /* =====================================
+                   TODAY P&L
+                ===================================== */
 
-                if (invested) {
+                const todayRealized =
+                    Number(
+                        data.today_realized_pnl || 0
+                    );
 
-                    invested.textContent =
-                        "₹" +
-                        Number(
-                            holding.invested_value
-                        ).toFixed(2);
+
+                const todayUnrealized =
+                    Number(
+                        data.today_unrealized_pnl || 0
+                    );
+
+
+                const todayTotal =
+                    Number(
+                        data.today_total_pnl || 0
+                    );
+
+
+                updatePnlElement(
+                    "today-realized-pnl",
+                    todayRealized
+                );
+
+
+                updatePnlElement(
+                    "today-unrealized-pnl",
+                    todayUnrealized
+                );
+
+
+                updatePnlElement(
+                    "today-total-pnl",
+                    todayTotal
+                );
+
+
+                /* =====================================
+                   EACH HOLDING
+                ===================================== */
+
+                if (Array.isArray(data.holdings)) {
+
+                    data.holdings.forEach(
+                        function(holding) {
+
+
+                            const card =
+                                document.querySelector(
+                                    `.holding[data-symbol="${holding.symbol}"]`
+                                );
+
+
+                            if (!card) {
+                                return;
+                            }
+
+
+                            /* PRICE */
+
+                            const price =
+                                card.querySelector(
+                                    ".live-price"
+                                );
+
+
+                            if (price) {
+
+
+                                const newPrice =
+                                    "₹" +
+                                    Number(
+                                        holding.price
+                                    ).toFixed(2);
+
+
+                                if (
+                                    price.textContent.trim()
+                                    !== newPrice
+                                ) {
+
+
+                                    price.textContent =
+                                        newPrice;
+
+
+                                    price.classList.remove(
+                                        "price-flash"
+                                    );
+
+
+                                    void price.offsetWidth;
+
+
+                                    price.classList.add(
+                                        "price-flash"
+                                    );
+
+                                }
+
+                            }
+
+
+                            /* INVESTED */
+
+                            const invested =
+                                card.querySelector(
+                                    ".live-invested"
+                                );
+
+
+                            if (invested) {
+
+                                invested.textContent =
+                                    "₹" +
+                                    Number(
+                                        holding.invested_value
+                                    ).toFixed(2);
+
+                            }
+
+
+                            /* CURRENT VALUE */
+
+                            const currentValue =
+                                card.querySelector(
+                                    ".live-value"
+                                );
+
+
+                            if (currentValue) {
+
+                                currentValue.textContent =
+                                    "₹" +
+                                    Number(
+                                        holding.current_value
+                                    ).toFixed(2);
+
+                            }
+
+
+                            /* P&L */
+
+                            const pnlElement =
+                                card.querySelector(
+                                    ".live-pnl"
+                                );
+
+
+                            if (pnlElement) {
+
+
+                                const pnl =
+                                    Number(
+                                        holding.pnl
+                                    );
+
+
+                                if (pnl >= 0) {
+
+
+                                    pnlElement.innerHTML =
+                                        `<span class="profit">
+                                            📈 +₹${pnl.toFixed(2)}
+                                        </span>`;
+
+
+                                } else {
+
+
+                                    pnlElement.innerHTML =
+                                        `<span class="loss">
+                                            📉 ₹${pnl.toFixed(2)}
+                                        </span>`;
+
+                                }
+
+                            }
+
+
+                        }
+                    );
 
                 }
 
-
-                const currentValue =
-                    card.querySelector(".live-value");
-
-                if (currentValue) {
-
-                    currentValue.textContent =
-                        "₹" +
-                        Number(
-                            holding.current_value
-                        ).toFixed(2);
-
-                }
-
-
-                const pnlElement =
-                    card.querySelector(".live-pnl");
-
-                if (pnlElement) {
-
-                    const pnl =
-                        Number(
-                            holding.pnl
-                        );
-
-                    if (pnl >= 0) {
-
-                        pnlElement.innerHTML =
-                            `<span class="profit">
-                                📈 +₹${pnl.toFixed(2)}
-                            </span>`;
-
-                    } else {
-
-                        pnlElement.innerHTML =
-                            `<span class="loss">
-                                📉 ₹${pnl.toFixed(2)}
-                            </span>`;
-
-                    }
-
-                }
 
             }
+
+            catch (error) {
+
+                console.log(
+                    "Portfolio live update error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /* =========================================
+           P&L FORMATTER
+        ========================================= */
+
+        function updatePnlElement(
+            elementId,
+            value
+        ) {
+
+
+            const element =
+                document.getElementById(
+                    elementId
+                );
+
+
+            if (!element) {
+                return;
+            }
+
+
+            if (value >= 0) {
+
+
+                element.textContent =
+                    "+₹" +
+                    value.toFixed(2);
+
+
+                element.className =
+                    "today-value profit";
+
+
+            } else {
+
+
+                element.textContent =
+                    "₹" +
+                    value.toFixed(2);
+
+
+                element.className =
+                    "today-value loss";
+
+            }
+
+        }
+
+
+        /* =========================================
+           FIRST UPDATE
+        ========================================= */
+
+        updatePortfolio();
+
+
+        /* =========================================
+           UPDATE EVERY SECOND
+        ========================================= */
+
+        setInterval(
+            updatePortfolio,
+            1000
         );
 
-    }
+    </script>
 
-    catch (error) {
-
-        console.log(
-            "Portfolio live update error:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================================
-   P&L FORMATTER
-========================================= */
-
-function updatePnlElement(
-    elementId,
-    value
-) {
-
-    const element =
-        document.getElementById(
-            elementId
-        );
-
-    if (!element) {
-        return;
-    }
-
-    if (value >= 0) {
-
-        element.textContent =
-            "+₹" +
-            value.toFixed(2);
-
-        element.className =
-            "today-value profit";
-
-    } else {
-
-        element.textContent =
-            "₹" +
-            value.toFixed(2);
-
-        element.className =
-            "today-value loss";
-
-    }
-
-}
-
-
-/* =========================================
-   FIRST UPDATE
-========================================= */
-
-updatePortfolio();
-
-
-/* =========================================
-   EVERY SECOND
-========================================= */
-
-setInterval(
-    updatePortfolio,
-    1000
-);
-
-</script>
 
 </body>
 
